@@ -2,9 +2,12 @@
 
 #include<iostream>
 #include<string>
-#include <glad/glad.h> 
+
+const int WIDTH = 1000; 
+const int HEIGHT = 1000;
 
 const std::string VERSION = "0.02";
+
 NCraftMain::NCraftMain(){
   std::cout << "NCraft v" + VERSION + "\n©Shahan Neda (https://shahan.ca)"<< std::endl;
   NCraftWindow w(1000, 1000, &window);
@@ -16,13 +19,16 @@ NCraftMain::NCraftMain(){
 
 
 void NCraftMain::initOpenGL(){
-
-}
-
+  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+  {
+    std::cout << "Failed to initialize GLAD" << std::endl;
+  }   
+  glViewport(0, 0, WIDTH, HEIGHT); 
+} 
 void NCraftMain::mainLoop(){
   while (!glfwWindowShouldClose(window))
   {
-        glfwPollEvents();
+    glfwPollEvents();
   }
 }
 
