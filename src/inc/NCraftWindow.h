@@ -5,5 +5,7 @@
 
 class NCraftWindow{
   public:
+    static int WIDTH ; 
+    static int HEIGHT;
     NCraftWindow(int width, int height, GLFWwindow** window );
 };
