@@ -1,5 +1,6 @@
 #include <Renderer.h>
 #include <iostream>
+#include <math.h>
 
 // glBindBuffer(GL_ARRAY_BUFFER, VBO);
 Renderer::Renderer(GLFWwindow **window)
@@ -41,9 +42,16 @@ void Renderer::Render()
   glClear(GL_COLOR_BUFFER_BIT);
 
   mainShader->Bind();
+  // mainShader->setFloat("gcolor", 1.0f);
+
   vertexBuffer->BindVertexArrayBuffer(); // bind our array object
+  mainShader->Bind();
 
   glPolygonMode(GL_FRONT_AND_BACK, (shouldWireframe) ? GL_LINE : GL_FILL);
+  float timeValue = glfwGetTime();
+  float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+
+  mainShader->setVec4f("ourColor", 0.0f, greenValue, 0.0f, 1.0f);
 
   // this draws using the incides, 6 is number of indices, gl unsined int is type
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
