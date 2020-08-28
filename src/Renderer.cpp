@@ -6,7 +6,7 @@ Renderer::Renderer(GLFWwindow **window)
 {
   this->window = *window;
   vertexBuffer = new VertexBuffer();
-  mainShader = new Shader("/shader.vert", "/shader.frag");
+  mainShader = new Shader("shaders/shader.vert", "shaders/shader.frag");
 
   std::vector<Vec3f> vertices = {
       Vec3f(0.5f, 0.5f, 0.0f),

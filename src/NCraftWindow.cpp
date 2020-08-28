@@ -26,7 +26,7 @@ void NCraftWindow::WindowResized(int width, int height)
 NCraftWindow::NCraftWindow(int width, int height, GLFWwindow **window, NCraftMain *main)
 {
   this->main = main;
-  std::cout << "NCraftWindow: Init";
+  std::cout << "NCraftWindow: Init" << std::endl;
 
   if (!glfwInit())
   {
