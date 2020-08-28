@@ -50,7 +50,7 @@ Shader::Shader(std::string vertexPath, std::string fragmentPath)
     glGetProgramiv(programId, GL_LINK_STATUS, &success);
     if (!success)
     {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        glGetProgramInfoLog(programId, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
                   << infoLog << std::endl;
     }
@@ -61,6 +61,7 @@ Shader::Shader(std::string vertexPath, std::string fragmentPath)
 
 void Shader::Bind()
 {
+    glUseProgram(programId);
 }
 
 void Shader::setBool(const std::string &name, bool value)
