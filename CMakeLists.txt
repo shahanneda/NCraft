@@ -16,14 +16,19 @@ ADD_LIBRARY(NCraft
 )
 
 
-set(srcs 
-  src/NCraftWindow.cpp
-  src/inc/NCraftMain.h
-  src/inc/NCraftWindow.h
+# set(srcs 
+#   src/NCraftWindow.cpp
+#   src/inc/NCraftMain.h
+#   src/inc/NCraftWindow.h
+# )
+
+file(GLOB srcs
+    "src/*.h"
+    "src/*.cpp"
+    # "src/inc/*.h"
 )
 
-
-target_include_directories(NCraft PRIVATE ${CMAKE_SOURCE_DIR}/src/inc/)
+# target_include_directories(NCraft PRIVATE ${CMAKE_SOURCE_DIR}/src/inc/)
 
 # GLFW
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)

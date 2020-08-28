@@ -1,9 +1,10 @@
-// #include <iostream>
-// #include <GLFW/glfw3.h>
-// #include <NCraftWindow.h>
+#include "NCraftWindow.h"
 
 class NCraftMain{
   public: 
     NCraftMain();
+  
+  private:
+    GLFWwindow* window;
 };
 
