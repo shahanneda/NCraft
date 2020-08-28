@@ -1,13 +1,30 @@
 // Shahan Neda  ©2020
 #pragma once
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <NCraftMain.h>
 
+class NCraftMain;
 class NCraftWindow
 {
 public:
   static int WIDTH;
   static int HEIGHT;
-  NCraftWindow(int width, int height, GLFWwindow **window);
+  NCraftMain *main;
+
+  NCraftWindow(int width, int height, GLFWwindow **window, NCraftMain *main);
+  // GLFW CALLBACK WRAPPERS
+  static void error_callback(int error, const char *description);
+  inline static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
+  {
+    NCraftWindow *w = static_cast<NCraftWindow *>(glfwGetWindowUserPointer(window));
+    w->NCraftKeyCallback(window, key, scancode, action, mods);
+  }
+  inline static void framebuffer_size_callback(GLFWwindow *window, int width, int height)
+  {
+    NCraftWindow *w = static_cast<NCraftWindow *>(glfwGetWindowUserPointer(window));
+    w->WindowResized(width, height);
+  }
+  void WindowResized(int width, int height);
+  void NCraftKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
 };

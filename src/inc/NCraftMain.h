@@ -1,10 +1,15 @@
-#include "NCraftWindow.h"
-#include <Renderer.h>
+#ifndef N_CRAFT_MAIN
+#define N_CRAFT_MAIN
 
+#include <Renderer.h>
+#include <glad/glad.h>
+
+class Renderer; // forward dec
 class NCraftMain
 {
 public:
   NCraftMain();
+  void KeyPressed(int key, int status);
 
 private:
   GLFWwindow *window;
@@ -13,6 +18,7 @@ private:
   void initOpenGL();
   void mainLoop();
   void cleanUp();
-  static void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-  void processInput(GLFWwindow *window);
+
+  void processInput();
 };
+#endif
