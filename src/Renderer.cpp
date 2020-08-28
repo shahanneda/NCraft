@@ -39,6 +39,10 @@ Renderer::Renderer(GLFWwindow **window)
               << infoLog << std::endl;
   }
 
+  int nrAttributes;
+  glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
+  std::cout << "Maximum nr of vertex attributes supported: " << nrAttributes << std::endl;
+
   unsigned int fragmentShader;
   fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
@@ -63,11 +67,17 @@ Renderer::Renderer(GLFWwindow **window)
   glDeleteShader(fragmentShader);
 
   std::vector<Vec3f> vertices = {
-      Vec3f(-0.5f, -0.5f, 0.0f),
+      Vec3f(0.5f, 0.5f, 0.0f),
       Vec3f(0.5f, -0.5f, 0.0f),
-      Vec3f(0.0f, 0.5f, 0.0f)};
+      Vec3f(-0.5f, -0.5f, 0.0f),
+      Vec3f(-0.5f, 0.5f, 0.0f)
 
-  vertexBuffer->PutVertexData(vertices);
+  };
+  std::vector<int> indices = {
+      0, 1, 3,
+      1, 2, 3};
+  vertexBuffer->BindVertexArrayBuffer();
+  vertexBuffer->PutVertexData(vertices, indices);
 }
 
 Renderer::~Renderer()
@@ -79,10 +89,11 @@ void Renderer::Render()
 {
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
-
   glUseProgram(shaderProgram);
+
   vertexBuffer->BindVertexArrayBuffer();
-  glDrawArrays(GL_TRIANGLES, 0, 3);
+  // this draws using the incides, 6 is number of indices, gl unsined int is type
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
   glfwSwapBuffers(window);
 }
