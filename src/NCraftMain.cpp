@@ -17,8 +17,6 @@ NCraftMain::NCraftMain()
   cleanUp();
 }
 
-// VertexBuffer vb;
-// unsigned int VAO; // vao basically stores the config of the vbo
 void NCraftMain::initOpenGL()
 {
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -28,16 +26,6 @@ void NCraftMain::initOpenGL()
   glViewport(0, 0, NCraftWindow::WIDTH, NCraftWindow::HEIGHT);
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-  // unsigned int VBO;
-  // glGenBuffers(1, &VBO);
-  // glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  /*
-   *GL_STREAM_DRAW: the data is set only once and used by the GPU at most a few times.
-GL_STATIC_DRAW: the data is set only once and used many times.
-GL_DYNAMIC_DRAW: the data is changed a lot and used many times.
-   *
-   *
-   */
   renderer = new Renderer(&window);
 }
 void NCraftMain::mainLoop()
@@ -45,8 +33,6 @@ void NCraftMain::mainLoop()
   while (!glfwWindowShouldClose(window))
   {
     renderer->Render();
-
-    glfwSwapBuffers(window);
     glfwPollEvents();
   }
 }
