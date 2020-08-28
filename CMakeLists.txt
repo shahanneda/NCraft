@@ -25,6 +25,8 @@ ADD_LIBRARY(NCraft
 file(GLOB srcs
     "src/*.h"
     "src/*.cpp"
+    "glad/*.c"
+    "glad/*.h"
     # "src/inc/*.h"
 )
 
@@ -41,6 +43,8 @@ include_directories(${CMAKE_SOURCE_DIR}/glfw/include)
 target_link_libraries(NCraft glfw)
 target_link_libraries(NCraft ${GLFW3_LIBRARY})
 
+include_directories(${CMAKE_SOURCE_DIR}/glad/include/)
+include_directories(${CMAKE_SOURCE_DIR}/glad/include/khr)
 find_package(OpenGL REQUIRED)
 target_link_libraries(NCraft OpenGL::GL)
 

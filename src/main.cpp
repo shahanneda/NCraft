@@ -2,28 +2,31 @@
 
 #include<iostream>
 #include<string>
+#include <glad/glad.h> 
 
-
-const string VERSION = "0.02";
+const std::string VERSION = "0.02";
 NCraftMain::NCraftMain(){
   std::cout << "NCraft v" + VERSION + "\n©Shahan Neda (https://shahan.ca)"<< std::endl;
   NCraftWindow w(1000, 1000, &window);
 
+  initOpenGL();
+  mainLoop();
+  cleanUp();
 }
 
 
-void initOpenGL::NCraftMain(){
+void NCraftMain::initOpenGL(){
 
 }
 
-void mainLoop::NCraftMain(){
+void NCraftMain::mainLoop(){
   while (!glfwWindowShouldClose(window))
   {
         glfwPollEvents();
   }
 }
 
-void cleanUp::NCraftMain(){
+void NCraftMain::cleanUp(){
   glfwDestroyWindow(window);
   glfwTerminate();
 }
