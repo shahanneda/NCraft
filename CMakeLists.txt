@@ -12,18 +12,18 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 
 ADD_LIBRARY(NCraft 
-  ${CMAKE_SOURCE_DIR}/src/main.cpp
+  ${CMAKE_SOURCE_DIR}/src/NCraftMain.cpp
 )
 
-# set(srcs 
-#   src/NCraftWindow.cpp
-#   src/inc/NCraftMain.h
-#   src/inc/NCraftWindow.h
-# )
+set(srcs 
+   src/inc/math/Vec3f.h
+)
 
 file(GLOB srcs
     "src/*.h"
     "src/*.cpp"
+    "src/inc/math/*.h"
+    "src/math/*.cpp"
     # "src/inc/*.h"
 )
 
@@ -50,8 +50,13 @@ target_link_libraries(NCraft OpenGL::GL)
 
 include_directories(glad/include/)
 
+include_directories(${CMAKE_SOURCE_DIR}/src/inc/math/)
+include_directories(${CMAKE_SOURCE_DIR}/src/inc/)
 
 
+include_directories(${CMAKE_SOURCE_DIR})
+
+target_include_directories(NCraft PRIVATE "src/inc/")
 # glad
 add_library("glad" "glad/src/glad.c")
 target_include_directories("glad" PRIVATE "glad/include/")
@@ -59,6 +64,6 @@ target_include_directories(NCraft PRIVATE "glad/include/")
 target_link_libraries(NCraft "glad" "${CMAKE_DL_LIBS}")
 
 
-add_executable(NCraftExe ${CMAKE_SOURCE_DIR}/src/main.cpp ${srcs} )
+add_executable(NCraftExe ${CMAKE_SOURCE_DIR}/src/NCraftMain.cpp ${srcs} )
 target_link_libraries(NCraftExe NCraft)
 
