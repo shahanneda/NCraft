@@ -10,10 +10,20 @@ set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
+
 ADD_LIBRARY(NCraft 
-    ${CMAKE_SOURCE_DIR}/src/main.cpp
+  ${CMAKE_SOURCE_DIR}/src/main.cpp
 )
 
+
+set(srcs 
+  src/NCraftWindow.cpp
+  src/inc/NCraftMain.h
+  src/inc/NCraftWindow.h
+)
+
+
+target_include_directories(NCraft PRIVATE ${CMAKE_SOURCE_DIR}/src/inc/)
 
 # GLFW
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -32,6 +42,7 @@ target_link_libraries(NCraft OpenGL::GL)
 
 
 
-add_executable(NCraftExe ${CMAKE_SOURCE_DIR}/src/main.cpp)
+
+add_executable(NCraftExe ${CMAKE_SOURCE_DIR}/src/main.cpp ${srcs} )
 target_link_libraries(NCraftExe NCraft)
 
