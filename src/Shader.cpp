@@ -41,7 +41,7 @@ Shader::Shader(std::string vertexPath, std::string fragmentPath)
     }
     //Fragment Shader
     ss.str("");
-    unsigned int fragmentShader;
+    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     std::fstream fFile(fragmentPath);
     if (vfile.good())
     {
