@@ -3,6 +3,7 @@
 #include <Buffer.h>
 #include <NCraftWindow.h>
 #include <glad/glad.h>
+#include <Shader.h>
 
 class Renderer
 {
@@ -13,6 +14,7 @@ public:
   void ToggleWireframe();
 
 private:
+  Shader *mainShader;
   VertexBuffer *vertexBuffer;
   GLFWwindow *window;
   unsigned int shaderProgram;
