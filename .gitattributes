@@ -1,5 +1,6 @@
  glfw/** linguist-detectable=false
  glfw/**/** linguist-detectable=false
+ glfw/*.* linguist-detectable=false
 
  glad/** linguist-detectable=false
 
