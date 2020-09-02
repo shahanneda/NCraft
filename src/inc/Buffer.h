@@ -1,8 +1,8 @@
 #ifndef BUFFER
 #define BUFFER
 
-#include <Vec3f.h>
 #include <vector>
+#include <glm/glm.hpp>
 
 class Buffer
 {
@@ -19,7 +19,7 @@ class VertexBuffer : public Buffer
 public:
   VertexBuffer();
   void BindVertexArrayBuffer() override;
-  void PutVertexData(std::vector<Vec3f> verts, std::vector<int> indices, std::vector<float> textures);
+  void PutVertexData(std::vector<glm::vec3> verts, std::vector<int> indices, std::vector<glm::vec2> textures);
   void UnbindVertexArrayBuffer();
 };
 

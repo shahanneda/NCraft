@@ -4,7 +4,8 @@
 #include <glm/glm.hpp>
 #include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
-
+using glm::vec2;
+using glm::vec3;
 // #include <Texture.h>
 
 // glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -14,20 +15,20 @@ Renderer::Renderer(GLFWwindow **window)
   vertexBuffer = new VertexBuffer();
   mainShader = new Shader("shaders/shader.vert", "shaders/shader.frag");
 
-  std::vector<Vec3f> vertices = {
-      Vec3f(0.5f, 0.5f, 0.0f),
-      Vec3f(0.5f, -0.5f, 0.0f),
-      Vec3f(-0.5f, -0.5f, 0.0f),
-      Vec3f(-0.5f, 0.5f, 0.0f)};
+  std::vector<vec3> vertices = {
+      vec3(0.5f, 0.5f, 0.0f),
+      vec3(0.5f, -0.5f, 0.0f),
+      vec3(-0.5f, -0.5f, 0.0f),
+      vec3(-0.5f, 0.5f, 0.0f)};
   std::vector<int> indices = {
       0, 1, 3,
       1, 2, 3};
 
-  std::vector<float> texCoords = {
-      1.0f, 1.0f, // lower-left corner
-      1.0f, 0.0f, // lower-right corner
-      0.0f, 0.0f, // top-center corner
-      0.0f, 1.0f};
+  std::vector<vec2> texCoords = {
+      vec2(1.0f, 1.0f), // lower-left corner
+      vec2(1.0f, 0.0f), // lower-right corner
+      vec2(0.0f, 0.0f), // top-center corner
+      vec2(0.0f, 1.0f)};
 
   texture = new Texture("resources/container.jpg");
   texture->BindTexture();

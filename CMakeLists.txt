@@ -23,9 +23,7 @@ set(srcs
 file(GLOB srcs
     "src/*.h"
     "src/*.cpp"
-    "src/inc/math/*.h"
     "src/inc/utils/*.h"
-    "src/math/*.cpp"
     # "src/inc/*.h"
 )
 
