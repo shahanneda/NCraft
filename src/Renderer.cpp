@@ -66,9 +66,10 @@ std::vector<int> indices = {
 
 };
 // glBindBuffer(GL_ARRAY_BUFFER, VBO);
-Renderer::Renderer(GLFWwindow **window)
+Renderer::Renderer(GLFWwindow **window, Camera **camera)
 {
   this->window = *window;
+  this->camera = *camera;
   vertexBuffer = new VertexBuffer();
   mainShader = new Shader("shaders/shader.vert", "shaders/shader.frag");
 
@@ -106,7 +107,6 @@ Renderer::Renderer(GLFWwindow **window)
   texture = new Texture("resources/container.jpg");
   texture->BindTexture();
 
-  camera = new Camera(vec3(0, 0, 5));
   mainShader->Bind();
   vertexBuffer->BindVertexArrayBuffer();
   vertexBuffer->PutVertexData(vertices, indices, texCoords);
@@ -122,7 +122,6 @@ Renderer::~Renderer()
 {
   delete vertexBuffer;
   delete mainShader;
-  delete camera;
   delete texture;
 }
 
@@ -141,26 +140,28 @@ void Renderer::Render()
   vertexBuffer->BindVertexArrayBuffer(); // bind our array object
   mainShader->Bind();
 
-  glm::mat4 model = glm::mat4(1.0f); // model = local space to world space
-  model = glm::translate(model, vec3(0, 0, 0));
-  model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
-  model = glm::translate(model, vec3(-0.5, 0, -0.5));
+  // model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+  // model = glm::translate(model, vec3(-0.5, 0, -0.5));
 
   glm::mat4 projection; // from camera to screen
   // fov / aspectratio/ near clip / far clip TODO: add option for these things TODO: add aspect ration height/width
   projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
+  std::cout << camera->position.x << camera->position.y << camera->position.z << std::endl;
 
-  mainShader->setMat4f("model", model);
   mainShader->setMat4f("view", camera->GetViewMatrix());
   mainShader->setMat4f("projection", projection);
 
   glPolygonMode(GL_FRONT_AND_BACK, (shouldWireframe) ? GL_LINE : GL_FILL);
-  float timeValue = glfwGetTime();
-  float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-  // mainShader->setVec4f("ourColor", 0.0f, greenValue, 0.0f, 1.0f);
 
-  // this draws using the incides, 6 is number of indices, gl unsined int is type
-  glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+  for (int i = 0; i < 10; i++)
+  {
+    glm::mat4 model = glm::mat4(1.0f); // model = local space to world space
+    model = glm::translate(model, vec3(i * 2, 0, i));
+    model = glm::rotate(model, (float)i, glm::vec3(0.0f, 1.0f, 0.0f));
+
+    mainShader->setMat4f("model", model);
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+  }
 
   glfwSwapBuffers(window);
 }

@@ -36,12 +36,16 @@ void NCraftMain::initOpenGL()
   glViewport(0, 0, NCraftWindow::WIDTH, NCraftWindow::HEIGHT);
   // glfwSetKeyCallback(window, key_callback);
 
-  renderer = new Renderer(&window);
+  camera = new Camera(glm::vec3(0, 0, 3));
+  renderer = new Renderer(&window, &camera);
 }
 void NCraftMain::mainLoop()
 {
   while (!glfwWindowShouldClose(window))
   {
+    deltaTime = glfwGetTime() - lastFrameTime;
+    lastFrameTime = glfwGetTime();
+
     renderer->Render();
     processInput();
     glfwPollEvents();
@@ -51,11 +55,44 @@ void NCraftMain::processInput()
 {
   if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
     glfwSetWindowShouldClose(window, true);
+
+  const float cameraSpeed = 2.5f * deltaTime;
+  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    camera->TranslateCameraBy(cameraSpeed * camera->target);
+
+  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    camera->TranslateCameraBy(-(cameraSpeed * camera->target));
+
+  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    camera->TranslateCameraBy(-glm::normalize(glm::cross(camera->target, camera->up)) * cameraSpeed);
+
+  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    camera->TranslateCameraBy(glm::normalize(glm::cross(camera->target, camera->up)) * cameraSpeed);
+}
+
+void NCraftMain::MouseMoved(double xpos, double ypos)
+{
+  if (lastMouseX == -999)
+  { // check if first time moving mouse
+    lastMouseX = xpos;
+    lastMouseY = ypos;
+  }
+  float xoffset = xpos - lastMouseX;
+  float yoffset = lastMouseY - ypos; // y from bottom to top
+  lastMouseX = xpos;
+  lastMouseY = ypos;
+
+  xoffset *= mouseSensitivity;
+  yoffset *= mouseSensitivity;
+
+  camera->setYaw(camera->getYaw() + xoffset);
+  camera->setPitch(camera->getPitch() + yoffset);
 }
 
 void NCraftMain::cleanUp()
 {
   delete renderer;
+  delete camera;
 
   glfwDestroyWindow(window);
   glfwTerminate();

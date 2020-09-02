@@ -11,7 +11,7 @@
 class Renderer
 {
 public:
-  Renderer(GLFWwindow **window);
+  Renderer(GLFWwindow **window, Camera **camera);
   ~Renderer();
   void Render();
   void ToggleWireframe();

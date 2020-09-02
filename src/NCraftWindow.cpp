@@ -8,6 +8,11 @@ void NCraftWindow::error_callback(int error, const char *description)
   fprintf(stderr, "GLFW Error: %s\n", description);
 }
 
+void NCraftWindow::NCraftMouseCallback(GLFWwindow *window, double xpos, double ypos)
+{
+  main->MouseMoved(xpos, ypos);
+}
+
 void NCraftWindow::NCraftKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
 
@@ -50,6 +55,7 @@ NCraftWindow::NCraftWindow(int width, int height, GLFWwindow **window, NCraftMai
   // Setup call backs for glfw
   glfwSetWindowUserPointer(*window, this);
   glfwSetKeyCallback(*window, key_callback);
+  glfwSetCursorPosCallback(*window, mouse_callback);
   glfwSetFramebufferSizeCallback(*window, framebuffer_size_callback);
 
   glfwMakeContextCurrent(*window);
