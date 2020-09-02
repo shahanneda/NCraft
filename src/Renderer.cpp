@@ -30,7 +30,7 @@ std::vector<vec3> vertices = {
     // left face
     vec3(0, 0, 1), // bottom left
     vec3(0, 0, 0), // bottom right
-    vec3(0, 1, 1), // top right
+    vec3(0, 1, 0), // top right
     vec3(0, 1, 1), // top left
 
     // top face
@@ -139,7 +139,7 @@ void Renderer::Render()
   mainShader->Bind();
 
   glm::mat4 model = glm::mat4(1.0f);
-  model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+  model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f));
   ;
   glm::mat4 view = glm::mat4(1.0f);
   view = glm::translate(view, glm::vec3(-1.0f, 0.0f, -5.0f));
