@@ -3,7 +3,6 @@
 
 #include <Renderer.h>
 #include <glad/glad.h>
-
 class Renderer; // forward dec
 class NCraftMain
 {

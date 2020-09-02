@@ -17,17 +17,24 @@ ADD_LIBRARY(NCraft
 
 set(srcs 
    src/inc/math/Vec3f.h
+   src/inc/utils/std_img.h
 )
 
 file(GLOB srcs
     "src/*.h"
     "src/*.cpp"
     "src/inc/math/*.h"
+    "src/inc/utils/*.h"
     "src/math/*.cpp"
     # "src/inc/*.h"
 )
 
+set(other_srcs 
+  "src/inc/utils/std_image.h"
+)
+
 # target_include_directories(NCraft PRIVATE ${CMAKE_SOURCE_DIR}/src/inc/)
+# target_include_directories(NCraft PRIVATE ${CMAKE_SOURCE_DIR}/src/inc/utils)
 
 # GLFW
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -52,18 +59,24 @@ include_directories(glad/include/)
 
 include_directories(${CMAKE_SOURCE_DIR}/src/inc/math/)
 include_directories(${CMAKE_SOURCE_DIR}/src/inc/)
+include_directories(${CMAKE_SOURCE_DIR}/src/inc/utils)
 
 
 include_directories(${CMAKE_SOURCE_DIR})
-
+#FILE(COPY yourImg.png DESTINATION "${CMAKE_BINARY_DIR}") later on coping shaders and resourses
 target_include_directories(NCraft PRIVATE "src/inc/")
 # glad
 add_library("glad" "glad/src/glad.c")
 target_include_directories("glad" PRIVATE "glad/include/")
 target_include_directories(NCraft PRIVATE "glad/include/")
+target_include_directories(NCraft PRIVATE "src/inc/")
+
 target_link_libraries(NCraft "glad" "${CMAKE_DL_LIBS}")
 
 
-add_executable(NCraftExe ${CMAKE_SOURCE_DIR}/src/NCraftMain.cpp ${srcs} )
+add_executable(NCraftExe ${CMAKE_SOURCE_DIR}/src/NCraftMain.cpp ${srcs}  ${other_srcs})
+target_include_directories(NCraftExe PRIVATE "{CMAKE_SOURCE_DIR}src/inc/")
+
+
 target_link_libraries(NCraftExe NCraft)
 

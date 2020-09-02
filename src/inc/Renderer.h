@@ -17,6 +17,6 @@ private:
   Shader *mainShader;
   VertexBuffer *vertexBuffer;
   GLFWwindow *window;
-  unsigned int shaderProgram;
+  uint32_t shaderProgram;
   bool shouldWireframe = false;
 };

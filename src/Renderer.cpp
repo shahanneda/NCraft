@@ -1,6 +1,7 @@
 #include <Renderer.h>
 #include <iostream>
 #include <math.h>
+// #include <Texture.h>
 
 // glBindBuffer(GL_ARRAY_BUFFER, VBO);
 Renderer::Renderer(GLFWwindow **window)
