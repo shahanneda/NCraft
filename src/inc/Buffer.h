@@ -19,7 +19,7 @@ class VertexBuffer : public Buffer
 public:
   VertexBuffer();
   void BindVertexArrayBuffer() override;
-  void PutVertexData(std::vector<Vec3f> verts, std::vector<int> indices);
+  void PutVertexData(std::vector<Vec3f> verts, std::vector<int> indices, std::vector<float> textures);
   void UnbindVertexArrayBuffer();
 };
 

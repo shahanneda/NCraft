@@ -1,9 +1,11 @@
+#define STB_IMAGE_IMPLEMENTATION
 #include <Texture.h>
+#include <iostream>
 #include <stdint.h>
 
 Texture::Texture(std::string filepath){
     int width, height, nrChannels;
-    unsigned char *data = stbi_load(filepath, &width, &height, &nrChannels, 0); 
+    unsigned char *data = stbi_load(filepath.c_str(), &width, &height, &nrChannels, 0); 
     glGenTextures(1, &this->id);  
     this->BindTexture();
     
@@ -22,5 +24,5 @@ Texture::Texture(std::string filepath){
 
 }
 void Texture::BindTexture(){
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, this->id);
 }

@@ -1,5 +1,7 @@
+#ifndef NCRAFT_TEXTURE
+#define NCRAFT_TEXTURE
+
 #include <string>
-#define STB_IMAGE_IMPLEMENTATION
 #include <utils/std_image.h>
 #include <glad/glad.h>
 
@@ -9,3 +11,4 @@ class Texture{
         Texture(std::string path);
         void BindTexture();
 };
+#endif

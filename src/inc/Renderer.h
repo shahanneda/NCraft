@@ -4,6 +4,7 @@
 #include <NCraftWindow.h>
 #include <glad/glad.h>
 #include <Shader.h>
+#include <Texture.h>
 
 class Renderer
 {
@@ -19,4 +20,5 @@ private:
   GLFWwindow *window;
   uint32_t shaderProgram;
   bool shouldWireframe = false;
+  Texture *texture;
 };

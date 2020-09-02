@@ -19,9 +19,18 @@ Renderer::Renderer(GLFWwindow **window)
       0, 1, 3,
       1, 2, 3};
 
+  std::vector<float> texCoords = {
+      1.0f, 1.0f, // lower-left corner
+      1.0f, 0.0f, // lower-right corner
+      0.0f, 0.0f, // top-center corner
+      0.0f, 1.0f};
+
+  texture = new Texture("resources/container.jpg");
+  texture->BindTexture();
+
   mainShader->Bind();
   vertexBuffer->BindVertexArrayBuffer();
-  vertexBuffer->PutVertexData(vertices, indices);
+  vertexBuffer->PutVertexData(vertices, indices, texCoords);
 }
 
 void Renderer::ToggleWireframe()
@@ -42,6 +51,7 @@ void Renderer::Render()
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
 
+  texture->BindTexture();
   mainShader->Bind();
   // mainShader->setFloat("gcolor", 1.0f);
 
@@ -51,8 +61,7 @@ void Renderer::Render()
   glPolygonMode(GL_FRONT_AND_BACK, (shouldWireframe) ? GL_LINE : GL_FILL);
   float timeValue = glfwGetTime();
   float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-
-  mainShader->setVec4f("ourColor", 0.0f, greenValue, 0.0f, 1.0f);
+  // mainShader->setVec4f("ourColor", 0.0f, greenValue, 0.0f, 1.0f);
 
   // this draws using the incides, 6 is number of indices, gl unsined int is type
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
