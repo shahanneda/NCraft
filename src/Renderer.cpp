@@ -9,34 +9,61 @@ using glm::vec3;
 // #include <Texture.h>
 
 std::vector<vec3> vertices = {
+    //front face
     vec3(0, 0, 0), // 0 bottom left
     vec3(0, 1, 0), // 1 top left
     vec3(1, 1, 0), // 2 top right
     vec3(1, 0, 0), // 3 bottom right
 
-    vec3(0, 0, 1), // 4 bottom left
-    vec3(0, 1, 1), // 5 top left
-    vec3(1, 1, 1), // 6 top right
-    vec3(1, 0, 1), // 7 bottom right
+    //right face
+    vec3(1, 0, 0), // bottom left
+    vec3(1, 0, 1), // bottom right
+    vec3(1, 1, 1), // top right
+    vec3(1, 1, 0), // top left
+
+    // back face
+    vec3(1, 0, 1), // 7 bottom left
+    vec3(0, 0, 1), // 8 bottom right
+    vec3(0, 1, 1), // 9 top right
+    vec3(1, 1, 1), // 10 top left
+
+    // left face
+    vec3(0, 0, 1), // bottom left
+    vec3(0, 0, 0), // bottom right
+    vec3(0, 1, 1), // top right
+    vec3(0, 1, 1), // top left
+
+    // top face
+    vec3(0, 1, 0), // bottom left
+    vec3(1, 1, 0), // bottom right
+    vec3(1, 1, 1), // top right
+    vec3(0, 1, 1), // top left
+
+    // bottom face
+    vec3(0, 0, 0), // bottom left
+    vec3(1, 0, 0), // bottom right
+    vec3(1, 0, 1), // top right
+    vec3(0, 0, 1)  // top left
 };
 std::vector<int> indices = {
     0, 1, 2, //  front face
     2, 3, 0, //
 
-    2, 3, 7, // right side
-    7, 6, 2, //
+    4, 5, 6, // right
+    6, 7, 4, //
 
-    7, 4, 5, // back face
-    7, 5, 6, //
+    8, 9, 10,  // back
+    10, 11, 8, //
 
-    5, 4, 0, // left side
-    0, 1, 5, //
+    12, 13, 14, // left
+    14, 15, 12, //
 
-    1, 2, 6, // top side
-    6, 5, 1, //
+    16, 17, 18, // top
+    18, 19, 16, //
 
-    0, 3, 7, // bottom side
-    0, 4, 0  //
+    20, 21, 22, // bottom
+    22, 23, 20  //
+
 };
 // glBindBuffer(GL_ARRAY_BUFFER, VBO);
 Renderer::Renderer(GLFWwindow **window)
@@ -55,7 +82,26 @@ Renderer::Renderer(GLFWwindow **window)
       vec2(0, 1),
       vec2(1, 1),
       vec2(1, 0),
-  };
+
+      vec2(0, 0),
+      vec2(0, 1),
+      vec2(1, 1),
+      vec2(1, 0),
+
+      vec2(0, 0),
+      vec2(0, 1),
+      vec2(1, 1),
+      vec2(1, 0),
+
+      vec2(0, 0),
+      vec2(0, 1),
+      vec2(1, 1),
+      vec2(1, 0),
+
+      vec2(0, 0),
+      vec2(0, 1),
+      vec2(1, 1),
+      vec2(1, 0)};
 
   texture = new Texture("resources/container.jpg");
   texture->BindTexture();
