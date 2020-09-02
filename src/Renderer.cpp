@@ -8,24 +8,35 @@ using glm::vec2;
 using glm::vec3;
 // #include <Texture.h>
 
+std::vector<vec3> vertices = {
+    vec3(0, 0, 0), // 0 bottom left
+    vec3(0, 1, 0), // 1 top left
+    vec3(1, 1, 0), // 2 top right
+    vec3(1, 0, 0), // 3 bottom right
+
+    vec3(0, 0, 1), // 4 bottom left
+    vec3(0, 1, 1), // 5 top left
+    vec3(1, 1, 1), // 6 top right
+    vec3(1, 0, 1), // 7 bottom right
+};
 std::vector<int> indices = {
     0, 1, 2, //  front face
     2, 3, 0, //
 
-    2, 6, 7, // right side
-    2, 7, 3, //
+    2, 3, 7, // right side
+    7, 6, 2, //
 
-    6, 5, 4, // back face
-    5, 4, 7, //
+    7, 4, 5, // back face
+    7, 5, 6, //
 
     5, 4, 0, // left side
-    5, 0, 1, //
+    0, 1, 5, //
 
     1, 2, 6, // top side
-    1, 6, 5, //
+    6, 5, 1, //
 
     0, 3, 7, // bottom side
-    1, 7, 4  //
+    0, 4, 0  //
 };
 // glBindBuffer(GL_ARRAY_BUFFER, VBO);
 Renderer::Renderer(GLFWwindow **window)
@@ -33,19 +44,6 @@ Renderer::Renderer(GLFWwindow **window)
   this->window = *window;
   vertexBuffer = new VertexBuffer();
   mainShader = new Shader("shaders/shader.vert", "shaders/shader.frag");
-
-  std::vector<vec3> vertices = {
-      vec3(0, 0, 0), // 0 bottom left
-      vec3(0, 1, 0), // 1 top left
-      vec3(1, 1, 0), // 2 top right
-      vec3(1, 0, 0), // 3 bottom right
-
-      vec3(0, 0, 1), // 4 bottom left
-      vec3(0, 1, 1), // 5 top left
-      vec3(1, 1, 1), // 6 top right
-      vec3(1, 0, 1), // 7 bottom right
-
-  };
 
   std::vector<vec2> texCoords = {
       vec2(0, 0),
@@ -83,7 +81,8 @@ void Renderer::Render()
 {
   // clear the screen
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT);
+  glEnable(GL_DEPTH_TEST);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glActiveTexture(GL_TEXTURE0);
   texture->BindTexture();
@@ -94,10 +93,10 @@ void Renderer::Render()
   mainShader->Bind();
 
   glm::mat4 model = glm::mat4(1.0f);
-  model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f));
+  model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
   ;
   glm::mat4 view = glm::mat4(1.0f);
-  view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+  view = glm::translate(view, glm::vec3(-1.0f, 0.0f, -5.0f));
 
   glm::mat4 projection;
 

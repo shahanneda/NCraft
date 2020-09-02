@@ -37,7 +37,7 @@ void VertexBuffer::PutVertexData(std::vector<glm::vec3> verts, std::vector<int> 
   // just for unpacking the arrays
   uint32_t vertexIndex = 0;
   uint32_t textureIndex = 0;
-  for (int i = 0; i < verts.size() * 3 + textures.size(); i += 5)
+  for (int i = 0; i < verts.size() * 3 + textures.size() * 2; i += 5)
   {
     vertsWithTextures[i] = verts[vertexIndex].x;
     vertsWithTextures[i + 1] = verts[vertexIndex].y;
@@ -48,6 +48,12 @@ void VertexBuffer::PutVertexData(std::vector<glm::vec3> verts, std::vector<int> 
     vertexIndex++;
     textureIndex++;
   }
+
+  for (float f : vertsWithTextures)
+  {
+    std::cout << f << std::endl;
+  }
+  std::cout << "donee" << std::endl;
 
   BindVertexArrayBuffer();
   glBufferData(GL_ARRAY_BUFFER, vertsWithTextures.size() * sizeof(float), &vertsWithTextures[0], GL_STATIC_DRAW);
