@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 #include <Shader.h>
 #include <Texture.h>
+#include <Camera.h>
 #include <glm/glm.hpp>
 
 class Renderer
@@ -22,4 +23,5 @@ private:
   uint32_t shaderProgram;
   bool shouldWireframe = false;
   Texture *texture;
+  Camera *camera;
 };

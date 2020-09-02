@@ -106,6 +106,7 @@ Renderer::Renderer(GLFWwindow **window)
   texture = new Texture("resources/container.jpg");
   texture->BindTexture();
 
+  camera = new Camera(vec3(0, 0, 5));
   mainShader->Bind();
   vertexBuffer->BindVertexArrayBuffer();
   vertexBuffer->PutVertexData(vertices, indices, texCoords);
@@ -121,6 +122,8 @@ Renderer::~Renderer()
 {
   delete vertexBuffer;
   delete mainShader;
+  delete camera;
+  delete texture;
 }
 
 void Renderer::Render()
@@ -138,19 +141,17 @@ void Renderer::Render()
   vertexBuffer->BindVertexArrayBuffer(); // bind our array object
   mainShader->Bind();
 
-  glm::mat4 model = glm::mat4(1.0f);
-  model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f));
-  ;
-  glm::mat4 view = glm::mat4(1.0f);
-  view = glm::translate(view, glm::vec3(-1.0f, 0.0f, -5.0f));
+  glm::mat4 model = glm::mat4(1.0f); // model = local space to world space
+  model = glm::translate(model, vec3(0, 0, 0));
+  model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+  model = glm::translate(model, vec3(-0.5, 0, -0.5));
 
-  glm::mat4 projection;
-
+  glm::mat4 projection; // from camera to screen
   // fov / aspectratio/ near clip / far clip TODO: add option for these things TODO: add aspect ration height/width
   projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
 
   mainShader->setMat4f("model", model);
-  mainShader->setMat4f("view", view);
+  mainShader->setMat4f("view", camera->GetViewMatrix());
   mainShader->setMat4f("projection", projection);
 
   glPolygonMode(GL_FRONT_AND_BACK, (shouldWireframe) ? GL_LINE : GL_FILL);
