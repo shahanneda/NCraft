@@ -11,7 +11,7 @@
 class Shader
 {
 public:
-    uint32_t programId;
+    uint32_t id;
 
     Shader(const std::string vertexPath, const std::string fragmentPath);
 

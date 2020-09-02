@@ -1,6 +1,10 @@
 #include <Renderer.h>
 #include <iostream>
 #include <math.h>
+#include <glm/glm.hpp>
+#include "glm/gtc/matrix_transform.hpp"
+#include <glm/gtc/type_ptr.hpp>
+
 // #include <Texture.h>
 
 // glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -51,12 +55,20 @@ void Renderer::Render()
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
 
+  glActiveTexture(GL_TEXTURE0);
   texture->BindTexture();
   mainShader->Bind();
   // mainShader->setFloat("gcolor", 1.0f);
 
   vertexBuffer->BindVertexArrayBuffer(); // bind our array object
   mainShader->Bind();
+
+  glm::mat4 trans = glm::mat4(1.0f);
+  trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+  trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+
+  uint32_t transformLoc = glGetUniformLocation(mainShader->id, "transform");
+  glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
   glPolygonMode(GL_FRONT_AND_BACK, (shouldWireframe) ? GL_LINE : GL_FILL);
   float timeValue = glfwGetTime();

@@ -1,24 +1,8 @@
-
 #include <Shader.h>
 #include <iostream>
 
 Shader::Shader(std::string vertexPath, std::string fragmentPath)
 {
-
-    // const char *vertexShaderSource = "#version 330 core\n"
-    //                                  "layout (location = 0) in vec3 aPos;\n"
-    //                                  "void main()\n"
-    //                                  "{\n"
-    //                                  "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    //                                  "}\0";
-
-    // // const char *fragmentShaderSource = "#version 330 core\n"
-    //                                    "out vec4 FragColor;\n"
-    //                                    "void main()\n"
-    //                                    "{\n"
-    //                                    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    //                                    "}\n\0";
-
     std::stringstream ss;
     char log[512];
 
@@ -58,15 +42,15 @@ Shader::Shader(std::string vertexPath, std::string fragmentPath)
         std::cout << "Bad path " << fragmentPath.c_str() << std::endl;
     }
 
-    programId = glCreateProgram();
-    glAttachShader(programId, vertexShader);
-    glAttachShader(programId, fragmentShader);
-    glLinkProgram(programId);
+    id = glCreateProgram();
+    glAttachShader(id, vertexShader);
+    glAttachShader(id, fragmentShader);
+    glLinkProgram(id);
 
-    glGetProgramInfoLog(programId, 512, NULL, log);
+    glGetProgramInfoLog(id, 512, NULL, log);
     std::cout << "Program: " << log << std::endl;
 
-    // glGetProgramiv(programId, GL_LINK_STATUS, &success);
+    // glGetProgramiv(id, GL_LINK_STATUS, &success);
     // if (!success)
     // {
     //     std::cout << "SHADER CREATION ERROR: PROGRAM LINK FAILED\n"
@@ -79,24 +63,24 @@ Shader::Shader(std::string vertexPath, std::string fragmentPath)
 
 void Shader::Bind()
 {
-    glUseProgram(programId);
+    glUseProgram(id);
 }
 
 void Shader::setBool(const std::string &name, bool value)
 {
-    glUniform1i(glGetUniformLocation(programId, name.c_str()), (int)value);
+    glUniform1i(glGetUniformLocation(id, name.c_str()), (int)value);
 }
 
 void Shader::setInt(const std::string &name, int value)
 {
-    glUniform1i(glGetUniformLocation(programId, name.c_str()), value);
+    glUniform1i(glGetUniformLocation(id, name.c_str()), value);
 }
 
 void Shader::setFloat(const std::string &name, float value)
 {
-    glUniform1f(glGetUniformLocation(programId, name.c_str()), value);
+    glUniform1f(glGetUniformLocation(id, name.c_str()), value);
 }
 void Shader::setVec4f(const std::string &name, float x, float y, float z, float w)
 {
-    glUniform4f(glGetUniformLocation(programId, name.c_str()), x, y, z, w);
+    glUniform4f(glGetUniformLocation(id, name.c_str()), x, y, z, w);
 }
