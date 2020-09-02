@@ -58,5 +58,6 @@ NCraftWindow::NCraftWindow(int width, int height, GLFWwindow **window, NCraftMai
   glfwSetCursorPosCallback(*window, mouse_callback);
   glfwSetFramebufferSizeCallback(*window, framebuffer_size_callback);
 
+  glfwSetInputMode(*window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glfwMakeContextCurrent(*window);
 }

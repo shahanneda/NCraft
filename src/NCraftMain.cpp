@@ -68,6 +68,12 @@ void NCraftMain::processInput()
 
   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     camera->TranslateCameraBy(glm::normalize(glm::cross(camera->target, camera->up)) * cameraSpeed);
+
+  if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    camera->TranslateCameraBy(glm::vec3(0, 1.0f * cameraSpeed, 0));
+
+  if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+    camera->TranslateCameraBy(glm::vec3(0, -1.0f * cameraSpeed, 0));
 }
 
 void NCraftMain::MouseMoved(double xpos, double ypos)
