@@ -8,27 +8,11 @@ WorldRenderer::WorldRenderer()
     worldVertexBuffer = new VertexBuffer();
     worldShader = new Shader("shaders/shader.vert", "shaders/shader.frag");
     worldTexture = new Texture("resources/container.jpg");
-
-    Chunk *mainChunk = new Chunk(vec3(0, 0, 0));
-    Chunk *posx = new Chunk(vec3(1, 0, 0));
-    Chunk *negx = new Chunk(vec3(-1, 0, 0));
-    Chunk *posy = new Chunk(vec3(0, 1, 0));
-    Chunk *negy = new Chunk(vec3(0, -1, 0));
-    Chunk *posz = new Chunk(vec3(0, 0, 1));
-    Chunk *negz = new Chunk(vec3(0, 0, -1));
-
-    mainChunk->positiveXNeighber = posx;
-    mainChunk->negativeXNeighber = negx;
-    mainChunk->positiveYNeighber = posy;
-    mainChunk->negativeYNeighber = negy;
-    mainChunk->positiveZNeighber = posz;
-    mainChunk->negativeZNeighber = negz;
+    ;
+    cLoader = new ChunkLoader(this);
 
     // posx->SetBlock(Block(vec3(0, 5, 5), AIR));
     // posz->SetBlock(Block(vec3(0, 5, 15), AIR));
-
-    renderedChunks.push_back(mainChunk);
-    mainChunk->meshData.GenerateData();
 }
 
 void WorldRenderer::RenderChunck(Chunk *c)
@@ -66,4 +50,5 @@ WorldRenderer::~WorldRenderer()
     delete worldVertexBuffer;
     delete worldShader;
     delete worldTexture;
+    delete cLoader;
 }

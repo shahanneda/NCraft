@@ -17,6 +17,10 @@ public:
   ~MasterRenderer();
   void Render();
   void ToggleWireframe();
+  inline void GenerateChunks()
+  {
+    worldRenderer->GenerateChunks();
+  }
 
 private:
   GLFWwindow *window;

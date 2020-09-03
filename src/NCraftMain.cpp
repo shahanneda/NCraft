@@ -27,6 +27,10 @@ void NCraftMain::KeyPressed(int key, int status)
   {
     renderer->ToggleWireframe();
   }
+  if (key == GLFW_KEY_C && status == GLFW_PRESS)
+  {
+    renderer->GenerateChunks();
+  }
 }
 
 void NCraftMain::initOpenGL()

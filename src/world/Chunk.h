@@ -17,6 +17,7 @@ public:
     vector<glm::vec2> textureCoords;
     ChunkMeshData(Chunk *chunk);
     Chunk *chunk;
+    bool generated = false;
     void GenerateData();
     void AddFace(BLOCK_FACE face, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT);
     void AddAllNeededFaces(int x, int y, int z, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT);
@@ -90,14 +91,15 @@ public:
     void SetBlock(vec3 pos, Block b);
     void SetBlock(Block b);
 
-    Chunk *positiveXNeighber;
-    Chunk *negativeXNeighber;
+    bool hasAllNeighbers();
+    Chunk *positiveXNeighber = nullptr;
+    Chunk *negativeXNeighber = nullptr;
 
-    Chunk *positiveYNeighber;
-    Chunk *negativeYNeighber;
+    Chunk *positiveYNeighber = nullptr;
+    Chunk *negativeYNeighber = nullptr;
 
-    Chunk *positiveZNeighber;
-    Chunk *negativeZNeighber;
+    Chunk *positiveZNeighber = nullptr;
+    Chunk *negativeZNeighber = nullptr;
 };
 
 #endif

@@ -9,10 +9,12 @@ using glm::vec3;
 Chunk::Chunk(vec3 pos) : blocks(), meshData(this), pos(pos)
 {
     FillChunk();
+    std::cout << "filled blocks for chunk at pos " << glm::to_string(pos) << std::endl;
 }
 
 void Chunk::FillChunk()
 {
+    BLOCK_TYPE type = pos.y > 0 ? AIR : GRASS;
     blocks.reserve(CHUNCK_SIZE * CHUNCK_SIZE * CHUNCK_SIZE);
     for (int x = 0; x < Chunk::CHUNCK_SIZE; x++)
     {
@@ -20,7 +22,7 @@ void Chunk::FillChunk()
         {
             for (int z = 0; z < Chunk::CHUNCK_SIZE; z++)
             {
-                SetBlock(Block(vec3(x, y, z), GRASS));
+                SetBlock(Block(vec3(x, y, z), type));
             }
         }
     }
@@ -37,6 +39,11 @@ void Chunk::SetBlock(Block b)
 Block *Chunk::GetBlockAt(glm::vec3 pos)
 {
     return &blocks[pos.x + pos.y * CHUNCK_SIZE + pos.z * CHUNCK_SIZE * CHUNCK_SIZE];
+}
+
+bool Chunk::hasAllNeighbers()
+{
+    return positiveXNeighber && negativeXNeighber && positiveYNeighber && negativeYNeighber && positiveZNeighber && negativeZNeighber;
 }
 
 ChunkMeshData::ChunkMeshData(Chunk *chunk)
@@ -169,6 +176,7 @@ void ChunkMeshData::AddAllNeededFaces(int x, int y, int z, vector<vec3> *blockV,
 }
 void ChunkMeshData::GenerateData()
 {
+    generated = true;
     for (int x = 0; x < Chunk::CHUNCK_SIZE; x++)
     {
         for (int y = 0; y < Chunk::CHUNCK_SIZE; y++)
