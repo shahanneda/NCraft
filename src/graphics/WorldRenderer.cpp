@@ -20,15 +20,14 @@ WorldRenderer::WorldRenderer()
     mainChunk->positiveXNeighber = posx;
     mainChunk->negativeXNeighber = negx;
     mainChunk->positiveYNeighber = posy;
-    mainChunk->negativeXNeighber = negy;
+    mainChunk->negativeYNeighber = negy;
     mainChunk->positiveZNeighber = posz;
     mainChunk->negativeZNeighber = negz;
-    posx->meshData.GenerateData();
-    posy->meshData.GenerateData();
+
+    // posx->SetBlock(Block(vec3(0, 5, 5), AIR));
+    // posz->SetBlock(Block(vec3(0, 5, 15), AIR));
 
     renderedChunks.push_back(mainChunk);
-    renderedChunks.push_back(posx);
-    renderedChunks.push_back(posy);
     mainChunk->meshData.GenerateData();
 }
 
