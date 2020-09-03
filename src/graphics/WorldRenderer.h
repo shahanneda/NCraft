@@ -10,9 +10,9 @@ class WorldRenderer
 public:
     WorldRenderer();
     ~WorldRenderer();
-    Chunk *c;
     void RenderChunck(Chunk *c);
     void Render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
+    vector<Chunk *> renderedChunks;
 
 private:
     Shader *worldShader;

@@ -6,6 +6,17 @@ enum BLOCK_TYPE
 {
     GRASS,
     STONE,
+    AIR,
+};
+
+enum BLOCK_FACE
+{
+    POS_X,
+    NEG_X,
+    POS_Y,
+    NEG_Y,
+    POS_Z,
+    NEG_Z
 };
 namespace NCraft
 {
@@ -15,6 +26,7 @@ namespace NCraft
         Block(glm::vec3 pos, BLOCK_TYPE type);
         glm::vec3 position;
         BLOCK_TYPE type;
+        bool isTransparent;
     };
 } // namespace NCraft
 #endif

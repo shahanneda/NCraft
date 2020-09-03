@@ -6,4 +6,8 @@ NCraft::Block::Block(glm::vec3 pos, BLOCK_TYPE type)
 {
     this->position = pos;
     this->type = type;
+    if (type == BLOCK_TYPE::AIR)
+    {
+        isTransparent = true;
+    }
 }
