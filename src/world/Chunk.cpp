@@ -62,17 +62,13 @@ void ChunkMeshData::GenerateData()
                 {
                     blockV[i] = blockV[i] + b->position;
                 }
-                int addToIndices = 0;
-                if (indices.size() > 0)
-                {
-                    addToIndices = indices.back(); // add accoridng to how many we have already;
-                }
+                int iteration = z + y * Chunk::CHUNCK_SIZE + x * Chunk::CHUNCK_SIZE * Chunk::CHUNCK_SIZE;
+                int addToIndices = iteration * blockV.size(); // we need to shift the indices, according to how many vertices are already in the array; iteration is number of blocks, and we times it by size since each block has that many vertcis
 
                 for (int i = 0; i < blockI.size(); i++)
                 {
                     blockI[i] = blockI[i] + addToIndices;
                 }
-
                 verts.insert(verts.end(), blockV.begin(), blockV.end());
                 indices.insert(indices.end(), blockI.begin(), blockI.end());
                 textureCoords.insert(textureCoords.end(), cubeTexCoords.begin(), cubeTexCoords.end());
