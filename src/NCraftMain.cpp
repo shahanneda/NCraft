@@ -1,9 +1,9 @@
 
-#include <NCraftMain.h>
+#include "NCraftMain.h"
 #include <iostream>
 #include <string>
 #include <glad/glad.h>
-#include "NCraftWindow.h"
+#include "graphics/Renderer.h"
 
 const std::string VERSION = "0.02";
 int NCraftWindow::WIDTH = 1000;

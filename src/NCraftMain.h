@@ -1,7 +1,7 @@
 #ifndef N_CRAFT_MAIN
 #define N_CRAFT_MAIN
 
-#include <Renderer.h>
+#include "graphics/Renderer.h"
 #include <glad/glad.h>
 
 class Camera;   // forward dec

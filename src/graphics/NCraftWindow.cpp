@@ -1,6 +1,6 @@
 // ©2020 Shahan Neda
 
-#include "inc/NCraftWindow.h"
+#include "NCraftWindow.h"
 #include <iostream>
 
 void NCraftWindow::error_callback(int error, const char *description)

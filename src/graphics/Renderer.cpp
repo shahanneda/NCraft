@@ -1,10 +1,10 @@
-#include <Renderer.h>
+#include "Renderer.h"
 #include <iostream>
 #include <math.h>
 #include <glm/glm.hpp>
 #include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
-#include <Chunk.h>
+#include "../world/Chunk.h"
 using glm::vec2;
 using glm::vec3;
 // #include <Texture.h>

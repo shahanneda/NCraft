@@ -1,13 +1,13 @@
 #pragma once
 #include <vector>
-#include <Buffer.h>
-#include <NCraftWindow.h>
+#include "Buffer.h"
+#include "NCraftWindow.h"
 #include <glad/glad.h>
-#include <Shader.h>
-#include <Texture.h>
-#include <Camera.h>
+#include "Shader.h"
+#include "Texture.h"
+#include "Camera.h"
 #include <glm/glm.hpp>
-#include <Block.h>
+#include "../world/Block.h"
 
 class Renderer
 {

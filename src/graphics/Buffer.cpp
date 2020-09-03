@@ -1,5 +1,5 @@
-#include <Buffer.h>
-#include "inc/NCraftMain.h"
+#include "Buffer.h"
+#include "../NCraftMain.h"
 
 VertexBuffer::VertexBuffer() : Buffer()
 {

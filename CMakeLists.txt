@@ -15,17 +15,8 @@ ADD_LIBRARY(NCraft
   ${CMAKE_SOURCE_DIR}/src/NCraftMain.cpp
 )
 
-set(srcs 
-   src/inc/math/Vec3f.h
-   src/inc/utils/std_img.h
-)
+file(GLOB_RECURSE SOURCES src/*.cpp)
 
-file(GLOB srcs
-    "src/*.h"
-    "src/*.cpp"
-    "src/inc/utils/*.h"
-    # "src/inc/*.h"
-)
 
 set(other_srcs 
   "src/inc/utils/std_image.h"
@@ -55,12 +46,9 @@ target_link_libraries(NCraft OpenGL::GL)
 
 include_directories(glad/include/)
 
-include_directories(${CMAKE_SOURCE_DIR}/src/inc/math/)
-include_directories(${CMAKE_SOURCE_DIR}/src/inc/)
 include_directories(${CMAKE_SOURCE_DIR}/src/inc/utils)
 
 
-include_directories(${CMAKE_SOURCE_DIR})
 #FILE(COPY yourImg.png DESTINATION "${CMAKE_BINARY_DIR}") later on coping shaders and resourses
 target_include_directories(NCraft PRIVATE "src/inc/")
 # glad
@@ -72,7 +60,7 @@ target_include_directories(NCraft PRIVATE "src/inc/")
 target_link_libraries(NCraft "glad" "${CMAKE_DL_LIBS}")
 
 
-add_executable(NCraftExe ${CMAKE_SOURCE_DIR}/src/NCraftMain.cpp ${srcs}  ${other_srcs})
+add_executable(NCraftExe ${CMAKE_SOURCE_DIR}/src/NCraftMain.cpp ${srcs} ${SOURCES} ${other_srcs})
 target_include_directories(NCraftExe PRIVATE "{CMAKE_SOURCE_DIR}src/inc/")
 
 

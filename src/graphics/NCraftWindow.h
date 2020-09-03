@@ -2,7 +2,7 @@
 #pragma once
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <NCraftMain.h>
+#include "../NCraftMain.h"
 
 class NCraftMain;
 class NCraftWindow
