@@ -18,10 +18,10 @@ public:
     ChunkMeshData(Chunk *chunk);
     Chunk *chunk;
     void GenerateData();
-    void AddFace(BLOCK_FACE face, vector<vec3> *blockV, vector<int> *blockI);
+    void AddFace(BLOCK_FACE face, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT);
 
 private:
-    const std::vector<int> faceIndices = {
+    const std::vector<int> faceIndicesOriginal = {
         0, 1, 2, //  front face
         2, 3, 0, //
     };
@@ -74,18 +74,8 @@ const std::vector<vec3> cubeVertBottom = {
     vec3(0, 0, 1)  // top left
 };
 
-const std::vector<vec2>
-    cubeTexCoords = {vec2(0, 0), vec2(0, 1), vec2(1, 1), vec2(1, 0),
+const std::vector<vec2> faceTextureCoords = {vec2(0, 0), vec2(0, 1), vec2(1, 1), vec2(1, 0)};
 
-                     vec2(0, 0), vec2(0, 1), vec2(1, 1), vec2(1, 0),
-
-                     vec2(0, 0), vec2(0, 1), vec2(1, 1), vec2(1, 0),
-
-                     vec2(0, 0), vec2(0, 1), vec2(1, 1), vec2(1, 0),
-
-                     vec2(0, 0), vec2(0, 1), vec2(1, 1), vec2(1, 0),
-
-                     vec2(0, 0), vec2(0, 1), vec2(1, 1), vec2(1, 0)};
 
 class Chunk
 {

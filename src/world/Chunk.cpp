@@ -15,21 +15,22 @@ void Chunk::FillChunk()
 {
 
     blocks.push_back(Block(glm::vec3(0, 0, 0), BLOCK_TYPE::GRASS));
-    // blocks.push_back(Block(glm::vec3(x, y, z), BLOCK_TYPE::GRASS));
+    blocks.push_back(Block(glm::vec3(1, 0, 1), BLOCK_TYPE::GRASS));
+    blocks.push_back(Block(glm::vec3(2, 0, 2), BLOCK_TYPE::GRASS));
 
-    int x = 1;
+    int x = 3;
     int y = 0;
     int z = 0;
-    for (int i = 1; i < CHUNCK_SIZE * CHUNCK_SIZE * CHUNCK_SIZE; i++)
+    for (int i = 2; i < CHUNCK_SIZE * CHUNCK_SIZE * CHUNCK_SIZE; i++)
     {
         blocks.push_back(Block(glm::vec3(x, y, z), BLOCK_TYPE::AIR));
         x++;
-        if (x == CHUNCK_SIZE)
+        if (x == CHUNCK_SIZE - 1)
         {
             x = 0;
             y++;
         }
-        if (y == CHUNCK_SIZE)
+        if (y == CHUNCK_SIZE - 1)
         {
             x = 0;
             y = 0;
@@ -48,10 +49,48 @@ ChunkMeshData::ChunkMeshData(Chunk *chunk)
     this->chunk = chunk;
 }
 
-void ChunkMeshData::AddFace(BLOCK_FACE face, vector<vec3> *blockV, vector<int> *blockI)
+void ChunkMeshData::AddFace(BLOCK_FACE face, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT)
 {
-    blockV->insert(blockV->end(), cubeVertRight.begin(), cubeVertRight.end());
+    std::vector<int> faceIndices(faceIndicesOriginal);
+
+    int numberOfFaceAlready = std::floorf(blockV->size() / 4); // check how many faces we already have
+    for (int i = 0; i < faceIndices.size(); i++)
+    {
+        faceIndices[i] += numberOfFaceAlready * cubeVertFront.size(); // shift the indices, by faces*4 , since thats how much each face stores
+    }
+
+    switch (face)
+    {
+    case BLOCK_FACE::POS_X:
+        blockV->insert(blockV->end(), cubeVertRight.begin(), cubeVertRight.end());
+        break;
+
+    case BLOCK_FACE::NEG_X:
+        blockV->insert(blockV->end(), cubeVertLeft.begin(), cubeVertLeft.end());
+        break;
+
+    case BLOCK_FACE::POS_Y:
+        blockV->insert(blockV->end(), cubeVertTop.begin(), cubeVertTop.end());
+        break;
+
+    case BLOCK_FACE::NEG_Y:
+        blockV->insert(blockV->end(), cubeVertBottom.begin(), cubeVertBottom.end());
+        break;
+
+    case BLOCK_FACE::POS_Z:
+        blockV->insert(blockV->end(), cubeVertBack.begin(), cubeVertBack.end());
+        break;
+
+    case BLOCK_FACE::NEG_Z:
+        blockV->insert(blockV->end(), cubeVertFront.begin(), cubeVertFront.end());
+        break;
+
+    default:
+        break;
+    }
+
     blockI->insert(blockI->end(), faceIndices.begin(), faceIndices.end());
+    blockT->insert(blockT->end(), faceTextureCoords.begin(), faceTextureCoords.end());
 }
 
 void ChunkMeshData::GenerateData()
@@ -71,15 +110,19 @@ void ChunkMeshData::GenerateData()
                 // std::cout << glm::to_string(b->position) << std::endl;
                 vector<vec3> blockV(0);
                 vector<int> blockI(0);
+                vector<vec2> blockT(0);
 
-                AddFace(BLOCK_FACE::POS_X, &blockV, &blockI);
+                AddFace(BLOCK_FACE::POS_X, &blockV, &blockI, &blockT);
+                AddFace(BLOCK_FACE::NEG_Y, &blockV, &blockI, &blockT);
+                AddFace(BLOCK_FACE::POS_Z, &blockV, &blockI, &blockT);
+                AddFace(BLOCK_FACE::NEG_Z, &blockV, &blockI, &blockT);
 
                 for (int i = 0; i < blockV.size(); i++)
                 {
-                    blockV[i] = blockV[i] + b->position;
+                    blockV[i] = blockV[i] + b->position; // move verts of block to the block pos
                 }
-                int iteration = z + y * Chunk::CHUNCK_SIZE + x * Chunk::CHUNCK_SIZE * Chunk::CHUNCK_SIZE;
-                int addToIndices = iteration * blockV.size(); // we need to shift the indices, according to how many vertices are already in the array; iteration is number of blocks, and we times it by size since each block has that many vertcis
+
+                int addToIndices = verts.size(); // we need to shift the indices, according to how many vertices are already in the array; iteration is number of blocks, and we times it by size since each block has that many vertcis
 
                 for (int i = 0; i < blockI.size(); i++)
                 {
@@ -87,7 +130,7 @@ void ChunkMeshData::GenerateData()
                 }
                 verts.insert(verts.end(), blockV.begin(), blockV.end());
                 indices.insert(indices.end(), blockI.begin(), blockI.end());
-                textureCoords.insert(textureCoords.end(), cubeTexCoords.begin(), cubeTexCoords.end());
+                textureCoords.insert(textureCoords.end(), blockT.begin(), blockT.end());
             }
         }
     }
