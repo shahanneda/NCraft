@@ -5,6 +5,8 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include "../world/Chunk.h"
+#include <glm/gtx/string_cast.hpp>
+
 using glm::vec2;
 using glm::vec3;
 // #include <Texture.h>
@@ -113,7 +115,7 @@ Renderer::Renderer(GLFWwindow **window, Camera **camera)
   vertexBuffer->PutVertexData(vertices, indices, texCoords);
 
   Chunk c;
-  // std::cout << c.blocks[0][0][0].position.x;
+  std::cout << glm::to_string(c.GetBlockAt(vec3(0, 8, 3)).position) << std::endl;
 }
 
 void Renderer::ToggleWireframe()
