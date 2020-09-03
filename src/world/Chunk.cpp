@@ -24,6 +24,7 @@ void Chunk::FillChunk()
             }
         }
     }
+    SetBlock(Block(vec3(5, 15, 5), AIR));
 }
 
 void Chunk::SetBlock(vec3 pos, Block b)
