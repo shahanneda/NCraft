@@ -6,7 +6,7 @@
 
 using glm::vec2;
 using glm::vec3;
-Chunk::Chunk() : blocks(), meshData(this)
+Chunk::Chunk(vec3 pos) : blocks(), meshData(this), pos(pos)
 {
     FillChunk();
 }

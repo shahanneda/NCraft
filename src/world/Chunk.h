@@ -81,8 +81,9 @@ class Chunk
 {
 public:
     const static int CHUNCK_SIZE = 16;
-    Chunk();
+    Chunk(vec3 pos);
     vector<Block> blocks;
+    vec3 pos;
     ChunkMeshData meshData;
     void FillChunk();
     Block *GetBlockAt(glm::vec3 pos);
