@@ -10,4 +10,8 @@ NCraft::Block::Block(glm::vec3 pos, BLOCK_TYPE type)
     {
         isTransparent = true;
     }
+    else
+    {
+        isTransparent = false;
+    }
 }
