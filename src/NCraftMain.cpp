@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <glad/glad.h>
-#include "graphics/Renderer.h"
+#include "graphics/MasterRenderer.h"
 
 const std::string VERSION = "0.02";
 int NCraftWindow::WIDTH = 1000;
@@ -27,6 +27,7 @@ void NCraftMain::KeyPressed(int key, int status)
     renderer->ToggleWireframe();
   }
 }
+
 void NCraftMain::initOpenGL()
 {
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -37,7 +38,7 @@ void NCraftMain::initOpenGL()
   // glfwSetKeyCallback(window, key_callback);
 
   camera = new Camera(glm::vec3(0, 0, 3));
-  renderer = new Renderer(&window, &camera);
+  renderer = new MasterRenderer(&window, &camera);
 }
 void NCraftMain::mainLoop()
 {

@@ -1,11 +1,11 @@
 #ifndef N_CRAFT_MAIN
 #define N_CRAFT_MAIN
 
-#include "graphics/Renderer.h"
+#include "graphics/MasterRenderer.h"
 #include <glad/glad.h>
 
-class Camera;   // forward dec
-class Renderer; // forward dec
+class Camera;         // forward dec
+class MasterRenderer; // forward dec
 class NCraftMain
 {
 public:
@@ -18,7 +18,7 @@ public:
 private:
   const float mouseSensitivity = 0.1f;
   GLFWwindow *window;
-  Renderer *renderer;
+  MasterRenderer *renderer;
   Camera *camera;
 
   float lastMouseX = -999;

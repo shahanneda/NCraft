@@ -1,5 +1,8 @@
 #include "Block.h"
 #include <vector>
+#ifndef NCRAFT_CHUNK
+#define NCRAFT_CHUNK
+
 using namespace NCraft;
 using std::vector;
 class Chunk
@@ -9,5 +12,6 @@ public:
     Chunk();
     vector<Block> blocks;
     void FillChunk();
-    Block GetBlockAt(glm::vec3 pos);
+    Block *GetBlockAt(glm::vec3 pos);
 };
+#endif

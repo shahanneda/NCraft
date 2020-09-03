@@ -8,21 +8,19 @@
 #include "Camera.h"
 #include <glm/glm.hpp>
 #include "../world/Block.h"
+#include "WorldRenderer.h"
 
-class Renderer
+class MasterRenderer
 {
 public:
-  Renderer(GLFWwindow **window, Camera **camera);
-  ~Renderer();
+  MasterRenderer(GLFWwindow **window, Camera **camera);
+  ~MasterRenderer();
   void Render();
   void ToggleWireframe();
 
 private:
-  Shader *mainShader;
-  VertexBuffer *vertexBuffer;
   GLFWwindow *window;
-  uint32_t shaderProgram;
   bool shouldWireframe = false;
-  Texture *texture;
   Camera *camera;
+  WorldRenderer *worldRenderer;
 };
