@@ -49,14 +49,7 @@ void VertexBuffer::PutVertexData(std::vector<glm::vec3> verts, std::vector<int> 
     textureIndex++;
   }
 
-  for (float f : vertsWithTextures)
-  {
-    std::cout << f << std::endl;
-  }
-  std::cout << "donee" << std::endl;
-
   BindVertexArrayBuffer();
   glBufferData(GL_ARRAY_BUFFER, vertsWithTextures.size() * sizeof(float), &vertsWithTextures[0], GL_STATIC_DRAW);
-
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices[0], GL_STATIC_DRAW);
 }

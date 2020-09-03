@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
+#include <Chunk.h>
 using glm::vec2;
 using glm::vec3;
 // #include <Texture.h>
@@ -110,6 +111,9 @@ Renderer::Renderer(GLFWwindow **window, Camera **camera)
   mainShader->Bind();
   vertexBuffer->BindVertexArrayBuffer();
   vertexBuffer->PutVertexData(vertices, indices, texCoords);
+
+  Chunk c;
+  // std::cout << c.blocks[0][0][0].position.x;
 }
 
 void Renderer::ToggleWireframe()
@@ -140,13 +144,9 @@ void Renderer::Render()
   vertexBuffer->BindVertexArrayBuffer(); // bind our array object
   mainShader->Bind();
 
-  // model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
-  // model = glm::translate(model, vec3(-0.5, 0, -0.5));
-
   glm::mat4 projection; // from camera to screen
   // fov / aspectratio/ near clip / far clip TODO: add option for these things TODO: add aspect ration height/width
   projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
-  std::cout << camera->position.x << camera->position.y << camera->position.z << std::endl;
 
   mainShader->setMat4f("view", camera->GetViewMatrix());
   mainShader->setMat4f("projection", projection);
