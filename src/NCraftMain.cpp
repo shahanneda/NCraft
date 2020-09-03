@@ -4,6 +4,7 @@
 #include <string>
 #include <glad/glad.h>
 #include "graphics/MasterRenderer.h"
+#include <string>
 
 const std::string VERSION = "0.02";
 int NCraftWindow::WIDTH = 1000;
@@ -44,8 +45,11 @@ void NCraftMain::mainLoop()
 {
   while (!glfwWindowShouldClose(window))
   {
+
     deltaTime = glfwGetTime() - lastFrameTime;
     lastFrameTime = glfwGetTime();
+
+    glfwSetWindowTitle(window, ("NCraft || FPS: " + std::to_string(std::ceil(1 / deltaTime))).c_str());
 
     renderer->Render();
     processInput();
@@ -57,7 +61,7 @@ void NCraftMain::processInput()
   if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
     glfwSetWindowShouldClose(window, true);
 
-  const float cameraSpeed = 2.5f * deltaTime;
+  const float cameraSpeed = 5.0f * deltaTime;
   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     camera->TranslateCameraBy(cameraSpeed * camera->target);
 

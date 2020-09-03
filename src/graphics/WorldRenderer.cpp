@@ -1,13 +1,11 @@
 #include "WorldRenderer.h"
-#include "Cube.h"
 #include "glm/gtc/matrix_transform.hpp"
 
 using glm::vec2;
 using glm::vec3;
 WorldRenderer::WorldRenderer()
 {
-    Cube cubeData;
-    Chunk *c = new Chunk(); // temp
+    c = new Chunk(); // temp
     worldVertexBuffer = new VertexBuffer();
     worldShader = new Shader("shaders/shader.vert", "shaders/shader.frag");
 
@@ -16,7 +14,7 @@ WorldRenderer::WorldRenderer()
 
     worldShader->Bind();
     worldVertexBuffer->BindVertexArrayBuffer();
-    worldVertexBuffer->PutVertexData(cubeData.vertices, cubeData.indices, cubeData.texCoords);
+    worldVertexBuffer->PutVertexData(c->meshData.verts, c->meshData.indices, c->meshData.textureCoords);
 }
 
 void WorldRenderer::RenderChunck(Chunk *c)
@@ -35,15 +33,11 @@ void WorldRenderer::Render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
 
     worldShader->setMat4f("projection", projectionMatrix);
 
-    for (int i = 0; i < 10; i++)
-    {
-        glm::mat4 model = glm::mat4(1.0f); // model = local space to world space
-        model = glm::translate(model, vec3(i * 2, 0, i));
-        model = glm::rotate(model, (float)i, glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 model = glm::mat4(1.0f);            // model = local space to world space
+    model = glm::translate(model, vec3(0, 0, 0)); // later replace this with model position
 
-        worldShader->setMat4f("model", model);
-        glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
-    }
+    worldShader->setMat4f("model", model);
+    glDrawElements(GL_TRIANGLES, c->meshData.indices.size(), GL_UNSIGNED_INT, 0);
     this->RenderChunck(c);
 }
 
