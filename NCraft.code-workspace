@@ -72,7 +72,10 @@
 			"unordered_map": "cpp",
 			"utility": "cpp",
 			"*.tcc": "cpp",
-			"filesystem": "cpp"
+			"filesystem": "cpp",
+			"__tree": "cpp",
+			"map": "cpp",
+			"queue": "cpp"
 		}
 	}
 }
