@@ -12,7 +12,8 @@ Camera::Camera(glm::vec3 pos)
 
 glm::mat4 Camera::GetViewMatrix()
 {
-    return glm::lookAt(position, position + target, up);
+    glm::mat4 view = glm::lookAt(position, position + target, up);
+    return view;
 }
 
 void Camera::SetPosition(glm::vec3 pos)

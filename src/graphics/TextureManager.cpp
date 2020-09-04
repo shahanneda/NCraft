@@ -26,11 +26,11 @@ std::vector<glm::vec2> TextureManager::GetTextureForBlockFace(BLOCK_TYPE type, B
     float topY = 0;
     float bottomY = (float)32 / (float)atlasSize;
     ;
-
     // float rightSide = ((float)faceIndexWithPixels + pixelsPerSideOfFace) / (float)atlasSize; // same as 1
     // float leftSide = (float)faceIndexWithPixels / (float)atlasSize;                          // same as 0
     // float rightSide = ((float)faceIndexWithPixels + pixelsPerSideOfFace) / (float)atlasSize; // same as 1
-    std::cout << faceIndex << leftX << " " << rightX << " " << bottomY << " " << std::endl;
+    std::cout
+        << faceIndex << leftX << " " << rightX << " " << bottomY << " " << std::endl;
 
     std::vector<vec2> coords = {
         vec2(leftX, bottomY),   // bottom left

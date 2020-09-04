@@ -59,9 +59,9 @@ void NCraftMain::mainLoop()
   {
     if (glfwGetTime() > lastFrameRateUpdateTime + frameRateInterval)
     {
-      frameCount = 0;
       lastFrameRateUpdateTime = glfwGetTime();
       frameRate = frameCount / frameRateInterval;
+      frameCount = 0;
     }
     frameCount++;
 

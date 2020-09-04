@@ -10,7 +10,6 @@ using glm::vec3;
 Chunk::Chunk(vec3 pos) : meshData(this), pos(pos)
 {
     FillChunk();
-    std::cout << "filled blocks for chunk at pos " << glm::to_string(pos) << std::endl;
 }
 
 void Chunk::FillChunk()
