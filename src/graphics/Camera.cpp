@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 
 Camera::Camera(glm::vec3 pos)
 {
@@ -21,11 +22,21 @@ void Camera::SetPosition(glm::vec3 pos)
 void Camera::setPitch(float pitch)
 {
     this->pitch = pitch;
+    if (this->pitch > 89.0f)
+    {
+        this->pitch = 89.0f;
+    }
+    if (this->pitch < -89.0f)
+    {
+        this->pitch = -89.0f;
+    }
+    std::cout << "pitch: " << this->pitch << std::endl;
     CalculateRotation();
 }
 void Camera::setYaw(float yaw)
 {
     this->yaw = yaw;
+    std::cout << "yaw: " << yaw << std::endl;
     CalculateRotation();
 }
 

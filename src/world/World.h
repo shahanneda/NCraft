@@ -2,6 +2,7 @@
 #define NCRAFT_WORLD
 #include "../graphics/MasterRenderer.h"
 #include "ChunkLoader.h"
+#include "glm/glm.hpp"
 
 class Camera;
 class MasterRenderer;
@@ -13,5 +14,6 @@ public:
     MasterRenderer *renderer;
     ChunkLoader *cLoader;
     void GenerateChunks();
+    void BreakBlock(glm::vec3 pos);
 };
 #endif

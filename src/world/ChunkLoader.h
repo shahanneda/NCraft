@@ -21,8 +21,10 @@ public:
     std::vector<Chunk *> nonGeneratedChunks;
     void NextChunkGenerationCycle();
     ~ChunkLoader();
-    Chunk *GetChunkAt(glm::vec3 pos);
+    Chunk *GetChunkAtChunkPos(glm::vec3 pos);
+    Chunk *GetChunkAtWorldPos(glm::vec3 pos);
     NCraft::Block *GetBlockAt(glm::vec3 pos);
+    NCraft::Block *SetBlockAt(glm::vec3 pos);
 
     WorldRenderer *renderer;
 };

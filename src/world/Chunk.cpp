@@ -6,7 +6,7 @@
 
 using glm::vec2;
 using glm::vec3;
-Chunk::Chunk(vec3 pos) : blocks(), meshData(this), pos(pos)
+Chunk::Chunk(vec3 pos) : meshData(this), pos(pos)
 {
     FillChunk();
     std::cout << "filled blocks for chunk at pos " << glm::to_string(pos) << std::endl;
@@ -16,18 +16,17 @@ void Chunk::FillChunk()
 {
     BLOCK_TYPE type = pos.y > 0 ? AIR : GRASS;
     blocks.reserve(CHUNCK_SIZE * CHUNCK_SIZE * CHUNCK_SIZE);
-    for (int x = 0; x < Chunk::CHUNCK_SIZE; x++)
+    for (int z = 0; z < Chunk::CHUNCK_SIZE; z++)
     {
         for (int y = 0; y < Chunk::CHUNCK_SIZE; y++)
         {
-            for (int z = 0; z < Chunk::CHUNCK_SIZE; z++)
+            for (int x = 0; x < Chunk::CHUNCK_SIZE; x++)
             {
-                SetBlock(Block(vec3(x, y, z), type));
+                blocks.push_back(Block(vec3(x, y, z), type));
             }
         }
     }
 }
-
 void Chunk::SetBlock(vec3 pos, Block b)
 {
     blocks[pos.x + pos.y * CHUNCK_SIZE + pos.z * CHUNCK_SIZE * CHUNCK_SIZE] = b;

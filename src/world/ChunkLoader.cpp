@@ -18,26 +18,51 @@ ChunkLoader::ChunkLoader(WorldRenderer *renderer) : loadedChunks()
     nonGeneratedChunks.push_back(mainChunk);
 }
 
-Chunk *ChunkLoader::GetChunkAt(vec3 pos)
+Chunk *ChunkLoader::GetChunkAtChunkPos(vec3 pos)
 {
     auto cIter = loadedChunks.find(pos);
     if (cIter == loadedChunks.end())
     {
-        std::cout << 'Trying to get Chunk that is not loaded!!!' << glm::to_string(pos) << std::endl;
+        std::cout << "Trying to get Chunk that is not loaded!!!" << glm::to_string(pos) << std::endl;
         return nullptr;
     }
     return cIter->second;
 };
 
+Chunk *ChunkLoader::GetChunkAtWorldPos(glm::vec3 pos)
+{
+    vec3 chunkPos = vec3((int)pos.x / Chunk::CHUNCK_SIZE, (int)pos.y / Chunk::CHUNCK_SIZE, (int)pos.z / Chunk::CHUNCK_SIZE);
+    Chunk *c = GetChunkAtChunkPos(chunkPos);
+    // std::cout << "got chunk at chunk pos " <<
+}
 NCraft::Block *ChunkLoader::GetBlockAt(vec3 pos)
 {
-    Chunk *c = GetChunkAt(vec3((int)pos.x / Chunk::CHUNCK_SIZE, (int)pos.y / Chunk::CHUNCK_SIZE, (int)pos.z / Chunk::CHUNCK_SIZE));
+    std::cout << "getting block at" << glm::to_string(pos) << std::endl;
+    Chunk *c = GetChunkAtWorldPos(pos);
     if (c)
     {
-        return c->GetBlockAt(vec3(pos.x - c->pos.x, pos.y - c->pos.y, pos.z - c->pos.z));
+        Block *k = c->GetBlockAt(vec3(pos.x - c->pos.x * Chunk::CHUNCK_SIZE, pos.y - c->pos.y * Chunk::CHUNCK_SIZE, pos.z - c->pos.z * Chunk::CHUNCK_SIZE));
+        if (!k)
+        {
+            std::cout << "BLOCK NOT FOUND " << std::endl;
+            return nullptr;
+        }
+        std::cout << "got block" << glm::to_string(k->position) << std::endl;
+        return k;
     }
     return nullptr;
 }
+
+NCraft::Block *ChunkLoader::SetBlockAt(vec3 pos)
+{
+    // Chunk *c = GetChunkAtWorldPos(pos);
+    // if (c)
+    // {
+    //     return c->GetBlockAt(vec3(pos.x - c->pos.x, pos.y - c->pos.y, pos.z - c->pos.z));
+    // }
+    return nullptr;
+}
+
 void ChunkLoader::NextChunkGenerationCycle()
 {
     std::cout << "generating chunks" << std::endl;

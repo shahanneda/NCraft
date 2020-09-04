@@ -31,6 +31,10 @@ void NCraftMain::KeyPressed(int key, int status)
   {
     world->GenerateChunks();
   }
+  if (key == GLFW_KEY_X && status == GLFW_PRESS)
+  {
+    world->BreakBlock(camera->position);
+  }
 }
 
 void NCraftMain::initOpenGL()
@@ -42,7 +46,7 @@ void NCraftMain::initOpenGL()
   glViewport(0, 0, NCraftWindow::WIDTH, NCraftWindow::HEIGHT);
   // glfwSetKeyCallback(window, key_callback);
 
-  camera = new Camera(glm::vec3(0, 0, 3));
+  camera = new Camera(glm::vec3(0, 18, 3));
   renderer = new MasterRenderer(window, camera);
   world = new World(renderer, camera);
 }

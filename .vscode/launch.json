@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}/bin/NCraftExe",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/bin/",
             "environment": [],
             "externalConsole": false,
             "MIMode": "lldb"
