@@ -24,16 +24,16 @@ public:
 
 private:
     const std::vector<int> faceIndicesOriginal = {
-        0, 1, 2, //  front face
+        0, 1, 2, //
         2, 3, 0, //
     };
 };
 const std::vector<vec3> cubeVertFront = {
     //front face
     vec3(0, 0, 0), // 0 bottom left
-    vec3(0, 1, 0), // 1 top left
+    vec3(1, 0, 0), // 1 bottom right
     vec3(1, 1, 0), // 2 top right
-    vec3(1, 0, 0), // 3 bottom right
+    vec3(0, 1, 0), // 3 top left
 };
 
 const std::vector<vec3> cubeVertRight = {
