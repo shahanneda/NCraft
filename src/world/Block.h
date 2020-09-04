@@ -5,6 +5,7 @@
 enum BLOCK_TYPE
 {
     GRASS,
+    DIRT,
     STONE,
     AIR,
 };

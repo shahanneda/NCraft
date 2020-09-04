@@ -1,7 +1,9 @@
-#include "Block.h"
-#include <vector>
 #ifndef NCRAFT_CHUNK
 #define NCRAFT_CHUNK
+
+#include "Block.h"
+#include <vector>
+#include "TerrainGenerator.h"
 
 using namespace NCraft;
 using glm::vec2;
@@ -80,7 +82,8 @@ class Chunk
 {
 public:
     const static int CHUNCK_SIZE = 16;
-    Chunk(vec3 pos);
+    Chunk(vec3 pos, TerrainGenerator *terrainGen);
+    TerrainGenerator *terrainGen;
     vector<Block> blocks;
     vec3 pos;
     ChunkMeshData meshData;

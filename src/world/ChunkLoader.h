@@ -9,6 +9,7 @@
 
 class WorldRenderer; // forward dec
 class Chunk;         // forward dec
+class TerrainGenerator;
 namespace NCraft
 {
     class Block;
@@ -16,9 +17,11 @@ namespace NCraft
 class ChunkLoader
 {
 public:
-    ChunkLoader(WorldRenderer *renderer);
+    ChunkLoader(WorldRenderer *renderer, TerrainGenerator *terrainGen);
     std::unordered_map<glm::vec3, Chunk *> loadedChunks;
     std::vector<Chunk *> nonGeneratedChunks;
+    TerrainGenerator *terrainGen;
+
     void NextChunkGenerationCycle();
     ~ChunkLoader();
     Chunk *GetChunkAtChunkPos(glm::vec3 pos);

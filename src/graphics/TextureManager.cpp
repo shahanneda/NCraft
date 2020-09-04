@@ -8,13 +8,22 @@ using std::vector;
 const std::map<BLOCK_TYPE, std::map<BLOCK_FACE, int>> TextureManager::numberOfFacesPerBlockType = {
     // this stores what faces each blocks use
     {
-        GRASS,
-        {{POS_X, 0},
-         {NEG_X, 0},
-         {POS_Z, 0},
-         {NEG_Z, 0},
-         {POS_Y, 1},
-         {NEG_Y, 2}}},
+        {GRASS,
+         {{POS_X, 0},
+          {NEG_X, 0},
+          {POS_Z, 0},
+          {NEG_Z, 0},
+          {POS_Y, 1},
+          {NEG_Y, 2}}},
+        {DIRT,
+         {{POS_X, 2},
+          {NEG_X, 2},
+          {POS_Z, 2},
+          {NEG_Z, 2},
+          {POS_Y, 2},
+          {NEG_Y, 2}}}
+
+    },
 };
 std::vector<glm::vec2> TextureManager::GetTextureForBlockFace(BLOCK_TYPE type, BLOCK_FACE face)
 {
@@ -32,8 +41,6 @@ std::vector<glm::vec2> TextureManager::GetTextureForBlockFace(BLOCK_TYPE type, B
     // float rightSide = ((float)faceIndexWithPixels + pixelsPerSideOfFace) / (float)atlasSize; // same as 1
     // float leftSide = (float)faceIndexWithPixels / (float)atlasSize;                          // same as 0
     // float rightSide = ((float)faceIndexWithPixels + pixelsPerSideOfFace) / (float)atlasSize; // same as 1
-    std::cout
-        << faceIndex << " " << adjustmentFactor << " " << leftX << " " << rightX << " " << bottomY << " " << std::endl;
 
     std::vector<vec2> coords = {
         vec2(leftX, bottomY),  // bottom left

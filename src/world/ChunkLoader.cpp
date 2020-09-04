@@ -11,10 +11,11 @@ using std::floor;
 using std::pair;
 using std::vector;
 
-ChunkLoader::ChunkLoader(WorldRenderer *renderer) : loadedChunks()
+ChunkLoader::ChunkLoader(WorldRenderer *renderer, TerrainGenerator *terrainGen) : loadedChunks()
 {
     this->renderer = renderer;
-    Chunk *mainChunk = new Chunk(vec3(0, 0, 0));
+    this->terrainGen = terrainGen;
+    Chunk *mainChunk = new Chunk(vec3(0, 0, 0), terrainGen);
     loadedChunks.insert(std::pair<glm::vec3, Chunk *>(mainChunk->pos, mainChunk));
     nonGeneratedChunks.push_back(mainChunk);
 }
@@ -74,7 +75,7 @@ void ChunkLoader::NextChunkGenerationCycle()
         Chunk *c = *it;
         if (c->positiveXNeighber == nullptr)
         {
-            Chunk *newChunk = new Chunk(vec3(c->pos.x + 1, c->pos.y, c->pos.z));
+            Chunk *newChunk = new Chunk(vec3(c->pos.x + 1, c->pos.y, c->pos.z), terrainGen);
             c->positiveXNeighber = newChunk;
             loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
             newNonGeneratedChunks.push_back(newChunk);
@@ -82,7 +83,7 @@ void ChunkLoader::NextChunkGenerationCycle()
         }
         if (c->negativeXNeighber == nullptr)
         {
-            Chunk *newChunk = new Chunk(vec3(c->pos.x - 1, c->pos.y, c->pos.z));
+            Chunk *newChunk = new Chunk(vec3(c->pos.x - 1, c->pos.y, c->pos.z), terrainGen);
             c->negativeXNeighber = newChunk;
             loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
             newNonGeneratedChunks.push_back(newChunk);
@@ -91,7 +92,7 @@ void ChunkLoader::NextChunkGenerationCycle()
 
         if (c->positiveYNeighber == nullptr)
         {
-            Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y + 1, c->pos.z));
+            Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y + 1, c->pos.z), terrainGen);
             c->positiveYNeighber = newChunk;
             loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
             newNonGeneratedChunks.push_back(newChunk);
@@ -99,7 +100,7 @@ void ChunkLoader::NextChunkGenerationCycle()
         }
         if (c->negativeYNeighber == nullptr)
         {
-            Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y - 1, c->pos.z));
+            Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y - 1, c->pos.z), terrainGen);
             c->negativeYNeighber = newChunk;
             loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
             newNonGeneratedChunks.push_back(newChunk);
@@ -108,7 +109,7 @@ void ChunkLoader::NextChunkGenerationCycle()
 
         if (c->positiveZNeighber == nullptr)
         {
-            Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y, c->pos.z + 1));
+            Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y, c->pos.z + 1), terrainGen);
             c->positiveZNeighber = newChunk;
             loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
             newNonGeneratedChunks.push_back(newChunk);
@@ -116,7 +117,7 @@ void ChunkLoader::NextChunkGenerationCycle()
         }
         if (c->negativeZNeighber == nullptr)
         {
-            Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y, c->pos.z - 1));
+            Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y, c->pos.z - 1), terrainGen);
             c->negativeZNeighber = newChunk;
             loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
             newNonGeneratedChunks.push_back(newChunk);

@@ -4,16 +4,19 @@
 #include <glm/gtx/string_cast.hpp>
 #include "Chunk.h"
 #include "../graphics/TextureManager.h"
+#include <FastNoise/FastNoise.h>
 
 using glm::vec2;
 using glm::vec3;
-Chunk::Chunk(vec3 pos) : meshData(this), pos(pos)
+Chunk::Chunk(vec3 pos, TerrainGenerator *terrainGen) : meshData(this), pos(pos)
 {
+    this->terrainGen = terrainGen;
     FillChunk();
 }
 
 void Chunk::FillChunk()
 {
+
     BLOCK_TYPE type = pos.y > 0 ? AIR : GRASS;
     blocks.reserve(CHUNCK_SIZE * CHUNCK_SIZE * CHUNCK_SIZE);
     for (int z = 0; z < Chunk::CHUNCK_SIZE; z++)
@@ -22,7 +25,8 @@ void Chunk::FillChunk()
         {
             for (int x = 0; x < Chunk::CHUNCK_SIZE; x++)
             {
-                blocks.push_back(Block(vec3(x, y, z), type));
+                vec3 worldPos = vec3(x + pos.x * CHUNCK_SIZE, y + pos.y * CHUNCK_SIZE, z + pos.z * CHUNCK_SIZE);
+                blocks.push_back(Block(vec3(x, y, z), terrainGen->GetBlockTypeAtPos(worldPos)));
             }
         }
     }

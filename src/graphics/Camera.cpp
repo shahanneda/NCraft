@@ -18,7 +18,7 @@ glm::mat4 Camera::GetViewMatrix()
 
 void Camera::SetPosition(glm::vec3 pos)
 {
-    this->position = pos;
+    this->position = pos / 2.0f;
 }
 void Camera::setPitch(float pitch)
 {
