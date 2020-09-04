@@ -29,7 +29,7 @@ void NCraftMain::KeyPressed(int key, int status)
   }
   if (key == GLFW_KEY_C && status == GLFW_PRESS)
   {
-    renderer->GenerateChunks();
+    world->GenerateChunks();
   }
 }
 
@@ -43,7 +43,8 @@ void NCraftMain::initOpenGL()
   // glfwSetKeyCallback(window, key_callback);
 
   camera = new Camera(glm::vec3(0, 0, 3));
-  renderer = new MasterRenderer(&window, &camera);
+  renderer = new MasterRenderer(window, camera);
+  world = new World(renderer, camera);
 }
 void NCraftMain::mainLoop()
 {
@@ -108,6 +109,7 @@ void NCraftMain::cleanUp()
 {
   delete renderer;
   delete camera;
+  delete world;
 
   glfwDestroyWindow(window);
   glfwTerminate();

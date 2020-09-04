@@ -9,10 +9,6 @@ WorldRenderer::WorldRenderer()
     worldShader = new Shader("shaders/shader.vert", "shaders/shader.frag");
     worldTexture = new Texture("resources/container.jpg");
     ;
-    cLoader = new ChunkLoader(this);
-
-    // posx->SetBlock(Block(vec3(0, 5, 5), AIR));
-    // posz->SetBlock(Block(vec3(0, 5, 15), AIR));
 }
 
 void WorldRenderer::RenderChunck(Chunk *c)
@@ -50,5 +46,4 @@ WorldRenderer::~WorldRenderer()
     delete worldVertexBuffer;
     delete worldShader;
     delete worldTexture;
-    delete cLoader;
 }

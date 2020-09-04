@@ -12,10 +12,10 @@ using glm::vec3;
 // #include <Texture.h>
 
 // glBindBuffer(GL_ARRAY_BUFFER, VBO);
-MasterRenderer::MasterRenderer(GLFWwindow **window, Camera **camera)
+MasterRenderer::MasterRenderer(GLFWwindow *window, Camera *camera)
 {
-  this->window = *window;
-  this->camera = *camera;
+  this->window = window;
+  this->camera = camera;
   this->worldRenderer = new WorldRenderer();
 }
 

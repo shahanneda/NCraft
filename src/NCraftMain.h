@@ -3,9 +3,11 @@
 
 #include "graphics/MasterRenderer.h"
 #include <glad/glad.h>
+#include "world/World.h"
 
 class Camera;         // forward dec
 class MasterRenderer; // forward dec
+class World;
 class NCraftMain
 {
 public:
@@ -18,6 +20,7 @@ public:
 private:
   const float mouseSensitivity = 0.1f;
   GLFWwindow *window;
+  World *world;
   MasterRenderer *renderer;
   Camera *camera;
 

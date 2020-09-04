@@ -13,18 +13,14 @@
 class MasterRenderer
 {
 public:
-  MasterRenderer(GLFWwindow **window, Camera **camera);
+  MasterRenderer(GLFWwindow *window, Camera *camera);
   ~MasterRenderer();
   void Render();
   void ToggleWireframe();
-  inline void GenerateChunks()
-  {
-    worldRenderer->GenerateChunks();
-  }
+  WorldRenderer *worldRenderer;
 
 private:
   GLFWwindow *window;
   bool shouldWireframe = false;
   Camera *camera;
-  WorldRenderer *worldRenderer;
 };
