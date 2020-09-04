@@ -19,8 +19,8 @@ public:
     Chunk *chunk;
     bool generated = false;
     void GenerateData();
-    void AddFace(BLOCK_FACE face, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT);
-    void AddAllNeededFaces(int x, int y, int z, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT);
+    void AddFace(BLOCK_TYPE type, BLOCK_FACE face, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT);
+    void AddAllNeededFaces(int x, int y, int z, BLOCK_TYPE type, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT);
 
 private:
     const std::vector<int> faceIndicesOriginal = {
@@ -75,8 +75,6 @@ const std::vector<vec3> cubeVertBottom = {
     vec3(1, 0, 1), // top right
     vec3(0, 0, 1)  // top left
 };
-
-const std::vector<vec2> faceTextureCoords = {vec2(0, 0), vec2(0, 1), vec2(1, 1), vec2(1, 0)};
 
 class Chunk
 {

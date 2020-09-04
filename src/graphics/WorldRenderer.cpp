@@ -7,7 +7,7 @@ WorldRenderer::WorldRenderer()
 {
     worldVertexBuffer = new VertexBuffer();
     worldShader = new Shader("shaders/shader.vert", "shaders/shader.frag");
-    worldTexture = new Texture("resources/container.jpg");
+    worldTexture = new Texture("resources/texture_atlas.png");
     ;
 }
 

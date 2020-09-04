@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include "Chunk.h"
+#include "../graphics/TextureManager.h"
 
 using glm::vec2;
 using glm::vec3;
@@ -50,7 +51,7 @@ ChunkMeshData::ChunkMeshData(Chunk *chunk)
     this->chunk = chunk;
 }
 
-void ChunkMeshData::AddFace(BLOCK_FACE face, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT)
+void ChunkMeshData::AddFace(BLOCK_TYPE type, BLOCK_FACE face, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT)
 {
     std::vector<int> faceIndices(faceIndicesOriginal);
 
@@ -89,36 +90,36 @@ void ChunkMeshData::AddFace(BLOCK_FACE face, vector<vec3> *blockV, vector<int> *
     default:
         break;
     }
-
+    auto texCoords = TextureManager::GetTextureForBlockFace(type, face);
     blockI->insert(blockI->end(), faceIndices.begin(), faceIndices.end());
-    blockT->insert(blockT->end(), faceTextureCoords.begin(), faceTextureCoords.end());
+    blockT->insert(blockT->end(), texCoords.begin(), texCoords.end()); // texture manager get texture coords for blocktpye
 }
 
 /// Checks and adds faces depending on whether the face has a transparent block beside it or not
-void ChunkMeshData::AddAllNeededFaces(int x, int y, int z, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT)
+void ChunkMeshData::AddAllNeededFaces(int x, int y, int z, BLOCK_TYPE type, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT)
 {
     // X
     if (x < Chunk::CHUNCK_SIZE - 1)
     { // -1 would be last block -2 is second last, bascially we dont want last
         if (chunk->GetBlockAt(vec3(x + 1, y, z))->isTransparent)
         {
-            AddFace(BLOCK_FACE::POS_X, blockV, blockI, blockT);
+            AddFace(type, BLOCK_FACE::POS_X, blockV, blockI, blockT);
         }
     }
     else if (chunk->positiveXNeighber->GetBlockAt(vec3(0, y, z))->isTransparent)
     { // chunk border
-        AddFace(BLOCK_FACE::POS_X, blockV, blockI, blockT);
+        AddFace(type, BLOCK_FACE::POS_X, blockV, blockI, blockT);
     }
     if (x > 0) // not first, since we are checking left
     {
         if (chunk->GetBlockAt(vec3(x - 1, y, z))->isTransparent)
         {
-            AddFace(BLOCK_FACE::NEG_X, blockV, blockI, blockT);
+            AddFace(type, BLOCK_FACE::NEG_X, blockV, blockI, blockT);
         }
     }
     else if (chunk->negativeXNeighber->GetBlockAt(vec3(Chunk::CHUNCK_SIZE - 1, y, z))->isTransparent)
     { // chunk border
-        AddFace(BLOCK_FACE::NEG_X, blockV, blockI, blockT);
+        AddFace(type, BLOCK_FACE::NEG_X, blockV, blockI, blockT);
     }
 
     // Y
@@ -126,23 +127,23 @@ void ChunkMeshData::AddAllNeededFaces(int x, int y, int z, vector<vec3> *blockV,
     { // -1 would be last block -2 is second last, bascially we dont want last
         if (chunk->GetBlockAt(vec3(x, y + 1, z))->isTransparent)
         {
-            AddFace(BLOCK_FACE::POS_Y, blockV, blockI, blockT);
+            AddFace(type, BLOCK_FACE::POS_Y, blockV, blockI, blockT);
         }
     }
     else if (chunk->positiveYNeighber->GetBlockAt(vec3(x, 0, z))->isTransparent)
     { // chunk border
-        AddFace(BLOCK_FACE::POS_Y, blockV, blockI, blockT);
+        AddFace(type, BLOCK_FACE::POS_Y, blockV, blockI, blockT);
     }
     if (y > 0) // not first, since we are checking left
     {
         if (chunk->GetBlockAt(vec3(x, y - 1, z))->isTransparent)
         {
-            AddFace(BLOCK_FACE::NEG_Y, blockV, blockI, blockT);
+            AddFace(type, BLOCK_FACE::NEG_Y, blockV, blockI, blockT);
         }
     }
     else if (chunk->negativeYNeighber->GetBlockAt(vec3(x, Chunk::CHUNCK_SIZE - 1, z))->isTransparent)
     { // chunk border
-        AddFace(BLOCK_FACE::NEG_Y, blockV, blockI, blockT);
+        AddFace(type, BLOCK_FACE::NEG_Y, blockV, blockI, blockT);
     }
 
     // Z
@@ -150,24 +151,24 @@ void ChunkMeshData::AddAllNeededFaces(int x, int y, int z, vector<vec3> *blockV,
     { // -1 would be last block -2 is second last, bascially we dont want last
         if (chunk->GetBlockAt(vec3(x, y, z + 1))->isTransparent)
         {
-            AddFace(BLOCK_FACE::POS_Z, blockV, blockI, blockT);
+            AddFace(type, BLOCK_FACE::POS_Z, blockV, blockI, blockT);
         }
     }
     else if (chunk->negativeYNeighber->GetBlockAt(vec3(x, y, 0))->isTransparent)
     { // chunk border
-        AddFace(BLOCK_FACE::POS_Z, blockV, blockI, blockT);
+        AddFace(type, BLOCK_FACE::POS_Z, blockV, blockI, blockT);
     }
 
     if (z > 0) // not first, since we are checking left
     {
         if (chunk->GetBlockAt(vec3(x, y, z - 1))->isTransparent)
         {
-            AddFace(BLOCK_FACE::NEG_Z, blockV, blockI, blockT);
+            AddFace(type, BLOCK_FACE::NEG_Z, blockV, blockI, blockT);
         }
     }
     else if (chunk->negativeYNeighber->GetBlockAt(vec3(x, y, Chunk::CHUNCK_SIZE - 1))->isTransparent)
     { // chunk border
-        AddFace(BLOCK_FACE::NEG_Z, blockV, blockI, blockT);
+        AddFace(type, BLOCK_FACE::NEG_Z, blockV, blockI, blockT);
     }
 
     // AddFace(BLOCK_FACE::POS_Z, blockV, blockI, blockT);
@@ -194,7 +195,7 @@ void ChunkMeshData::GenerateData()
                 vector<vec2> blockT(0);
 
                 // check and only draw faces where the blocks are air
-                AddAllNeededFaces(x, y, z, &blockV, &blockI, &blockT);
+                AddAllNeededFaces(x, y, z, b->type, &blockV, &blockI, &blockT);
 
                 for (int i = 0; i < blockV.size(); i++)
                 {
