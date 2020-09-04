@@ -4,6 +4,7 @@
 #include "Chunk.h"
 #include "../graphics/WorldRenderer.h"
 #include <iterator>
+#include <glm/gtx/string_cast.hpp>
 
 using glm::vec3;
 using std::pair;
@@ -17,6 +18,26 @@ ChunkLoader::ChunkLoader(WorldRenderer *renderer) : loadedChunks()
     nonGeneratedChunks.push_back(mainChunk);
 }
 
+Chunk *ChunkLoader::GetChunkAt(vec3 pos)
+{
+    auto cIter = loadedChunks.find(pos);
+    if (cIter == loadedChunks.end())
+    {
+        std::cout << 'Trying to get Chunk that is not loaded!!!' << glm::to_string(pos) << std::endl;
+        return nullptr;
+    }
+    return cIter->second;
+};
+
+NCraft::Block *ChunkLoader::GetBlockAt(vec3 pos)
+{
+    Chunk *c = GetChunkAt(vec3((int)pos.x / Chunk::CHUNCK_SIZE, (int)pos.y / Chunk::CHUNCK_SIZE, (int)pos.z / Chunk::CHUNCK_SIZE));
+    if (c)
+    {
+        return c->GetBlockAt(vec3(pos.x - c->pos.x, pos.y - c->pos.y, pos.z - c->pos.z));
+    }
+    return nullptr;
+}
 void ChunkLoader::NextChunkGenerationCycle()
 {
     std::cout << "generating chunks" << std::endl;
