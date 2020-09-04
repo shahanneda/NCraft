@@ -27,7 +27,10 @@ private:
   float lastMouseX = -999;
   float lastMouseY = -999;
 
-  void initOpenGL();
+  float lastFrameRateUpdateTime = 0;
+
+  void
+  initOpenGL();
   void mainLoop();
   void cleanUp();
 

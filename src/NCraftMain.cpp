@@ -52,13 +52,25 @@ void NCraftMain::initOpenGL()
 }
 void NCraftMain::mainLoop()
 {
+  const double frameRateInterval = 1.0;
+  int frameCount = 0;
+  double frameRate = 0;
   while (!glfwWindowShouldClose(window))
   {
+    if (glfwGetTime() > lastFrameRateUpdateTime + frameRateInterval)
+    {
+      frameCount = 0;
+      lastFrameRateUpdateTime = glfwGetTime();
+      frameRate = frameCount / frameRateInterval;
+    }
+    frameCount++;
 
     deltaTime = glfwGetTime() - lastFrameTime;
     lastFrameTime = glfwGetTime();
 
-    glfwSetWindowTitle(window, ("NCraft || FPS: " + std::to_string(std::ceil(1 / deltaTime))).c_str());
+    std::string cords = "x: " + std::to_string(camera->position.x) + " y: " + std::to_string(camera->position.y) + " z: " + std::to_string(camera->position.z);
+
+    glfwSetWindowTitle(window, ("NCraft || " + cords + " || FPS: " + std::to_string(std::ceil(frameRate))).c_str());
 
     renderer->Render();
     processInput();
