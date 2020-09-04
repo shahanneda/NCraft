@@ -2,6 +2,7 @@
 
 World::World(MasterRenderer *renderer, Camera *camera)
 {
+    terrainGen = new TerrainGenerator();
     cLoader = new ChunkLoader(renderer->worldRenderer, terrainGen);
     this->renderer = renderer;
 }

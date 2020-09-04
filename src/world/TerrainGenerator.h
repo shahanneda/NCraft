@@ -11,8 +11,11 @@ class TerrainGenerator
 public:
     TerrainGenerator();
     BLOCK_TYPE GetBlockTypeAtPos(glm::vec3 pos);
+    float maxBlockHeight = 100;
 
 private:
-    FastNoise *noise;
+    FastNoise noise;
+    int GetBlockHeightForPos(float x, float z);
+    float noiseScale = 0.5f;
 };
 #endif
