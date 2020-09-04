@@ -45,6 +45,10 @@ void MasterRenderer::Render()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glPolygonMode(GL_FRONT_AND_BACK, (shouldWireframe) ? GL_LINE : GL_FILL);
 
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
+  glFrontFace(GL_CW);
+
   glm::mat4 projection; // from camera to screen
   // fov / aspectratio/ near clip / far clip TODO: add option for these things TODO: add aspect ration height/width
   projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
