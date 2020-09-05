@@ -160,7 +160,7 @@ void ChunkMeshData::AddAllNeededFaces(int x, int y, int z, BLOCK_TYPE type, vect
             AddFace(type, BLOCK_FACE::POS_Z, blockV, blockI, blockT);
         }
     }
-    else if (chunk->negativeYNeighber->GetBlockAt(vec3(x, y, 0))->isTransparent)
+    else if (chunk->positiveZNeighber->GetBlockAt(vec3(x, y, 0))->isTransparent)
     { // chunk border
         AddFace(type, BLOCK_FACE::POS_Z, blockV, blockI, blockT);
     }
@@ -172,7 +172,7 @@ void ChunkMeshData::AddAllNeededFaces(int x, int y, int z, BLOCK_TYPE type, vect
             AddFace(type, BLOCK_FACE::NEG_Z, blockV, blockI, blockT);
         }
     }
-    else if (chunk->negativeYNeighber->GetBlockAt(vec3(x, y, Chunk::CHUNCK_SIZE - 1))->isTransparent)
+    else if (chunk->negativeZNeighber->GetBlockAt(vec3(x, y, Chunk::CHUNCK_SIZE - 1))->isTransparent)
     { // chunk border
         AddFace(type, BLOCK_FACE::NEG_Z, blockV, blockI, blockT);
     }
