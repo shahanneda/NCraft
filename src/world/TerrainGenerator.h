@@ -9,7 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/string_cast.hpp>
 
-#include <map>
+#include <unordered_map>
 
 class TerrainGenerator
 {
@@ -17,7 +17,7 @@ public:
     TerrainGenerator();
     BLOCK_TYPE GetBlockTypeAtPos(glm::vec3 pos);
     float maxBlockHeight = 100;
-    std::map<std::pair<int,int>, int> blockHeights;
+    std::unordered_map<glm::vec2, int> blockHeights;
     static int HashOfTwoNumbers(int x, int y);
 
 private:

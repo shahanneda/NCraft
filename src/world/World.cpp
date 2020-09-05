@@ -5,6 +5,7 @@ World::World(MasterRenderer *renderer, Camera *camera)
     terrainGen = new TerrainGenerator();
     cLoader = new ChunkLoader(renderer->worldRenderer, terrainGen);
     this->renderer = renderer;
+    this->camera = camera;
 }
 
 World::~World()
@@ -15,9 +16,14 @@ World::~World()
 
 void World::GenerateChunks()
 {
+    // cLoader->PlayerMovedToNewChunk(camera->position);
     cLoader->NextChunkGenerationCycle();
 }
 
+void World::Update()
+{
+    // cLoader->NextChunkGenerationCycle();
+}
 void World::BreakBlock(glm::vec3 pos)
 {
     std::cout << "broke blokc" << std::endl;

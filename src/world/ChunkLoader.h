@@ -29,6 +29,11 @@ public:
 
     void NextChunkGenerationCycle();
     void GenerateChunks();
+    void UnloadChunk(Chunk *c);
+    const float renderDistance = 120.0f;
+
+    void PlayerMovedToNewChunk(glm::vec3 playerPos);
+    glm::vec3 GetChunkPositionFromWorldPosition(glm::vec3 pos);
     Chunk *GetChunkAtChunkPos(glm::vec3 pos);
     Chunk *GetChunkAtWorldPos(glm::vec3 pos);
     NCraft::Block *GetBlockAt(glm::vec3 pos);

@@ -92,6 +92,7 @@ public:
     Block *GetBlockAt(glm::vec3 pos);
     void SetBlock(vec3 pos, Block b);
     void SetBlock(Block b);
+    vec3 GetWorldPos();
 
     bool hasAllNeighbers();
     Chunk *positiveXNeighber = nullptr;

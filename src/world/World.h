@@ -13,8 +13,10 @@ public:
     World(MasterRenderer *renderer, Camera *camera);
     ~World();
     MasterRenderer *renderer;
-    TerrainGenerator* terrainGen;
+    TerrainGenerator *terrainGen;
     ChunkLoader *cLoader;
+    Camera *camera;
+    void Update();
     void GenerateChunks();
     void BreakBlock(glm::vec3 pos);
 };

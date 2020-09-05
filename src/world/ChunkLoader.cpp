@@ -34,11 +34,17 @@ Chunk *ChunkLoader::GetChunkAtChunkPos(vec3 pos)
 
 Chunk *ChunkLoader::GetChunkAtWorldPos(glm::vec3 pos)
 {
-    vec3 chunkPos = vec3((int)floor(pos.x / Chunk::CHUNCK_SIZE), (int)floor(pos.y / Chunk::CHUNCK_SIZE), (int)floor(pos.z / Chunk::CHUNCK_SIZE));
+    vec3 chunkPos = GetChunkPositionFromWorldPosition(pos);
     Chunk *c = GetChunkAtChunkPos(chunkPos);
     // std::cout << "got chunk at chunk pos " <<
     return c;
 }
+
+glm::vec3 ChunkLoader::GetChunkPositionFromWorldPosition(glm::vec3 pos)
+{
+    return vec3((int)floor(pos.x / Chunk::CHUNCK_SIZE), (int)floor(pos.y / Chunk::CHUNCK_SIZE), (int)floor(pos.z / Chunk::CHUNCK_SIZE));
+}
+
 NCraft::Block *ChunkLoader::GetBlockAt(vec3 pos)
 {
     std::cout << "getting block at" << glm::to_string(pos) << std::endl;
@@ -67,13 +73,71 @@ NCraft::Block *ChunkLoader::SetBlockAt(vec3 pos)
     return nullptr;
 }
 
+// two stages of removal of chunks, first if its distance is longer than the render distace, remove it form the rendere queue (loaded but not rendred)
+// secondly if its distance is very far away, renderDistance*2 , then we can can delte the chunk, by removing all neighbers from render queue, and then deleting this chunk
+
+void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
+{
+
+    // if (GetChunkAtWorldPos(playerPos) == nullptr)
+    // {
+    //     Chunk *newChunk = new Chunk(GetChunkPositionFromWorldPosition(playerPos), terrainGen);
+    //     loadedChunks.insert(std::pair<glm::vec3, Chunk *>(newChunk->pos, newChunk));
+    //     nonGeneratedChunks.push_back(newChunk);
+    // }
+    // for (auto it = loadedChunks.begin(); it != loadedChunks.end();)
+    // {
+    //     Chunk *c = it->second;
+    //     float distance = glm::distance(playerPos, c->GetWorldPos());
+    //     if (distance > renderDistance)
+    //     {
+    //         loadedChunks.erase(it++); // this erases in a way that doesnt kill the it
+    //         UnloadChunk(c);
+    //     }
+    //     else
+    //     {
+    //         ++it;
+    //     }
+    // }
+    // NextChunkGenerationCycle();
+}
+void ChunkLoader::UnloadChunk(Chunk *c) // remove all the neighbers from the render queue, and add them to non generated chunks
+{
+    renderer->RemoveChunkFromRenderQueue(c);
+
+    renderer->RemoveChunkFromRenderQueue(c->positiveXNeighber);
+    nonGeneratedChunks.push_back(c->positiveXNeighber);
+
+    renderer->RemoveChunkFromRenderQueue(c->negativeXNeighber);
+    nonGeneratedChunks.push_back(c->negativeXNeighber);
+
+    renderer->RemoveChunkFromRenderQueue(c->positiveYNeighber);
+    nonGeneratedChunks.push_back(c->positiveYNeighber);
+
+    renderer->RemoveChunkFromRenderQueue(c->negativeYNeighber);
+    nonGeneratedChunks.push_back(c->negativeYNeighber);
+
+    renderer->RemoveChunkFromRenderQueue(c->positiveZNeighber);
+    nonGeneratedChunks.push_back(c->positiveZNeighber);
+
+    renderer->RemoveChunkFromRenderQueue(c->negativeZNeighber);
+    nonGeneratedChunks.push_back(c->negativeZNeighber);
+
+    delete c;
+}
 void ChunkLoader::NextChunkGenerationCycle()
 {
+    if (loadedChunks.size() > 1000)
+    {
+        return;
+    }
     std::cout << "generating chunks" << std::endl;
     vector<Chunk *> newNonGeneratedChunks; // store it here for temp, since we dont want the size of it actuallly changing
     for (auto it = nonGeneratedChunks.begin(); it != nonGeneratedChunks.end();)
     {
         Chunk *c = *it;
+        // Chunk *c = nonGeneratedChunks.back();
+        // nonGeneratedChunks.pop_back();
         if (c->positiveXNeighber == nullptr)
         {
             Chunk *newChunk = new Chunk(vec3(c->pos.x + 1, c->pos.y, c->pos.z), terrainGen);

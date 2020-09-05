@@ -73,6 +73,7 @@ void NCraftMain::mainLoop()
     glfwSetWindowTitle(window, ("NCraft || " + cords + " || FPS: " + std::to_string(std::ceil(frameRate))).c_str());
 
     renderer->Render();
+    world->Update(); // TODO: move this somewhere at a constant time interval
     processInput();
     glfwPollEvents();
   }

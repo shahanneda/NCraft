@@ -28,11 +28,11 @@ using std::pair;
 int TerrainGenerator::GetBlockHeightForPos(float x, float z)
 {
     int hash = HashOfTwoNumbers(x, z);
-    auto mapIt = blockHeights.find(std::pair<int, int>(x, z));
+    auto mapIt = blockHeights.find(glm::vec2(x, z));
     if (mapIt == blockHeights.end())
     {
         int blockHeight = (int)(maxBlockHeight * (float)noise.GetNoise(x * noiseScale, z * noiseScale));
-        blockHeights.insert(std::pair<std::pair<int, int>, int>(std::pair<int, int>(x, z), blockHeight));
+        blockHeights.insert(std::pair<glm::vec2, int>(glm::vec2(x, z), blockHeight));
         return blockHeight;
     }
     return mapIt->second;

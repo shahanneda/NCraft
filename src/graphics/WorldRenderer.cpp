@@ -1,6 +1,7 @@
 #include "WorldRenderer.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include <memory>
+#include <algorithm>
 
 using glm::vec2;
 using glm::vec3;
@@ -36,6 +37,13 @@ void WorldRenderer::Render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
     {
         this->RenderChunck(renderedChunks[i]);
     }
+}
+
+void WorldRenderer::RemoveChunkFromRenderQueue(Chunk *c)
+{
+    std::vector<Chunk *>::iterator position = std::find(renderedChunks.begin(), renderedChunks.end(), c); // TODO: replace this with hash map lookup to speed this up by ALOT
+    if (position != renderedChunks.end())
+        renderedChunks.erase(position);
 }
 
 void WorldRenderer::AddChunkToRenderQueue(Chunk *c)

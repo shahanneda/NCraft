@@ -17,6 +17,10 @@ Chunk::Chunk(vec3 pos, TerrainGenerator *terrainGen) : meshData(this), pos(pos)
     // t1.detach();
 }
 
+vec3 Chunk::GetWorldPos()
+{
+    return vec3(pos.x * CHUNCK_SIZE, pos.y * CHUNCK_SIZE, pos.z * CHUNCK_SIZE);
+}
 void Chunk::FillChunk()
 {
 
@@ -33,6 +37,8 @@ void Chunk::FillChunk()
             }
         }
     }
+
+    terrainGen->blockHeights.clear(); // reset the hash map used for memonization
 }
 void Chunk::SetBlock(vec3 pos, Block b)
 {

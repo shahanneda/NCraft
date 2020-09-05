@@ -16,10 +16,11 @@ public:
     ~WorldRenderer();
     void RenderChunck(Chunk *c);
     void Render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
-    void AddChunkToRenderQueue(Chunk *);
+    void AddChunkToRenderQueue(Chunk *c);
+    void RemoveChunkFromRenderQueue(Chunk *c);
 
 private:
-    vector<Chunk *> renderedChunks;
+    vector<Chunk *> renderedChunks; // replace this with hash map so we can delete and get easier
     Shader *worldShader;
     VertexBuffer *worldVertexBuffer;
     Texture *worldTexture;
