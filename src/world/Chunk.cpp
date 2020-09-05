@@ -5,6 +5,7 @@
 #include "Chunk.h"
 #include "../graphics/TextureManager.h"
 #include <FastNoise/FastNoise.h>
+#include <thread>
 
 using glm::vec2;
 using glm::vec3;
@@ -12,6 +13,8 @@ Chunk::Chunk(vec3 pos, TerrainGenerator *terrainGen) : meshData(this), pos(pos)
 {
     this->terrainGen = terrainGen;
     FillChunk();
+    // std::thread t1(&Chunk::FillChunk, this);
+    // t1.detach();
 }
 
 void Chunk::FillChunk()
@@ -177,9 +180,9 @@ void ChunkMeshData::AddAllNeededFaces(int x, int y, int z, BLOCK_TYPE type, vect
     // AddFace(BLOCK_FACE::POS_Z, blockV, blockI, blockT);
     // AddFace(BLOCK_FACE::NEG_Z, blockV, blockI, blockT);
 }
-void ChunkMeshData::GenerateData()
+
+void ChunkMeshData::GenerateDataThread()
 {
-    generated = true;
     for (int x = 0; x < Chunk::CHUNCK_SIZE; x++)
     {
         for (int y = 0; y < Chunk::CHUNCK_SIZE; y++)
@@ -217,4 +220,11 @@ void ChunkMeshData::GenerateData()
             }
         }
     }
+}
+void ChunkMeshData::GenerateData()
+{
+    generated = true;
+    this->GenerateDataThread();
+    // std::thread t1(&ChunkMeshData::GenerateDataThread, this);
+    // t1.detach();
 }

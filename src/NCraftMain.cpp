@@ -82,7 +82,7 @@ void NCraftMain::processInput()
   if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
     glfwSetWindowShouldClose(window, true);
 
-  const float cameraSpeed = 5.0f * deltaTime;
+  const float cameraSpeed = 20.0f * deltaTime;
   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     camera->TranslateCameraBy(cameraSpeed * camera->target);
 

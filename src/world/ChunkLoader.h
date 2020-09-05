@@ -18,12 +18,17 @@ class ChunkLoader
 {
 public:
     ChunkLoader(WorldRenderer *renderer, TerrainGenerator *terrainGen);
+    ~ChunkLoader();
+
+    // used to get specif blocks at world positions
     std::unordered_map<glm::vec3, Chunk *> loadedChunks;
+
     std::vector<Chunk *> nonGeneratedChunks;
+    std::vector<Chunk *> chunksToGenerate;
     TerrainGenerator *terrainGen;
 
     void NextChunkGenerationCycle();
-    ~ChunkLoader();
+    void GenerateChunks();
     Chunk *GetChunkAtChunkPos(glm::vec3 pos);
     Chunk *GetChunkAtWorldPos(glm::vec3 pos);
     NCraft::Block *GetBlockAt(glm::vec3 pos);

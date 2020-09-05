@@ -5,6 +5,7 @@
 #include "../graphics/WorldRenderer.h"
 #include <iterator>
 #include <glm/gtx/string_cast.hpp>
+#include <thread>
 
 using glm::vec3;
 using std::floor;
@@ -124,11 +125,10 @@ void ChunkLoader::NextChunkGenerationCycle()
             newChunk->positiveZNeighber = c;
         }
 
-        if (c->hasAllNeighbers() && !c->meshData.generated)
+        if (c->hasAllNeighbers() && !c->meshData.generated) // if this chunk is ready to be generated
         {
             it = nonGeneratedChunks.erase(it); // remove in a way that doesnt mess up the iterator
-            c->meshData.GenerateData();
-            renderer->renderedChunks.push_back(c);
+            chunksToGenerate.push_back(c);     // it it to list so we can generate on another thread
         }
         else
         {
@@ -137,7 +137,18 @@ void ChunkLoader::NextChunkGenerationCycle()
     }
 
     nonGeneratedChunks.insert(nonGeneratedChunks.end(), newNonGeneratedChunks.begin(), newNonGeneratedChunks.end()); // add the new chuncks to the  non generated chunks
-    // mainChunk->meshData.GenerateData();
+    std::thread t(&ChunkLoader::GenerateChunks, this);
+    t.detach();
+}
+void ChunkLoader::GenerateChunks()
+{
+    for (int i = 0; i < chunksToGenerate.size(); i++)
+    {
+        Chunk *chunk = chunksToGenerate[i];
+        chunk->meshData.GenerateData();
+        renderer->AddChunkToRenderQueue(chunk); // possibly move this to the other thread??
+    }
+    chunksToGenerate.clear();
 }
 ChunkLoader::~ChunkLoader()
 {

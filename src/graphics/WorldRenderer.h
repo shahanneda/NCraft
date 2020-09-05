@@ -7,6 +7,7 @@
 #include <glad/glad.h>
 #include "Shader.h"
 #include "../world/ChunkLoader.h"
+#include <memory>
 
 class WorldRenderer
 {
@@ -15,9 +16,10 @@ public:
     ~WorldRenderer();
     void RenderChunck(Chunk *c);
     void Render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
-    vector<Chunk *> renderedChunks;
+    void AddChunkToRenderQueue(Chunk *);
 
 private:
+    vector<Chunk *> renderedChunks;
     Shader *worldShader;
     VertexBuffer *worldVertexBuffer;
     Texture *worldTexture;

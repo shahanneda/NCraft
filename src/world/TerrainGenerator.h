@@ -3,8 +3,13 @@
 #define TERRAIN_GENERATOR
 #include <FastNoise/FastNoise.h>
 #include "Block.h"
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/hash.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtx/string_cast.hpp>
+
+#include <map>
 
 class TerrainGenerator
 {
@@ -12,6 +17,8 @@ public:
     TerrainGenerator();
     BLOCK_TYPE GetBlockTypeAtPos(glm::vec3 pos);
     float maxBlockHeight = 100;
+    std::map<std::pair<int,int>, int> blockHeights;
+    static int HashOfTwoNumbers(int x, int y);
 
 private:
     FastNoise noise;

@@ -21,6 +21,7 @@ public:
     Chunk *chunk;
     bool generated = false;
     void GenerateData();
+    void GenerateDataThread();
     void AddFace(BLOCK_TYPE type, BLOCK_FACE face, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT);
     void AddAllNeededFaces(int x, int y, int z, BLOCK_TYPE type, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT);
 

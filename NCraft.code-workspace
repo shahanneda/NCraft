@@ -75,7 +75,10 @@
 			"filesystem": "cpp",
 			"__tree": "cpp",
 			"map": "cpp",
-			"queue": "cpp"
+			"queue": "cpp",
+			"numeric": "cpp",
+			"random": "cpp",
+			"thread": "cpp"
 		}
 	}
 }

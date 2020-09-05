@@ -1,5 +1,6 @@
 #include "WorldRenderer.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include <memory>
 
 using glm::vec2;
 using glm::vec3;
@@ -25,15 +26,21 @@ void WorldRenderer::RenderChunck(Chunk *c)
     worldShader->setMat4f("model", model);
     glDrawElements(GL_TRIANGLES, c->meshData.indices.size(), GL_UNSIGNED_INT, 0);
 }
+
 void WorldRenderer::Render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
 {
     worldShader->setMat4f("view", viewMatrix);
     worldShader->setMat4f("projection", projectionMatrix);
 
-    for (Chunk *c : renderedChunks)
+    for (int i = 0; i < renderedChunks.size(); i++)
     {
-        this->RenderChunck(c);
+        this->RenderChunck(renderedChunks[i]);
     }
+}
+
+void WorldRenderer::AddChunkToRenderQueue(Chunk *c)
+{
+    renderedChunks.push_back(c);
 }
 
 WorldRenderer::~WorldRenderer()
