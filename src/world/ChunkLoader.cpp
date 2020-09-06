@@ -74,9 +74,7 @@ NCraft::Block *ChunkLoader::SetBlockAt(vec3 pos)
     return nullptr;
 }
 
-// two stages of removal of chunks, first if its distance is longer than the render distace, remove it form the rendere queue (loaded but not rendred)
-// secondly if its distance is very far away, renderDistance*2 , then we can can delte the chunk, by removing all neighbers from render queue, and then deleting this chunk
-
+// this is the core of the chunkloaidng, it checks in a increment around the player and adds those chunks to a queue
 void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
 {
     vec3 playerChunkPos = GetChunkPositionFromWorldPosition(playerPos);
@@ -91,9 +89,11 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
                 {
                     chunkPlayerIsIn = new Chunk(playerChunkPos, terrainGen);
                 }
-                if (!chunkPlayerIsIn->meshData.generated) // now we check maybe it exists but just hasnt been generated yet,
+                if (!chunkPlayerIsIn->meshData.generated && !chunkPlayerIsIn->inQueueToBeGenerated) // now we check maybe it exists but just hasnt been generated yet, and if it is already in the queue(so we dont add it again)
                 {
-                    queueOfChunksToLoad.push(chunkPlayerIsIn);
+                    chunkPlayerIsIn->inQueueToBeGenerated = true;
+                    this->queueOfChunksToLoad.push(chunkPlayerIsIn);
+                    std::cout << queueOfChunksToLoad.size() << std::endl;
                 }
             }
         }
@@ -233,7 +233,7 @@ void ChunkLoader::LoadChunk(Chunk *c)
     nonGeneratedChunks.insert(nonGeneratedChunks.end(), newNonGeneratedChunks.begin(), newNonGeneratedChunks.end()); // add the new chuncks to the  non generated chunks
     GenerateChunks();
     // std::thread t(&ChunkLoader::GenerateChunks, this);
-    // t.detach()s
+    // t.detach();
 }
 
 void ChunkLoader::NextChunkGenerationCycle(vec3 playerPos)

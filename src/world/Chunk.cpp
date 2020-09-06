@@ -234,3 +234,11 @@ void ChunkMeshData::GenerateData()
     // std::thread t1(&ChunkMeshData::GenerateDataThread, this);
     // t1.detach();
 }
+
+ChunkMeshData::~ChunkMeshData()
+{
+    // this is just to avoid somesort of bug with the vector destructor
+    verts.clear();
+    indices.clear();
+    textureCoords.clear();
+}

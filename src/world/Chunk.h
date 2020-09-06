@@ -18,6 +18,7 @@ public:
     vector<int> indices;
     vector<glm::vec2> textureCoords;
     ChunkMeshData(Chunk *chunk);
+    ~ChunkMeshData();
     Chunk *chunk;
     bool generated = false;
     void GenerateData();
@@ -88,6 +89,8 @@ public:
     vector<Block> blocks;
     vec3 pos;
     ChunkMeshData meshData;
+    bool inQueueToBeGenerated = false;
+
     void FillChunk();
     Block *GetBlockAt(glm::vec3 pos);
     void SetBlock(vec3 pos, Block b);
@@ -95,6 +98,7 @@ public:
     vec3 GetWorldPos();
 
     bool hasAllNeighbers();
+
     Chunk *positiveXNeighber = nullptr;
     Chunk *negativeXNeighber = nullptr;
 
