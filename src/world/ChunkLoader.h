@@ -27,9 +27,10 @@ public:
     std::vector<Chunk *> chunksToGenerate;
     TerrainGenerator *terrainGen;
 
-    void NextChunkGenerationCycle();
+    void NextChunkGenerationCycle(glm::vec3 playerPos);
     void GenerateChunks();
     void UnloadChunk(Chunk *c);
+    void LoadChunk(Chunk *c);
     const float renderDistance = 120.0f;
 
     void PlayerMovedToNewChunk(glm::vec3 playerPos);

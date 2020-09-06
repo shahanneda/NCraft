@@ -17,11 +17,11 @@ World::~World()
 void World::GenerateChunks()
 {
     // cLoader->PlayerMovedToNewChunk(camera->position);
-    cLoader->NextChunkGenerationCycle();
 }
 
 void World::Update()
 {
+    cLoader->NextChunkGenerationCycle(camera->position);
     // cLoader->NextChunkGenerationCycle();
 }
 void World::BreakBlock(glm::vec3 pos)

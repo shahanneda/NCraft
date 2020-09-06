@@ -125,84 +125,102 @@ void ChunkLoader::UnloadChunk(Chunk *c) // remove all the neighbers from the ren
 
     delete c;
 }
-void ChunkLoader::NextChunkGenerationCycle()
+
+void ChunkLoader::LoadChunk(Chunk *c)
+{
+
+    vector<Chunk *> newNonGeneratedChunks; // store it here for temp, since we dont want the size of it actuallly changing
+    if (c->positiveXNeighber == nullptr)
+    {
+        Chunk *newChunk = new Chunk(vec3(c->pos.x + 1, c->pos.y, c->pos.z), terrainGen);
+        c->positiveXNeighber = newChunk;
+        loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
+        newNonGeneratedChunks.push_back(newChunk);
+        newChunk->negativeXNeighber = c;
+    }
+    if (c->negativeXNeighber == nullptr)
+    {
+        Chunk *newChunk = new Chunk(vec3(c->pos.x - 1, c->pos.y, c->pos.z), terrainGen);
+        c->negativeXNeighber = newChunk;
+        loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
+        newNonGeneratedChunks.push_back(newChunk);
+        newChunk->positiveXNeighber = c;
+    }
+
+    if (c->positiveYNeighber == nullptr)
+    {
+        Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y + 1, c->pos.z), terrainGen);
+        c->positiveYNeighber = newChunk;
+        loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
+        newNonGeneratedChunks.push_back(newChunk);
+        newChunk->negativeYNeighber = c;
+    }
+    if (c->negativeYNeighber == nullptr)
+    {
+        Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y - 1, c->pos.z), terrainGen);
+        c->negativeYNeighber = newChunk;
+        loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
+        newNonGeneratedChunks.push_back(newChunk);
+        newChunk->positiveYNeighber = c;
+    }
+
+    if (c->positiveZNeighber == nullptr)
+    {
+        Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y, c->pos.z + 1), terrainGen);
+        c->positiveZNeighber = newChunk;
+        loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
+        newNonGeneratedChunks.push_back(newChunk);
+        newChunk->negativeZNeighber = c;
+    }
+    if (c->negativeZNeighber == nullptr)
+    {
+        Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y, c->pos.z - 1), terrainGen);
+        c->negativeZNeighber = newChunk;
+        loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
+        newNonGeneratedChunks.push_back(newChunk);
+        newChunk->positiveZNeighber = c;
+    }
+
+    if (c->hasAllNeighbers() && !c->meshData.generated) // if this chunk is ready to be generated
+    {
+        chunksToGenerate.push_back(c); // it it to list so we can generate on another thread
+    }
+
+    loadedChunks.insert(pair<vec3, Chunk *>(c->pos, c));
+    nonGeneratedChunks.insert(nonGeneratedChunks.end(), newNonGeneratedChunks.begin(), newNonGeneratedChunks.end()); // add the new chuncks to the  non generated chunks
+    GenerateChunks();
+    // std::thread t(&ChunkLoader::GenerateChunks, this);
+    // t.detach()s
+}
+
+void ChunkLoader::NextChunkGenerationCycle(vec3 playerPos)
 {
     if (loadedChunks.size() > 1000)
     {
         return;
     }
-    std::cout << "generating chunks" << std::endl;
-    vector<Chunk *> newNonGeneratedChunks; // store it here for temp, since we dont want the size of it actuallly changing
-    for (auto it = nonGeneratedChunks.begin(); it != nonGeneratedChunks.end();)
+    // std::cout << "generating chunks" << std::endl;
+    vec3 playerChunkPos = GetChunkPositionFromWorldPosition(playerPos);
+    Chunk *chunkPlayerIsIn = GetChunkAtChunkPos(playerChunkPos);
+    if (chunkPlayerIsIn == nullptr)
     {
-        Chunk *c = *it;
-        // Chunk *c = nonGeneratedChunks.back();
-        // nonGeneratedChunks.pop_back();
-        if (c->positiveXNeighber == nullptr)
-        {
-            Chunk *newChunk = new Chunk(vec3(c->pos.x + 1, c->pos.y, c->pos.z), terrainGen);
-            c->positiveXNeighber = newChunk;
-            loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
-            newNonGeneratedChunks.push_back(newChunk);
-            newChunk->negativeXNeighber = c;
-        }
-        if (c->negativeXNeighber == nullptr)
-        {
-            Chunk *newChunk = new Chunk(vec3(c->pos.x - 1, c->pos.y, c->pos.z), terrainGen);
-            c->negativeXNeighber = newChunk;
-            loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
-            newNonGeneratedChunks.push_back(newChunk);
-            newChunk->positiveXNeighber = c;
-        }
-
-        if (c->positiveYNeighber == nullptr)
-        {
-            Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y + 1, c->pos.z), terrainGen);
-            c->positiveYNeighber = newChunk;
-            loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
-            newNonGeneratedChunks.push_back(newChunk);
-            newChunk->negativeYNeighber = c;
-        }
-        if (c->negativeYNeighber == nullptr)
-        {
-            Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y - 1, c->pos.z), terrainGen);
-            c->negativeYNeighber = newChunk;
-            loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
-            newNonGeneratedChunks.push_back(newChunk);
-            newChunk->positiveYNeighber = c;
-        }
-
-        if (c->positiveZNeighber == nullptr)
-        {
-            Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y, c->pos.z + 1), terrainGen);
-            c->positiveZNeighber = newChunk;
-            loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
-            newNonGeneratedChunks.push_back(newChunk);
-            newChunk->negativeZNeighber = c;
-        }
-        if (c->negativeZNeighber == nullptr)
-        {
-            Chunk *newChunk = new Chunk(vec3(c->pos.x, c->pos.y, c->pos.z - 1), terrainGen);
-            c->negativeZNeighber = newChunk;
-            loadedChunks.insert(pair<vec3, Chunk *>(newChunk->pos, newChunk));
-            newNonGeneratedChunks.push_back(newChunk);
-            newChunk->positiveZNeighber = c;
-        }
-
-        if (c->hasAllNeighbers() && !c->meshData.generated) // if this chunk is ready to be generated
-        {
-            it = nonGeneratedChunks.erase(it); // remove in a way that doesnt mess up the iterator
-            chunksToGenerate.push_back(c);     // it it to list so we can generate on another thread
-        }
-        else
-        {
-            ++it;
-        }
+        chunkPlayerIsIn = new Chunk(playerChunkPos, terrainGen);
+    }
+    if (!chunkPlayerIsIn->meshData.generated)
+    {
+        LoadChunk(chunkPlayerIsIn);
+        std::cout << glm::to_string(playerChunkPos) << std::endl;
     }
 
-    nonGeneratedChunks.insert(nonGeneratedChunks.end(), newNonGeneratedChunks.begin(), newNonGeneratedChunks.end()); // add the new chuncks to the  non generated chunks
-    std::thread t(&ChunkLoader::GenerateChunks, this);
-    t.detach();
+    // for (int i = nonGeneratedChunks.size() - 1; i >= 0; i--)
+    // {
+    //     Chunk *c = nonGeneratedChunks[i];
+    //     // Chunk *c = nonGeneratedChunks.back();
+    //     // nonGeneratedChunks.pop_back();
+    //     LoadChunk(c);
+    //     // it = nonGeneratedChunks.erase(nonGeneratedChunks.begin() + i); // remove in a way that doesnt mess up the iterator
+    // }
+    nonGeneratedChunks.clear();
 }
 void ChunkLoader::GenerateChunks()
 {
