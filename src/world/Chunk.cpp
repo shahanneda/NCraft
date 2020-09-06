@@ -58,7 +58,7 @@ bool Chunk::hasAllNeighbers()
     return positiveXNeighber && negativeXNeighber && positiveYNeighber && negativeYNeighber && positiveZNeighber && negativeZNeighber;
 }
 
-ChunkMeshData::ChunkMeshData(Chunk *chunk)
+ChunkMeshData::ChunkMeshData(Chunk *chunk) : verts(), indices(), textureCoords()
 {
     this->chunk = chunk;
 }
@@ -237,13 +237,11 @@ void ChunkMeshData::GenerateData()
 
 Chunk::~Chunk()
 {
-    blocks.clear();
-    blocks.shrink_to_fit();
 }
 ChunkMeshData::~ChunkMeshData()
 {
     // this is just to avoid somesort of bug with the vector destructor
-    verts.clear();
-    indices.clear();
-    textureCoords.clear();
+    // verts.clear();
+    // indices.clear();
+    // textureCoords.clear();
 }

@@ -107,8 +107,8 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
         Chunk *c = it->second;
         if (ShouldUnloadChunk(c, playerPos))
         {
-            UnloadChunk(c);
             it = loadedChunks.erase(it);
+            UnloadChunk(c);
         }
         else
         {
