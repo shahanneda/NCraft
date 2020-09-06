@@ -85,6 +85,7 @@ class Chunk
 public:
     const static int CHUNCK_SIZE = 16;
     Chunk(vec3 pos, TerrainGenerator *terrainGen);
+    ~Chunk();
     TerrainGenerator *terrainGen;
     vector<Block> blocks;
     vec3 pos;

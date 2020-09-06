@@ -84,15 +84,17 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
         {
             for (int yInc = -chunksRenderDistanceY; yInc < chunksRenderDistanceY; yInc++)
             {
-                Chunk *chunkPlayerIsIn = GetChunkAtChunkPos(vec3(playerChunkPos.x + xInc, playerChunkPos.y + yInc, playerChunkPos.z + zInc));
-                if (chunkPlayerIsIn == nullptr) // first check if it doesnt exits
+                vec3 newChunkPosition = vec3(playerChunkPos.x + xInc, playerChunkPos.y + yInc, playerChunkPos.z + zInc);
+                Chunk *chunkNearPlayer = GetChunkAtChunkPos(newChunkPosition);
+                if (chunkNearPlayer == nullptr) // first check if it doesnt exits
                 {
-                    chunkPlayerIsIn = new Chunk(playerChunkPos, terrainGen);
+                    chunkNearPlayer = new Chunk(newChunkPosition, terrainGen);
+                    loadedChunks.insert(std::pair<vec3, Chunk *>(chunkNearPlayer->pos, chunkNearPlayer));
                 }
-                if (!chunkPlayerIsIn->meshData.generated && !chunkPlayerIsIn->inQueueToBeGenerated) // now we check maybe it exists but just hasnt been generated yet, and if it is already in the queue(so we dont add it again)
+                if (!chunkNearPlayer->meshData.generated && !chunkNearPlayer->inQueueToBeGenerated) // now we check maybe it exists but just hasnt been generated yet, and if it is already in the queue(so we dont add it again)
                 {
-                    chunkPlayerIsIn->inQueueToBeGenerated = true;
-                    this->queueOfChunksToLoad.push(chunkPlayerIsIn);
+                    chunkNearPlayer->inQueueToBeGenerated = true;
+                    this->queueOfChunksToLoad.push(chunkNearPlayer);
                     std::cout << queueOfChunksToLoad.size() << std::endl;
                 }
             }
@@ -105,8 +107,8 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
         Chunk *c = it->second;
         if (ShouldUnloadChunk(c, playerPos))
         {
-            it = loadedChunks.erase(it);
             UnloadChunk(c);
+            it = loadedChunks.erase(it);
         }
         else
         {
@@ -117,54 +119,51 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
 
 bool ChunkLoader::ShouldUnloadChunk(Chunk *c, glm::vec3 playerPos)
 {
-    return glm::distance(playerPos, c->GetWorldPos()) > chunksUnloadDistanceInBlocks;
+    float distance = glm::distance(GetChunkPositionFromWorldPosition(playerPos), c->pos);
+
+    return distance - 2 > chunksRenderDistanceXZ;
 }
 
 void ChunkLoader::UnloadChunk(Chunk *c) // remove all the neighbers from the render queue, and add them to non generated chunks, and reset their neighbers
 {
     renderer->RemoveChunkFromRenderQueue(c);
+    loadedChunks.erase(c->pos);
 
     renderer->RemoveChunkFromRenderQueue(c->positiveXNeighber);
     if (c->positiveXNeighber)
     {
         c->positiveXNeighber->negativeXNeighber = nullptr;
     }
-    nonGeneratedChunks.push_back(c->positiveXNeighber);
 
     renderer->RemoveChunkFromRenderQueue(c->negativeXNeighber);
     if (c->negativeXNeighber)
     {
         c->negativeXNeighber->positiveXNeighber = nullptr;
     }
-    nonGeneratedChunks.push_back(c->negativeXNeighber);
 
     renderer->RemoveChunkFromRenderQueue(c->positiveYNeighber);
     if (c->positiveYNeighber)
     {
         c->positiveYNeighber->negativeYNeighber = nullptr;
     }
-    nonGeneratedChunks.push_back(c->positiveYNeighber);
 
     renderer->RemoveChunkFromRenderQueue(c->negativeYNeighber);
     if (c->negativeYNeighber)
     {
         c->negativeYNeighber->positiveYNeighber = nullptr;
     }
-    nonGeneratedChunks.push_back(c->negativeYNeighber);
 
     renderer->RemoveChunkFromRenderQueue(c->positiveZNeighber);
     if (c->positiveZNeighber)
     {
         c->positiveZNeighber->negativeZNeighber = nullptr;
     }
-    nonGeneratedChunks.push_back(c->positiveZNeighber);
 
     renderer->RemoveChunkFromRenderQueue(c->negativeZNeighber);
     if (c->negativeZNeighber)
     {
         c->negativeZNeighber->positiveZNeighber = nullptr;
     }
-    nonGeneratedChunks.push_back(c->negativeZNeighber);
 
     delete c;
 }
@@ -250,6 +249,10 @@ void ChunkLoader::NextChunkGenerationCycle(vec3 playerPos)
         if (!ShouldUnloadChunk(c, camera->position)) // if a chunk is out of range, dont bother loading it
         {
             LoadChunk(c);
+        }
+        else
+        {
+            UnloadChunk(c);
         }
     }
 

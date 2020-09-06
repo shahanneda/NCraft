@@ -235,6 +235,11 @@ void ChunkMeshData::GenerateData()
     // t1.detach();
 }
 
+Chunk::~Chunk()
+{
+    blocks.clear();
+    blocks.shrink_to_fit();
+}
 ChunkMeshData::~ChunkMeshData()
 {
     // this is just to avoid somesort of bug with the vector destructor

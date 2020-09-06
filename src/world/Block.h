@@ -28,6 +28,10 @@ namespace NCraft
         glm::vec3 position;
         BLOCK_TYPE type;
         bool isTransparent;
+
+    private:
+        // Block(const Block& that);
+        // Block &operator=(const Block &that);
     };
 } // namespace NCraft
 #endif
