@@ -16,8 +16,13 @@ public:
     TerrainGenerator *terrainGen;
     ChunkLoader *cLoader;
     Camera *camera;
-    void Update();
+    void Update(const float, const double);
     void GenerateChunks();
     void BreakBlock(glm::vec3 pos);
+
+private:
+    double chunkGenerationUpdateInterval = 1.0;
+    double lastChunkGenTime = 0;
+    ;
 };
 #endif

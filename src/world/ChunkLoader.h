@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <glm/gtx/hash.hpp>
 #include <glm/glm.hpp>
-
+#include <queue>
 class WorldRenderer; // forward dec
 class Chunk;         // forward dec
 class TerrainGenerator;
@@ -31,7 +31,9 @@ public:
     void GenerateChunks();
     void UnloadChunk(Chunk *c);
     void LoadChunk(Chunk *c);
-    const float renderDistance = 120.0f;
+    std::queue<Chunk *> queueOfChunksToLoad;
+    const float chunksRenderDistanceXZ = 2;
+    const float chunksRenderDistanceY = 2;
 
     void PlayerMovedToNewChunk(glm::vec3 playerPos);
     glm::vec3 GetChunkPositionFromWorldPosition(glm::vec3 pos);

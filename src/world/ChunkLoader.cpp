@@ -78,7 +78,27 @@ NCraft::Block *ChunkLoader::SetBlockAt(vec3 pos)
 
 void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
 {
-
+    // std::cout << "generating chunks" << std::endl;
+    vec3 playerChunkPos = GetChunkPositionFromWorldPosition(playerPos);
+    for (int xInc = -chunksRenderDistanceXZ; xInc < chunksRenderDistanceXZ; xInc++)
+    {
+        for (int zInc = -chunksRenderDistanceXZ; zInc < chunksRenderDistanceXZ; zInc++)
+        {
+            for (int yInc = -chunksRenderDistanceY; yInc < chunksRenderDistanceY; yInc++)
+            {
+                Chunk *chunkPlayerIsIn = GetChunkAtChunkPos(vec3(playerChunkPos.x + xInc, playerChunkPos.y + yInc, playerChunkPos.z + zInc));
+                if (chunkPlayerIsIn == nullptr) // first check if it doesnt exits
+                {
+                    chunkPlayerIsIn = new Chunk(playerChunkPos, terrainGen);
+                }
+                if (!chunkPlayerIsIn->meshData.generated) // now we check maybe it exists but just hasnt been generated yet,
+                {
+                    queueOfChunksToLoad.push(chunkPlayerIsIn);
+                    // std::cout << glm::to_string(playerChunkPos) << std::endl;
+                }
+            }
+        }
+    }
     // if (GetChunkAtWorldPos(playerPos) == nullptr)
     // {
     //     Chunk *newChunk = new Chunk(GetChunkPositionFromWorldPosition(playerPos), terrainGen);
@@ -199,17 +219,11 @@ void ChunkLoader::NextChunkGenerationCycle(vec3 playerPos)
     {
         return;
     }
-    // std::cout << "generating chunks" << std::endl;
-    vec3 playerChunkPos = GetChunkPositionFromWorldPosition(playerPos);
-    Chunk *chunkPlayerIsIn = GetChunkAtChunkPos(playerChunkPos);
-    if (chunkPlayerIsIn == nullptr)
+
+    if (!queueOfChunksToLoad.empty())
     {
-        chunkPlayerIsIn = new Chunk(playerChunkPos, terrainGen);
-    }
-    if (!chunkPlayerIsIn->meshData.generated)
-    {
-        LoadChunk(chunkPlayerIsIn);
-        std::cout << glm::to_string(playerChunkPos) << std::endl;
+        LoadChunk(queueOfChunksToLoad.front());
+        queueOfChunksToLoad.pop();
     }
 
     // for (int i = nonGeneratedChunks.size() - 1; i >= 0; i--)

@@ -16,13 +16,17 @@ World::~World()
 
 void World::GenerateChunks()
 {
-    // cLoader->PlayerMovedToNewChunk(camera->position);
+    cLoader->PlayerMovedToNewChunk(camera->position);
 }
 
-void World::Update()
+void World::Update(const float deltaTime, const double time)
 {
+    if (time > lastChunkGenTime + chunkGenerationUpdateInterval)
+    {
+        lastChunkGenTime = time;
+        GenerateChunks();
+    }
     cLoader->NextChunkGenerationCycle(camera->position);
-    // cLoader->NextChunkGenerationCycle();
 }
 void World::BreakBlock(glm::vec3 pos)
 {
