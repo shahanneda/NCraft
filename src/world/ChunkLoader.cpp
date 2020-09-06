@@ -12,10 +12,11 @@ using std::floor;
 using std::pair;
 using std::vector;
 
-ChunkLoader::ChunkLoader(WorldRenderer *renderer, TerrainGenerator *terrainGen) : loadedChunks()
+ChunkLoader::ChunkLoader(WorldRenderer *renderer, TerrainGenerator *terrainGen, Camera *camera) : loadedChunks()
 {
     this->renderer = renderer;
     this->terrainGen = terrainGen;
+    this->camera = camera;
     Chunk *mainChunk = new Chunk(vec3(0, 0, 0), terrainGen);
     loadedChunks.insert(std::pair<glm::vec3, Chunk *>(mainChunk->pos, mainChunk));
     nonGeneratedChunks.push_back(mainChunk);
@@ -26,7 +27,7 @@ Chunk *ChunkLoader::GetChunkAtChunkPos(vec3 pos)
     auto cIter = loadedChunks.find(pos);
     if (cIter == loadedChunks.end())
     {
-        std::cout << "Trying to get Chunk that is not loaded!!!" << glm::to_string(pos) << std::endl;
+        // std::cout << "Trying to get Chunk that is not loaded!!!" << glm::to_string(pos) << std::endl;
         return nullptr;
     }
     return cIter->second;
@@ -78,7 +79,6 @@ NCraft::Block *ChunkLoader::SetBlockAt(vec3 pos)
 
 void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
 {
-    // std::cout << "generating chunks" << std::endl;
     vec3 playerChunkPos = GetChunkPositionFromWorldPosition(playerPos);
     for (int xInc = -chunksRenderDistanceXZ; xInc < chunksRenderDistanceXZ; xInc++)
     {
@@ -94,53 +94,76 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
                 if (!chunkPlayerIsIn->meshData.generated) // now we check maybe it exists but just hasnt been generated yet,
                 {
                     queueOfChunksToLoad.push(chunkPlayerIsIn);
-                    // std::cout << glm::to_string(playerChunkPos) << std::endl;
                 }
             }
         }
     }
-    // if (GetChunkAtWorldPos(playerPos) == nullptr)
-    // {
-    //     Chunk *newChunk = new Chunk(GetChunkPositionFromWorldPosition(playerPos), terrainGen);
-    //     loadedChunks.insert(std::pair<glm::vec3, Chunk *>(newChunk->pos, newChunk));
-    //     nonGeneratedChunks.push_back(newChunk);
-    // }
-    // for (auto it = loadedChunks.begin(); it != loadedChunks.end();)
-    // {
-    //     Chunk *c = it->second;
-    //     float distance = glm::distance(playerPos, c->GetWorldPos());
-    //     if (distance > renderDistance)
-    //     {
-    //         loadedChunks.erase(it++); // this erases in a way that doesnt kill the it
-    //         UnloadChunk(c);
-    //     }
-    //     else
-    //     {
-    //         ++it;
-    //     }
-    // }
-    // NextChunkGenerationCycle();
+
+    // Check and unload any chuncks far away
+    for (auto it = loadedChunks.begin(); it != loadedChunks.end();)
+    {
+        Chunk *c = it->second;
+        if (ShouldUnloadChunk(c, playerPos))
+        {
+            it = loadedChunks.erase(it);
+            UnloadChunk(c);
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
-void ChunkLoader::UnloadChunk(Chunk *c) // remove all the neighbers from the render queue, and add them to non generated chunks
+
+bool ChunkLoader::ShouldUnloadChunk(Chunk *c, glm::vec3 playerPos)
+{
+    return glm::distance(playerPos, c->GetWorldPos()) > chunksUnloadDistanceInBlocks;
+}
+
+void ChunkLoader::UnloadChunk(Chunk *c) // remove all the neighbers from the render queue, and add them to non generated chunks, and reset their neighbers
 {
     renderer->RemoveChunkFromRenderQueue(c);
 
     renderer->RemoveChunkFromRenderQueue(c->positiveXNeighber);
+    if (c->positiveXNeighber)
+    {
+        c->positiveXNeighber->negativeXNeighber = nullptr;
+    }
     nonGeneratedChunks.push_back(c->positiveXNeighber);
 
     renderer->RemoveChunkFromRenderQueue(c->negativeXNeighber);
+    if (c->negativeXNeighber)
+    {
+        c->negativeXNeighber->positiveXNeighber = nullptr;
+    }
     nonGeneratedChunks.push_back(c->negativeXNeighber);
 
     renderer->RemoveChunkFromRenderQueue(c->positiveYNeighber);
+    if (c->positiveYNeighber)
+    {
+        c->positiveYNeighber->negativeYNeighber = nullptr;
+    }
     nonGeneratedChunks.push_back(c->positiveYNeighber);
 
     renderer->RemoveChunkFromRenderQueue(c->negativeYNeighber);
+    if (c->negativeYNeighber)
+    {
+        c->negativeYNeighber->positiveYNeighber = nullptr;
+    }
     nonGeneratedChunks.push_back(c->negativeYNeighber);
 
     renderer->RemoveChunkFromRenderQueue(c->positiveZNeighber);
+    if (c->positiveZNeighber)
+    {
+        c->positiveZNeighber->negativeZNeighber = nullptr;
+    }
     nonGeneratedChunks.push_back(c->positiveZNeighber);
 
     renderer->RemoveChunkFromRenderQueue(c->negativeZNeighber);
+    if (c->negativeZNeighber)
+    {
+        c->negativeZNeighber->positiveZNeighber = nullptr;
+    }
     nonGeneratedChunks.push_back(c->negativeZNeighber);
 
     delete c;
@@ -222,18 +245,14 @@ void ChunkLoader::NextChunkGenerationCycle(vec3 playerPos)
 
     if (!queueOfChunksToLoad.empty())
     {
-        LoadChunk(queueOfChunksToLoad.front());
+        Chunk *c = queueOfChunksToLoad.front();
         queueOfChunksToLoad.pop();
+        if (!ShouldUnloadChunk(c, camera->position)) // if a chunk is out of range, dont bother loading it
+        {
+            LoadChunk(c);
+        }
     }
 
-    // for (int i = nonGeneratedChunks.size() - 1; i >= 0; i--)
-    // {
-    //     Chunk *c = nonGeneratedChunks[i];
-    //     // Chunk *c = nonGeneratedChunks.back();
-    //     // nonGeneratedChunks.pop_back();
-    //     LoadChunk(c);
-    //     // it = nonGeneratedChunks.erase(nonGeneratedChunks.begin() + i); // remove in a way that doesnt mess up the iterator
-    // }
     nonGeneratedChunks.clear();
 }
 void ChunkLoader::GenerateChunks()
@@ -241,8 +260,15 @@ void ChunkLoader::GenerateChunks()
     for (int i = 0; i < chunksToGenerate.size(); i++)
     {
         Chunk *chunk = chunksToGenerate[i];
-        chunk->meshData.GenerateData();
-        renderer->AddChunkToRenderQueue(chunk); // possibly move this to the other thread??
+        if (chunk->hasAllNeighbers()) // check if for somereason it doesnt have all its neghbers
+        {
+            chunk->meshData.GenerateData();
+            renderer->AddChunkToRenderQueue(chunk); // possibly move this to the other thread??
+        }
+        else
+        {
+            chunksToGenerate.erase(chunksToGenerate.begin() + i);
+        }
     }
     chunksToGenerate.clear();
 }

@@ -1,4 +1,5 @@
-
+#ifndef NCRAFT_CAMERA
+#define NCRAFT_CAMERA
 #include <glm/glm.hpp>
 
 class Camera
@@ -30,3 +31,4 @@ private:
     float yaw;
     float pitch;
 };
+#endif
