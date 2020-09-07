@@ -77,10 +77,13 @@ void ChunkLoader::UpdateChunkAndNeighbers(Chunk *c)
 
 void ChunkLoader::UpdateChunk(Chunk *c)
 {
-    c->meshData.verts.clear();
-    c->meshData.indices.clear();
-    c->meshData.textureCoords.clear();
-    c->meshData.GenerateData();
+    if (c->meshData.generated)
+    {
+        c->meshData.verts.clear();
+        c->meshData.indices.clear();
+        c->meshData.textureCoords.clear();
+        c->meshData.GenerateData();
+    }
 }
 
 NCraft::Block *ChunkLoader::SetBlockAt(vec3 pos)
@@ -305,7 +308,6 @@ void ChunkLoader::LoadChunk(Chunk *c)
         chunksToGenerate.push_back(c); // it it to list so we can generate on another thread
     }
 
-    loadedChunks.insert(pair<vec3, Chunk *>(c->pos, c));
     // nonGeneratedChunks.insert(nonGeneratedChunks.end(), newNonGeneratedChunks.begin(), newNonGeneratedChunks.end()); // add the new chuncks to the  non generated chunks
     GenerateChunks();
     // std::thread t(&ChunkLoader::GenerateChunks, this);

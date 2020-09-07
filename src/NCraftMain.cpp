@@ -33,14 +33,19 @@ void NCraftMain::KeyPressed(int key, int status)
   }
   if ((key == GLFW_KEY_X && status == GLFW_PRESS))
   {
-    world->BreakBlock(camera->position);
+    world->BreakBlock();
   }
 }
 void NCraftMain::MouseButtonPressed(int key, int status)
 {
   if (key == GLFW_MOUSE_BUTTON_LEFT && status == GLFW_PRESS)
   {
-    world->BreakBlock(camera->position);
+    world->BreakBlock();
+  }
+
+  if (key == GLFW_MOUSE_BUTTON_RIGHT && status == GLFW_PRESS)
+  {
+    world->PlaceBlock();
   }
 }
 

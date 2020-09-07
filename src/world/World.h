@@ -23,8 +23,10 @@ public:
 
     void Update(const float, const double);
     void GenerateChunks();
-    void BreakBlock(glm::vec3 pos);
+    void BreakBlock();
+    void PlaceBlock();
     Block *RayCastToNonAirBlock(vec3 position, vec3 direction, float distance);
+    Block *RayCastToAirBlock(vec3 position, vec3 direction, float distance);
 
 private:
     double chunkGenerationUpdateInterval = 1.0;
