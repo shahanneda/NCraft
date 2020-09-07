@@ -15,6 +15,10 @@ WorldRenderer::WorldRenderer()
 
 void WorldRenderer::RenderChunck(Chunk *c)
 {
+    if (c->meshData.verts.size() == 0)
+    { // dont have to render all air chunks
+        return;
+    }
     glActiveTexture(GL_TEXTURE0);
     worldTexture->BindTexture();
     worldShader->Bind();
