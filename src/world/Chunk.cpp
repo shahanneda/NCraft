@@ -33,7 +33,7 @@ void Chunk::FillChunk()
             for (int x = 0; x < Chunk::CHUNCK_SIZE; x++)
             {
                 vec3 worldPos = vec3(x + pos.x * CHUNCK_SIZE, y + pos.y * CHUNCK_SIZE, z + pos.z * CHUNCK_SIZE);
-                blocks.push_back(Block(vec3(x, y, z), terrainGen->GetBlockTypeAtPos(worldPos)));
+                blocks.push_back(Block(vec3(x, y, z), terrainGen->GetBlockTypeAtPos(worldPos), this));
             }
         }
     }

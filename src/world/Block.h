@@ -2,6 +2,7 @@
 #define NCRAFT_BLOCK
 #include <glm/glm.hpp>
 
+class Chunk;
 enum BLOCK_TYPE
 {
     GRASS,
@@ -24,10 +25,12 @@ namespace NCraft
     class Block
     {
     public:
-        Block(glm::vec3 pos, BLOCK_TYPE type);
+        Block(glm::vec3 pos, BLOCK_TYPE type, Chunk *chunk);
         glm::vec3 position;
         BLOCK_TYPE type;
         bool isTransparent;
+        Chunk *chunk;
+        glm::vec3 GetWorldPos();
 
     private:
         // Block(const Block& that);

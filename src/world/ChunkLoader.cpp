@@ -48,20 +48,39 @@ glm::vec3 ChunkLoader::GetChunkPositionFromWorldPosition(glm::vec3 pos)
 
 NCraft::Block *ChunkLoader::GetBlockAt(vec3 pos)
 {
-    std::cout << "getting block at" << glm::to_string(pos) << std::endl;
     Chunk *c = GetChunkAtWorldPos(pos);
     if (c)
     {
         Block *k = c->GetBlockAt(vec3((int)floor(pos.x - c->pos.x * Chunk::CHUNCK_SIZE), (int)floor(pos.y - c->pos.y * Chunk::CHUNCK_SIZE), (int)floor(pos.z - c->pos.z * Chunk::CHUNCK_SIZE)));
         if (!k)
         {
-            std::cout << "BLOCK NOT FOUND " << std::endl;
             return nullptr;
         }
-        std::cout << "got block" << glm::to_string(k->position) << std::endl;
         return k;
     }
     return nullptr;
+}
+
+void ChunkLoader::UpdateChunkAndNeighbers(Chunk *c)
+{
+    UpdateChunk(c);
+
+    UpdateChunk(c->positiveXNeighber);
+    UpdateChunk(c->negativeXNeighber);
+
+    UpdateChunk(c->positiveYNeighber);
+    UpdateChunk(c->negativeYNeighber);
+
+    UpdateChunk(c->positiveZNeighber);
+    UpdateChunk(c->negativeZNeighber);
+}
+
+void ChunkLoader::UpdateChunk(Chunk *c)
+{
+    c->meshData.verts.clear();
+    c->meshData.indices.clear();
+    c->meshData.textureCoords.clear();
+    c->meshData.GenerateData();
 }
 
 NCraft::Block *ChunkLoader::SetBlockAt(vec3 pos)

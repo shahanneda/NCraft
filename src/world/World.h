@@ -7,6 +7,10 @@
 
 class Camera;
 class MasterRenderer;
+
+using namespace NCraft;
+using glm::vec3;
+
 class World
 {
 public:
@@ -16,13 +20,15 @@ public:
     TerrainGenerator *terrainGen;
     ChunkLoader *cLoader;
     Camera *camera;
+
     void Update(const float, const double);
     void GenerateChunks();
     void BreakBlock(glm::vec3 pos);
+    Block *RayCastToNonAirBlock(vec3 position, vec3 direction, float distance);
 
 private:
     double chunkGenerationUpdateInterval = 1.0;
     double lastChunkGenTime = 0;
-    ;
+    float raycastStep = 0.1f;
 };
 #endif

@@ -31,9 +31,8 @@ public:
 
     void NextChunkGenerationCycle(glm::vec3 playerPos);
     void PlayerMovedToNewChunk(glm::vec3 playerPos);
-    void GenerateChunks();
-    void UnloadChunk(Chunk *c);
-    void LoadChunk(Chunk *c);
+    void UpdateChunkAndNeighbers(Chunk *c);
+    void UpdateChunk(Chunk *c);
 
     std::queue<Chunk *> queueOfChunksToLoad;
     const float chunksRenderDistanceXZ = 4;
@@ -51,5 +50,8 @@ private:
     Camera *camera;
     bool ShouldUnloadChunk(Chunk *, glm::vec3 playerPos);
     void CheckIfNeighbersExistAndUpdate(Chunk *c);
+    void GenerateChunks();
+    void UnloadChunk(Chunk *c);
+    void LoadChunk(Chunk *c);
 };
 #endif

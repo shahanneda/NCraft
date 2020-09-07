@@ -30,12 +30,29 @@ void World::Update(const float deltaTime, const double time)
 }
 void World::BreakBlock(glm::vec3 pos)
 {
-    std::cout << "broke blokc" << std::endl;
-    cLoader->GetBlockAt(pos)->type = AIR;
-    cLoader->GetBlockAt(pos)->isTransparent = true;
-    Chunk *c = cLoader->GetChunkAtWorldPos(pos);
-    c->meshData.verts.clear();
-    c->meshData.indices.clear();
-    c->meshData.textureCoords.clear();
-    c->meshData.GenerateData();
+
+    Block *b = RayCastToNonAirBlock(pos, camera->target, 50.0f);
+    std::cout << b->type << std::endl;
+    std::cout << glm::to_string(b->position) << std::endl;
+
+    b->type = AIR;
+    b->isTransparent = true;
+
+    cLoader->UpdateChunkAndNeighbers(b->chunk);
+}
+
+Block *World::RayCastToNonAirBlock(vec3 position, vec3 direction, float distance)
+{
+    Block *block = nullptr;
+    for (float distanceGone = 0; distanceGone <= distance; distanceGone += raycastStep)
+    {
+        vec3 checkPos = position + (direction * distanceGone);
+        block = cLoader->GetBlockAt(checkPos);
+        if (block != nullptr && block->type != AIR)
+        {
+            break;
+        }
+    }
+
+    return block;
 }
