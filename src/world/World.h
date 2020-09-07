@@ -25,7 +25,7 @@ public:
     void GenerateChunks();
     void BreakBlock();
     void PlaceBlock();
-    Block *RayCastToNonAirBlock(vec3 position, vec3 direction, float distance);
+    Block *RayCastToNonAirBlock(vec3 position, vec3 direction, float distance, vec3 *outFaceNormal);
     Block *RayCastToAirBlock(vec3 position, vec3 direction, float distance);
 
 private:
