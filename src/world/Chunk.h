@@ -17,14 +17,16 @@ public:
     vector<glm::vec3> verts;
     vector<int> indices;
     vector<glm::vec2> textureCoords;
+    vector<glm::vec3> normals;
+
     ChunkMeshData(Chunk *chunk);
     ~ChunkMeshData();
     Chunk *chunk;
     bool generated = false;
     void GenerateData();
     void GenerateDataThread();
-    void AddFace(BLOCK_TYPE type, BLOCK_FACE face, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT);
-    void AddAllNeededFaces(int x, int y, int z, BLOCK_TYPE type, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT);
+    void AddFace(BLOCK_TYPE type, BLOCK_FACE face, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT, vector<vec3> *blockN);
+    void AddAllNeededFaces(int x, int y, int z, BLOCK_TYPE type, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT, vector<vec3> *blockN);
 
 private:
     std::vector<int> faceIndicesOriginal = {
@@ -39,6 +41,13 @@ const std::vector<vec3> cubeVertFront = {
     vec3(1, 1, 0), // 2 top right
     vec3(0, 1, 0), // 3 top left
 };
+const std::vector<vec3> cubeNormFront = {
+    //front face
+    vec3(0, 0, -1), // 0 bottom left
+    vec3(0, 0, -1), // 1 bottom right
+    vec3(0, 0, -1), // 2 top right
+    vec3(0, 0, -1), // 3 top left
+};
 
 const std::vector<vec3> cubeVertRight = {
     //right face
@@ -48,12 +57,27 @@ const std::vector<vec3> cubeVertRight = {
     vec3(1, 1, 0), // top left
 
 };
+const std::vector<vec3> cubeNormRight = {
+    //right face
+    vec3(1, 0, 0), // bottom left
+    vec3(1, 0, 0), // bottom right
+    vec3(1, 0, 0), // top right
+    vec3(1, 0, 0), // top left
+};
+
 const std::vector<vec3> cubeVertBack = {
     // back face
     vec3(1, 0, 1), // 7 bottom left
     vec3(0, 0, 1), // 8 bottom right
     vec3(0, 1, 1), // 9 top right
     vec3(1, 1, 1), // 10 top left
+};
+const std::vector<vec3> cubeNormBack = {
+    // back face
+    vec3(0, 0, 1), // 7 bottom left
+    vec3(0, 0, 1), // 8 bottom right
+    vec3(0, 0, 1), // 9 top right
+    vec3(0, 0, 1), // 10 top left
 };
 
 const std::vector<vec3> cubeVertLeft = {
@@ -63,6 +87,13 @@ const std::vector<vec3> cubeVertLeft = {
     vec3(0, 1, 0), // top right
     vec3(0, 1, 1), // top left
 };
+const std::vector<vec3> cubeNormLeft = {
+    // left face
+    vec3(-1, 0, 0), // bottom left
+    vec3(-1, 0, 0), // bottom right
+    vec3(-1, 0, 0), // top right
+    vec3(-1, 0, 0), // top left
+};
 
 const std::vector<vec3> cubeVertTop = {
     // top face
@@ -71,6 +102,13 @@ const std::vector<vec3> cubeVertTop = {
     vec3(1, 1, 1), // top right
     vec3(0, 1, 1), // top left
 };
+const std::vector<vec3> cubeNormTop = {
+    // top face
+    vec3(0, 1, 0), // bottom left
+    vec3(0, 1, 0), // bottom right
+    vec3(0, 1, 0), // top right
+    vec3(0, 1, 0), // top left
+};
 
 const std::vector<vec3> cubeVertBottom = {
     // bottom face
@@ -78,6 +116,13 @@ const std::vector<vec3> cubeVertBottom = {
     vec3(1, 0, 0), // bottom right
     vec3(1, 0, 1), // top right
     vec3(0, 0, 1)  // top left
+};
+const std::vector<vec3> cubeNormBottom = {
+    // bottom face
+    vec3(0, -1, 0), // bottom left
+    vec3(0, -1, 0), // bottom right
+    vec3(0, -1, 0), // top right
+    vec3(0, -1, 0)  // top left
 };
 
 class Chunk

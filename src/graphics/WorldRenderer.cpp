@@ -23,7 +23,7 @@ void WorldRenderer::RenderChunck(Chunk *c)
     worldTexture->BindTexture();
     worldShader->Bind();
     worldVertexBuffer->BindVertexArrayBuffer();
-    worldVertexBuffer->PutVertexData(c->meshData.verts, c->meshData.indices, c->meshData.textureCoords);
+    worldVertexBuffer->PutVertexData(c->meshData.verts, c->meshData.indices, c->meshData.textureCoords, c->meshData.normals);
 
     glm::mat4 model = glm::mat4(1.0f); // model = local space to world space
     model = glm::translate(model, vec3(c->pos.x * Chunk::CHUNCK_SIZE, c->pos.y * Chunk::CHUNCK_SIZE, c->pos.z * Chunk::CHUNCK_SIZE));

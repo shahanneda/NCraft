@@ -58,14 +58,14 @@ bool Chunk::hasAllNeighbers()
     return positiveXNeighber && negativeXNeighber && positiveYNeighber && negativeYNeighber && positiveZNeighber && negativeZNeighber;
 }
 
-ChunkMeshData::ChunkMeshData(Chunk *chunk) : verts(), indices(), textureCoords()
+ChunkMeshData::ChunkMeshData(Chunk *chunk) : verts(), indices(), textureCoords(), normals()
 {
     this->chunk = chunk;
     indices.push_back(0);
     // indices.erase(indices.begin());
 }
 
-void ChunkMeshData::AddFace(BLOCK_TYPE type, BLOCK_FACE face, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT)
+void ChunkMeshData::AddFace(BLOCK_TYPE type, BLOCK_FACE face, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT, vector<vec3> *blockN)
 {
     std::vector<int> faceIndices(faceIndicesOriginal);
 
@@ -79,26 +79,32 @@ void ChunkMeshData::AddFace(BLOCK_TYPE type, BLOCK_FACE face, vector<vec3> *bloc
     {
     case BLOCK_FACE::POS_X:
         blockV->insert(blockV->end(), cubeVertRight.begin(), cubeVertRight.end());
+        blockN->insert(blockN->end(), cubeNormRight.begin(), cubeNormRight.end());
         break;
 
     case BLOCK_FACE::NEG_X:
         blockV->insert(blockV->end(), cubeVertLeft.begin(), cubeVertLeft.end());
+        blockN->insert(blockN->end(), cubeNormLeft.begin(), cubeNormLeft.end());
         break;
 
     case BLOCK_FACE::POS_Y:
         blockV->insert(blockV->end(), cubeVertTop.begin(), cubeVertTop.end());
+        blockN->insert(blockN->end(), cubeNormTop.begin(), cubeNormTop.end());
         break;
 
     case BLOCK_FACE::NEG_Y:
         blockV->insert(blockV->end(), cubeVertBottom.begin(), cubeVertBottom.end());
+        blockN->insert(blockN->end(), cubeNormBottom.begin(), cubeNormBottom.end());
         break;
 
     case BLOCK_FACE::POS_Z:
         blockV->insert(blockV->end(), cubeVertBack.begin(), cubeVertBack.end());
+        blockN->insert(blockN->end(), cubeNormBack.begin(), cubeNormBack.end());
         break;
 
     case BLOCK_FACE::NEG_Z:
         blockV->insert(blockV->end(), cubeVertFront.begin(), cubeVertFront.end());
+        blockN->insert(blockN->end(), cubeNormFront.begin(), cubeNormFront.end());
         break;
 
     default:
@@ -110,30 +116,30 @@ void ChunkMeshData::AddFace(BLOCK_TYPE type, BLOCK_FACE face, vector<vec3> *bloc
 }
 
 /// Checks and adds faces depending on whether the face has a transparent block beside it or not
-void ChunkMeshData::AddAllNeededFaces(int x, int y, int z, BLOCK_TYPE type, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT)
+void ChunkMeshData::AddAllNeededFaces(int x, int y, int z, BLOCK_TYPE type, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT, vector<vec3> *blockN)
 {
     // X
     if (x < Chunk::CHUNCK_SIZE - 1)
     { // -1 would be last block -2 is second last, bascially we dont want last
         if (chunk->GetBlockAt(vec3(x + 1, y, z))->isTransparent)
         {
-            AddFace(type, BLOCK_FACE::POS_X, blockV, blockI, blockT);
+            AddFace(type, BLOCK_FACE::POS_X, blockV, blockI, blockT, blockN);
         }
     }
     else if (chunk->positiveXNeighber->GetBlockAt(vec3(0, y, z))->isTransparent)
     { // chunk border
-        AddFace(type, BLOCK_FACE::POS_X, blockV, blockI, blockT);
+        AddFace(type, BLOCK_FACE::POS_X, blockV, blockI, blockT, blockN);
     }
     if (x > 0) // not first, since we are checking left
     {
         if (chunk->GetBlockAt(vec3(x - 1, y, z))->isTransparent)
         {
-            AddFace(type, BLOCK_FACE::NEG_X, blockV, blockI, blockT);
+            AddFace(type, BLOCK_FACE::NEG_X, blockV, blockI, blockT, blockN);
         }
     }
     else if (chunk->negativeXNeighber->GetBlockAt(vec3(Chunk::CHUNCK_SIZE - 1, y, z))->isTransparent)
     { // chunk border
-        AddFace(type, BLOCK_FACE::NEG_X, blockV, blockI, blockT);
+        AddFace(type, BLOCK_FACE::NEG_X, blockV, blockI, blockT, blockN);
     }
 
     // Y
@@ -141,23 +147,23 @@ void ChunkMeshData::AddAllNeededFaces(int x, int y, int z, BLOCK_TYPE type, vect
     { // -1 would be last block -2 is second last, bascially we dont want last
         if (chunk->GetBlockAt(vec3(x, y + 1, z))->isTransparent)
         {
-            AddFace(type, BLOCK_FACE::POS_Y, blockV, blockI, blockT);
+            AddFace(type, BLOCK_FACE::POS_Y, blockV, blockI, blockT, blockN);
         }
     }
     else if (chunk->positiveYNeighber->GetBlockAt(vec3(x, 0, z))->isTransparent)
     { // chunk border
-        AddFace(type, BLOCK_FACE::POS_Y, blockV, blockI, blockT);
+        AddFace(type, BLOCK_FACE::POS_Y, blockV, blockI, blockT, blockN);
     }
     if (y > 0) // not first, since we are checking left
     {
         if (chunk->GetBlockAt(vec3(x, y - 1, z))->isTransparent)
         {
-            AddFace(type, BLOCK_FACE::NEG_Y, blockV, blockI, blockT);
+            AddFace(type, BLOCK_FACE::NEG_Y, blockV, blockI, blockT, blockN);
         }
     }
     else if (chunk->negativeYNeighber->GetBlockAt(vec3(x, Chunk::CHUNCK_SIZE - 1, z))->isTransparent)
     { // chunk border
-        AddFace(type, BLOCK_FACE::NEG_Y, blockV, blockI, blockT);
+        AddFace(type, BLOCK_FACE::NEG_Y, blockV, blockI, blockT, blockN);
     }
 
     // Z
@@ -165,24 +171,24 @@ void ChunkMeshData::AddAllNeededFaces(int x, int y, int z, BLOCK_TYPE type, vect
     { // -1 would be last block -2 is second last, bascially we dont want last
         if (chunk->GetBlockAt(vec3(x, y, z + 1))->isTransparent)
         {
-            AddFace(type, BLOCK_FACE::POS_Z, blockV, blockI, blockT);
+            AddFace(type, BLOCK_FACE::POS_Z, blockV, blockI, blockT, blockN);
         }
     }
     else if (chunk->positiveZNeighber->GetBlockAt(vec3(x, y, 0))->isTransparent)
     { // chunk border
-        AddFace(type, BLOCK_FACE::POS_Z, blockV, blockI, blockT);
+        AddFace(type, BLOCK_FACE::POS_Z, blockV, blockI, blockT, blockN);
     }
 
     if (z > 0) // not first, since we are checking left
     {
         if (chunk->GetBlockAt(vec3(x, y, z - 1))->isTransparent)
         {
-            AddFace(type, BLOCK_FACE::NEG_Z, blockV, blockI, blockT);
+            AddFace(type, BLOCK_FACE::NEG_Z, blockV, blockI, blockT, blockN);
         }
     }
     else if (chunk->negativeZNeighber->GetBlockAt(vec3(x, y, Chunk::CHUNCK_SIZE - 1))->isTransparent)
     { // chunk border
-        AddFace(type, BLOCK_FACE::NEG_Z, blockV, blockI, blockT);
+        AddFace(type, BLOCK_FACE::NEG_Z, blockV, blockI, blockT, blockN);
     }
 
     // AddFace(BLOCK_FACE::POS_Z, blockV, blockI, blockT);
@@ -207,9 +213,10 @@ void ChunkMeshData::GenerateDataThread()
                 vector<vec3> blockV(0);
                 vector<int> blockI(0);
                 vector<vec2> blockT(0);
+                vector<vec3> blockN(0);
 
                 // check and only draw faces where the blocks are air
-                AddAllNeededFaces(x, y, z, b->type, &blockV, &blockI, &blockT);
+                AddAllNeededFaces(x, y, z, b->type, &blockV, &blockI, &blockT, &blockN);
 
                 for (int i = 0; i < blockV.size(); i++)
                 {
@@ -225,6 +232,7 @@ void ChunkMeshData::GenerateDataThread()
                 verts.insert(verts.end(), blockV.begin(), blockV.end());
                 indices.insert(indices.end(), blockI.begin(), blockI.end());
                 textureCoords.insert(textureCoords.end(), blockT.begin(), blockT.end());
+                normals.insert(normals.end(), blockN.begin(), blockN.end());
             }
         }
     }
@@ -235,6 +243,7 @@ void ChunkMeshData::GenerateData()
     verts.clear();
     indices.clear();
     textureCoords.clear();
+    normals.clear();
     this->GenerateDataThread();
     // std::thread t1(&ChunkMeshData::GenerateDataThread, this);
     // t1.detach();

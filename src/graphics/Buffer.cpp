@@ -12,11 +12,14 @@ VertexBuffer::VertexBuffer() : Buffer()
   glBindBuffer(GL_ARRAY_BUFFER, bufferId);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBufferId);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
-  glEnableVertexAttribArray(0); // this is the location for vertex
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)0); // not shifted
+  glEnableVertexAttribArray(0);                                                  // this is the location for vertex
 
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
-  glEnableVertexAttribArray(1); // this is the location for textures
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float))); // shifted by 3 since 3 verts
+  glEnableVertexAttribArray(1);                                                                    // this is the location for textures
+
+  glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(5 * sizeof(float))); // shifte by 5 since 3 verts + 2 text
+  glEnableVertexAttribArray(2);                                                                    // this is the location for normals
 
   UnbindVertexArrayBuffer(); // so we dont accidently overwrite
 }
@@ -30,21 +33,29 @@ void VertexBuffer::UnbindVertexArrayBuffer()
   glBindVertexArray(0);
 }
 
-void VertexBuffer::PutVertexData(std::vector<glm::vec3> verts, std::vector<int> indices, std::vector<glm::vec2> textures)
+void VertexBuffer::PutVertexData(std::vector<glm::vec3> verts, std::vector<int> indices, std::vector<glm::vec2> textures, std::vector<glm::vec3> normals)
 {
-  int numberOfElements = verts.size() * 3 + textures.size() * 2;
+  int numberOfElements = verts.size() * 3 + textures.size() * 2 + normals.size() * 3;
   float *vertsWithTextures = new float[numberOfElements]; // manually allocating array instead of vector for preformance
 
   // just for unpacking the arrays
   uint32_t vertexIndex = 0;
   uint32_t textureIndex = 0;
-  for (int i = 0; i < verts.size() * 3 + textures.size() * 2; i += 5)
+  for (int i = 0; i < numberOfElements; i += 8)
   {
+    // Verts
     vertsWithTextures[i] = (float)verts[vertexIndex].x;
     vertsWithTextures[i + 1] = (float)verts[vertexIndex].y;
     vertsWithTextures[i + 2] = (float)verts[vertexIndex].z;
+
+    //textures
     vertsWithTextures[i + 3] = (float)textures[textureIndex].x;
     vertsWithTextures[i + 4] = (float)textures[textureIndex].y;
+
+    //normals
+    vertsWithTextures[i + 5] = normals[vertexIndex].x;
+    vertsWithTextures[i + 6] = normals[vertexIndex].y;
+    vertsWithTextures[i + 7] = normals[vertexIndex].z;
 
     vertexIndex++;
     textureIndex++;
