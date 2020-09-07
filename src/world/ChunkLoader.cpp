@@ -88,7 +88,7 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
                 Chunk *chunkNearPlayer = GetChunkAtChunkPos(newChunkPosition);
                 if (chunkNearPlayer == nullptr) // first check if it doesnt exits
                 {
-                    // maybe a chunk here already has NEIGHBERS!! we need to check this, and if it does we need to add them
+                    // maybe a chunk here already has NEIGHBERS!! we need to check this, and if it does we need to add them, this was the source of a very hard to find memory leak
                     chunkNearPlayer = new Chunk(newChunkPosition, terrainGen);
                     CheckIfNeighbersExistAndUpdate(chunkNearPlayer);
                     loadedChunks.insert(std::pair<vec3, Chunk *>(newChunkPosition, chunkNearPlayer));
@@ -97,7 +97,6 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
                 {
                     chunkNearPlayer->inQueueToBeGenerated = true;
                     this->queueOfChunksToLoad.push(chunkNearPlayer);
-                    std::cout << queueOfChunksToLoad.size() << std::endl;
                 }
             }
         }
@@ -114,9 +113,9 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
         }
     }
 
-    for (Chunk *c : chunksToUnLoad)
+    for (int i = 0; i < chunksToUnLoad.size(); i++)
     {
-        UnloadChunk(c);
+        UnloadChunk(chunksToUnLoad[i]);
     }
 }
 
@@ -124,7 +123,7 @@ bool ChunkLoader::ShouldUnloadChunk(Chunk *c, glm::vec3 playerPos)
 {
     float distance = glm::distance(GetChunkPositionFromWorldPosition(playerPos), c->pos);
 
-    return distance - 2 > chunksRenderDistanceXZ;
+    return distance > chunksRenderDistanceXZ + 2;
 }
 
 void ChunkLoader::UnloadChunk(Chunk *c) // remove all the neighbers from the render queue, and add them to non generated chunks, and reset their neighbers
@@ -299,14 +298,15 @@ void ChunkLoader::NextChunkGenerationCycle(vec3 playerPos)
     {
         Chunk *c = queueOfChunksToLoad.front();
         queueOfChunksToLoad.pop();
-        if (!ShouldUnloadChunk(c, camera->position)) // if a chunk is out of range, dont bother loading it
+
+        if (!ShouldUnloadChunk(c, camera->position) && GetChunkAtChunkPos(c->pos) != nullptr) // if a chunk is out of range, dont bother loading it
         {
             LoadChunk(c);
         }
-        else
-        {
-            UnloadChunk(c);
-        }
+        // else
+        // {
+        //     UnloadChunk(c);
+        // }
     }
 
     nonGeneratedChunks.clear();

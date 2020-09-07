@@ -40,11 +40,11 @@ void VertexBuffer::PutVertexData(std::vector<glm::vec3> verts, std::vector<int> 
   uint32_t textureIndex = 0;
   for (int i = 0; i < verts.size() * 3 + textures.size() * 2; i += 5)
   {
-    vertsWithTextures[i] = verts[vertexIndex].x;
-    vertsWithTextures[i + 1] = verts[vertexIndex].y;
-    vertsWithTextures[i + 2] = verts[vertexIndex].z;
-    vertsWithTextures[i + 3] = textures[textureIndex].x;
-    vertsWithTextures[i + 4] = textures[textureIndex].y;
+    vertsWithTextures[i] = (float)verts[vertexIndex].x;
+    vertsWithTextures[i + 1] = (float)verts[vertexIndex].y;
+    vertsWithTextures[i + 2] = (float)verts[vertexIndex].z;
+    vertsWithTextures[i + 3] = (float)textures[textureIndex].x;
+    vertsWithTextures[i + 4] = (float)textures[textureIndex].y;
 
     vertexIndex++;
     textureIndex++;

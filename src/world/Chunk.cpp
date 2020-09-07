@@ -61,6 +61,8 @@ bool Chunk::hasAllNeighbers()
 ChunkMeshData::ChunkMeshData(Chunk *chunk) : verts(), indices(), textureCoords()
 {
     this->chunk = chunk;
+    indices.push_back(0);
+    // indices.erase(indices.begin());
 }
 
 void ChunkMeshData::AddFace(BLOCK_TYPE type, BLOCK_FACE face, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT)
@@ -243,6 +245,8 @@ Chunk::~Chunk()
 }
 ChunkMeshData::~ChunkMeshData()
 {
+    verts.push_back(vec3(0, 0, 0));
+    indices.push_back(0);
     // this is just to avoid somesort of bug with the vector destructor
     // verts.clear();
     // indices.clear();
