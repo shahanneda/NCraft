@@ -22,6 +22,7 @@ public:
     void setInt(const std::string &name, int value);
     void setFloat(const std::string &name, float value);
     void setVec4f(const std::string &name, float x, float y, float z, float w);
+    void setVec3f(const std::string &name, float x, float y, float z);
     void setMat4f(const std::string &name, const glm::mat4 mat);
 };
 

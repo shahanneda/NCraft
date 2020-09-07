@@ -36,6 +36,7 @@ void WorldRenderer::Render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
 {
     worldShader->setMat4f("view", viewMatrix);
     worldShader->setMat4f("projection", projectionMatrix);
+    worldShader->setVec3f("lightColor", 1.0f, 0.0f, 0.0f);
 
     for (int i = 0; i < renderedChunks.size(); i++)
     {
