@@ -230,6 +230,9 @@ void ChunkMeshData::GenerateDataThread()
 void ChunkMeshData::GenerateData()
 {
     generated = true;
+    verts.clear();
+    indices.clear();
+    textureCoords.clear();
     this->GenerateDataThread();
     // std::thread t1(&ChunkMeshData::GenerateDataThread, this);
     // t1.detach();

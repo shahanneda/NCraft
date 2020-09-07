@@ -36,8 +36,8 @@ public:
     void LoadChunk(Chunk *c);
 
     std::queue<Chunk *> queueOfChunksToLoad;
-    const float chunksRenderDistanceXZ = 2;
-    const float chunksRenderDistanceY = 2;
+    const float chunksRenderDistanceXZ = 1;
+    const float chunksRenderDistanceY = 1;
 
     glm::vec3 GetChunkPositionFromWorldPosition(glm::vec3 pos);
     Chunk *GetChunkAtChunkPos(glm::vec3 pos);
@@ -50,5 +50,6 @@ public:
 private:
     Camera *camera;
     bool ShouldUnloadChunk(Chunk *, glm::vec3 playerPos);
+    void CheckIfNeighbersExistAndUpdate(Chunk *c);
 };
 #endif

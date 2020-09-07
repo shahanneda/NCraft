@@ -88,8 +88,10 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
                 Chunk *chunkNearPlayer = GetChunkAtChunkPos(newChunkPosition);
                 if (chunkNearPlayer == nullptr) // first check if it doesnt exits
                 {
+                    // maybe a chunk here already has NEIGHBERS!! we need to check this, and if it does we need to add them
                     chunkNearPlayer = new Chunk(newChunkPosition, terrainGen);
-                    loadedChunks.insert(std::pair<vec3, Chunk *>(chunkNearPlayer->pos, chunkNearPlayer));
+                    CheckIfNeighbersExistAndUpdate(chunkNearPlayer);
+                    loadedChunks.insert(std::pair<vec3, Chunk *>(newChunkPosition, chunkNearPlayer));
                 }
                 if (!chunkNearPlayer->meshData.generated && !chunkNearPlayer->inQueueToBeGenerated) // now we check maybe it exists but just hasnt been generated yet, and if it is already in the queue(so we dont add it again)
                 {
@@ -102,18 +104,19 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
     }
 
     // Check and unload any chuncks far away
-    for (auto it = loadedChunks.begin(); it != loadedChunks.end();)
+    vector<Chunk *> chunksToUnLoad;
+    for (auto it = loadedChunks.begin(); it != loadedChunks.end(); ++it)
     {
         Chunk *c = it->second;
         if (ShouldUnloadChunk(c, playerPos))
         {
-            it = loadedChunks.erase(it);
-            UnloadChunk(c);
+            chunksToUnLoad.push_back(c);
         }
-        else
-        {
-            ++it;
-        }
+    }
+
+    for (Chunk *c : chunksToUnLoad)
+    {
+        UnloadChunk(c);
     }
 }
 
@@ -130,48 +133,98 @@ void ChunkLoader::UnloadChunk(Chunk *c) // remove all the neighbers from the ren
     loadedChunks.erase(c->pos);
 
     renderer->RemoveChunkFromRenderQueue(c->positiveXNeighber);
+
     if (c->positiveXNeighber)
     {
         c->positiveXNeighber->negativeXNeighber = nullptr;
+        c->positiveXNeighber->inQueueToBeGenerated = false;
+        c->positiveXNeighber->meshData.generated = false;
     }
 
     renderer->RemoveChunkFromRenderQueue(c->negativeXNeighber);
     if (c->negativeXNeighber)
     {
         c->negativeXNeighber->positiveXNeighber = nullptr;
+        c->negativeXNeighber->inQueueToBeGenerated = false;
+        c->negativeXNeighber->meshData.generated = false;
     }
 
     renderer->RemoveChunkFromRenderQueue(c->positiveYNeighber);
     if (c->positiveYNeighber)
     {
         c->positiveYNeighber->negativeYNeighber = nullptr;
+        c->positiveYNeighber->inQueueToBeGenerated = false;
+        c->positiveYNeighber->meshData.generated = false;
     }
 
     renderer->RemoveChunkFromRenderQueue(c->negativeYNeighber);
     if (c->negativeYNeighber)
     {
         c->negativeYNeighber->positiveYNeighber = nullptr;
+        c->negativeYNeighber->inQueueToBeGenerated = false;
+        c->negativeYNeighber->meshData.generated = false;
     }
 
     renderer->RemoveChunkFromRenderQueue(c->positiveZNeighber);
     if (c->positiveZNeighber)
     {
         c->positiveZNeighber->negativeZNeighber = nullptr;
+        c->positiveZNeighber->inQueueToBeGenerated = false;
+        c->positiveZNeighber->meshData.generated = false;
     }
 
     renderer->RemoveChunkFromRenderQueue(c->negativeZNeighber);
     if (c->negativeZNeighber)
     {
         c->negativeZNeighber->positiveZNeighber = nullptr;
+        c->negativeZNeighber->inQueueToBeGenerated = false;
+        c->negativeZNeighber->meshData.generated = false;
     }
 
     delete c;
 }
 
+void ChunkLoader::CheckIfNeighbersExistAndUpdate(Chunk *c)
+{
+    c->positiveXNeighber = GetChunkAtChunkPos(vec3(c->pos.x + 1, c->pos.y, c->pos.z));
+    if (c->positiveXNeighber)
+    {
+        c->positiveXNeighber->negativeXNeighber = c;
+    }
+    c->negativeXNeighber = GetChunkAtChunkPos(vec3(c->pos.x - 1, c->pos.y, c->pos.z));
+    if (c->negativeXNeighber)
+    {
+        c->negativeXNeighber->positiveXNeighber = c;
+    }
+
+    c->positiveYNeighber = GetChunkAtChunkPos(vec3(c->pos.x, c->pos.y + 1, c->pos.z));
+    if (c->positiveYNeighber)
+    {
+        c->positiveYNeighber->negativeYNeighber = c;
+    }
+    c->negativeYNeighber = GetChunkAtChunkPos(vec3(c->pos.x, c->pos.y - 1, c->pos.z));
+    if (c->negativeYNeighber)
+    {
+        c->negativeYNeighber->positiveYNeighber = c;
+    }
+
+    c->positiveZNeighber = GetChunkAtChunkPos(vec3(c->pos.x, c->pos.y, c->pos.z + 1));
+    if (c->positiveZNeighber)
+    {
+        c->positiveZNeighber->negativeYNeighber = c;
+    }
+    c->negativeZNeighber = GetChunkAtChunkPos(vec3(c->pos.x, c->pos.y, c->pos.z - 1));
+    if (c->negativeZNeighber)
+    {
+        c->negativeZNeighber->positiveZNeighber = c;
+    }
+}
+
 void ChunkLoader::LoadChunk(Chunk *c)
 {
-
+    CheckIfNeighbersExistAndUpdate(c);
     vector<Chunk *> newNonGeneratedChunks; // store it here for temp, since we dont want the size of it actuallly changing
+
     if (c->positiveXNeighber == nullptr)
     {
         Chunk *newChunk = new Chunk(vec3(c->pos.x + 1, c->pos.y, c->pos.z), terrainGen);
@@ -229,7 +282,7 @@ void ChunkLoader::LoadChunk(Chunk *c)
     }
 
     loadedChunks.insert(pair<vec3, Chunk *>(c->pos, c));
-    nonGeneratedChunks.insert(nonGeneratedChunks.end(), newNonGeneratedChunks.begin(), newNonGeneratedChunks.end()); // add the new chuncks to the  non generated chunks
+    // nonGeneratedChunks.insert(nonGeneratedChunks.end(), newNonGeneratedChunks.begin(), newNonGeneratedChunks.end()); // add the new chuncks to the  non generated chunks
     GenerateChunks();
     // std::thread t(&ChunkLoader::GenerateChunks, this);
     // t.detach();
