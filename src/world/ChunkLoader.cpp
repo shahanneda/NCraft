@@ -179,8 +179,14 @@ void ChunkLoader::UnloadChunk(Chunk *c) // remove all the neighbers from the ren
         c->negativeZNeighber->inQueueToBeGenerated = false;
         c->negativeZNeighber->meshData.generated = false;
     }
-
-    delete c;
+    try
+    {
+        delete c;
+    }
+    catch (int e)
+    {
+        std::cout << "An exception occurred when unloading chunk !! " << e << std::endl;
+    }
 }
 
 void ChunkLoader::CheckIfNeighbersExistAndUpdate(Chunk *c)

@@ -36,7 +36,7 @@ public:
     void LoadChunk(Chunk *c);
 
     std::queue<Chunk *> queueOfChunksToLoad;
-    const float chunksRenderDistanceXZ = 2;
+    const float chunksRenderDistanceXZ = 4;
     const float chunksRenderDistanceY = 2;
 
     glm::vec3 GetChunkPositionFromWorldPosition(glm::vec3 pos);
