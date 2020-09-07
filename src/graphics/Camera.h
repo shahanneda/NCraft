@@ -28,7 +28,7 @@ public:
 
 private:
     void CalculateRotation();
-    float yaw;
-    float pitch;
+    float yaw = 0;
+    float pitch = 0;
 };
 #endif
