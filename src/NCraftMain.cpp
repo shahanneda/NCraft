@@ -31,7 +31,14 @@ void NCraftMain::KeyPressed(int key, int status)
   {
     world->GenerateChunks();
   }
-  if (key == GLFW_KEY_X && status == GLFW_PRESS)
+  if ((key == GLFW_KEY_X && status == GLFW_PRESS))
+  {
+    world->BreakBlock(camera->position);
+  }
+}
+void NCraftMain::MouseButtonPressed(int key, int status)
+{
+  if (key == GLFW_MOUSE_BUTTON_LEFT && status == GLFW_PRESS)
   {
     world->BreakBlock(camera->position);
   }

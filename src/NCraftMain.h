@@ -16,6 +16,7 @@ public:
   float deltaTime = 0;
   float lastFrameTime = 0;
   void MouseMoved(double xpos, double ypos);
+  void MouseButtonPressed(int button, int action);
 
 private:
   const float mouseSensitivity = 0.1f;

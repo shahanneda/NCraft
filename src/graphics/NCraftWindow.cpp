@@ -22,6 +22,12 @@ void NCraftWindow::NCraftKeyCallback(GLFWwindow *window, int key, int scancode, 
   }
   main->KeyPressed(key, action);
 }
+
+void NCraftWindow::NCraftMouseButtonCallback(GLFWwindow *window, int button, int action, int mods)
+{
+  main->MouseButtonPressed(button, action);
+}
+
 void NCraftWindow::WindowResized(int width, int height)
 {
   glViewport(0, 0, width, height);
@@ -57,6 +63,7 @@ NCraftWindow::NCraftWindow(int width, int height, GLFWwindow **window, NCraftMai
   glfwSetKeyCallback(*window, key_callback);
   glfwSetCursorPosCallback(*window, mouse_callback);
   glfwSetFramebufferSizeCallback(*window, framebuffer_size_callback);
+  glfwSetMouseButtonCallback(*window, mouse_button_callback);
 
   glfwSetInputMode(*window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glfwMakeContextCurrent(*window);

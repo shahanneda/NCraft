@@ -25,6 +25,13 @@ public:
     NCraftWindow *w = static_cast<NCraftWindow *>(glfwGetWindowUserPointer(window));
     w->WindowResized(width, height);
   }
+  inline static void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
+  {
+    NCraftWindow *w = static_cast<NCraftWindow *>(glfwGetWindowUserPointer(window));
+    w->NCraftMouseButtonCallback(window, button, action, mods);
+  }
+
+  void NCraftMouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
 
   void NCraftMouseCallback(GLFWwindow *window, double xpos, double ypos);
 
