@@ -82,7 +82,7 @@ void NCraftMain::mainLoop()
 
     std::string cords = "x: " + std::to_string(camera->position.x) + " y: " + std::to_string(camera->position.y) + " z: " + std::to_string(camera->position.z) + " Chunks Loaded: " + std::to_string(world->cLoader->loadedChunks.size()) + " Queue Of Chunks to load: " + std::to_string(world->cLoader->queueOfChunksToLoad.size()) + " ";
 
-    glfwSetWindowTitle(window, ("NCraft || " + cords + " || FPS: " + std::to_string(std::ceil(frameRate))).c_str());
+    // glfwSetWindowTitle(window, ("NCraft || " + cords + " || FPS: " + std::to_string(std::ceil(frameRate))).c_str());
 
     renderer->Render();
     world->Update(deltaTime, glfwGetTime()); // TODO: move this somewhere at a constant time interval
