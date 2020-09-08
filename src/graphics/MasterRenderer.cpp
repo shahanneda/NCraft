@@ -57,10 +57,7 @@ void MasterRenderer::Render()
   glm::mat4 view = camera->GetViewMatrix();
 
 
-  std::cout << glGetError() << std::endl;
   worldRenderer->Render(projection, view);
-  std::cout << glGetError() << std::endl;
   uiRenderer->Render();
-  std::cout << glGetError() << std::endl;
   glfwSwapBuffers(window);
 }

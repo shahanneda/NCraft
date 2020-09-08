@@ -13,7 +13,6 @@ UIRenderer::UIRenderer() : uiBuffer(), uiShader("shaders/ui.vert", "shaders/ui.f
     uiBuffer.PutVertexData(verts, indices, textures);
 	uiBuffer.BindVertexArrayBuffer();
 
-    std::cout << glGetError() << std::endl;
 }
 
 void UIRenderer::Render()
@@ -25,12 +24,10 @@ void UIRenderer::Render()
     glm::mat4 model = glm::mat4(1.0f); // model = local space to world space
     model = glm::translate(model, vec3(0, 0, 0));
 
-    std::cout << glGetError() << std::endl;
     uiShader.setMat4f("model", model);
 
 	uiBuffer.BindVertexArrayBuffer();
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    std::cout << glGetError() << std::endl;
     uiBuffer.UnbindVertexArrayBuffer();
 }

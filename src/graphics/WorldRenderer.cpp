@@ -23,28 +23,22 @@ void WorldRenderer::RenderChunck(Chunk *c)
 	worldShader->Bind();
 	worldVertexBuffer->BindVertexArrayBuffer();
 
-    std::cout << glGetError() << std::endl;
 	worldVertexBuffer->BindVertexArrayBuffer();
     worldVertexBuffer->PutVertexData(c->meshData.verts, c->meshData.indices, c->meshData.textureCoords, c->meshData.normals); // TODO: pass these by refrence or ptr instead of copy
 	worldVertexBuffer->BindVertexArrayBuffer();
 
-    std::cout << glGetError() << std::endl;
     glm::mat4 model = glm::mat4(1.0f); // model = local space to world space
     model = glm::translate(model, vec3(c->pos.x * Chunk::CHUNCK_SIZE, c->pos.y * Chunk::CHUNCK_SIZE, c->pos.z * Chunk::CHUNCK_SIZE));
 
-    std::cout << glGetError() << std::endl;
     worldShader->setMat4f("model", model);
 
 	worldVertexBuffer->BindVertexArrayBuffer();
-    std::cout << glGetError() << std::endl;
     glDrawElements(GL_TRIANGLES, c->meshData.indices.size(), GL_UNSIGNED_INT, 0);
 
-    std::cout << glGetError() << std::endl;
 }
 
 void WorldRenderer::Render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
 {
-    std::cout << glGetError() << std::endl;
     glActiveTexture(GL_TEXTURE0);
     worldTexture->BindTexture();
     worldShader->Bind();
@@ -52,7 +46,6 @@ void WorldRenderer::Render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
 	glBindBuffer(GL_ARRAY_BUFFER, worldVertexBuffer->bufferId);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, worldVertexBuffer->elementsBufferId);
 
-    std::cout << glGetError() << std::endl;
     worldShader->setMat4f("view", viewMatrix);
     worldShader->setMat4f("projection", projectionMatrix);
     worldShader->setVec3f("lightColor", 0.9f, 0.9f, 0.9f);
