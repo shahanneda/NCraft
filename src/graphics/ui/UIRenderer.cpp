@@ -8,8 +8,11 @@ using std::vector;
 
 UIRenderer::UIRenderer() : uiBuffer(), uiShader("shaders/ui.vert", "shaders/ui.frag")
 {
+	uiShader.Bind();
     uiBuffer.BindVertexArrayBuffer();
     uiBuffer.PutVertexData(verts, indices, textures);
+	uiBuffer.BindVertexArrayBuffer();
+
     std::cout << glGetError() << std::endl;
 }
 
@@ -24,6 +27,8 @@ void UIRenderer::Render()
 
     std::cout << glGetError() << std::endl;
     uiShader.setMat4f("model", model);
+
+	uiBuffer.BindVertexArrayBuffer();
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     std::cout << glGetError() << std::endl;

@@ -16,12 +16,12 @@ void Buffer::UnbindVertexArrayBuffer()
 
 VertexBuffer::VertexBuffer() : Buffer()
 {
+  glGenVertexArrays(1, &vertexArrayBufferId);
+  BindVertexArrayBuffer(); // we bind the vertex array so it keeps track of all the things were doing
+
   glGenBuffers(1, &bufferId);
   glGenBuffers(1, &elementsBufferId);
 
-  glGenVertexArrays(1, &vertexArrayBufferId);
-
-  BindVertexArrayBuffer(); // we bind the vertex array so it keeps track of all the things were doing
   glBindBuffer(GL_ARRAY_BUFFER, bufferId);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBufferId);
 
@@ -66,19 +66,26 @@ void VertexBuffer::PutVertexData(std::vector<glm::vec3> verts, std::vector<int> 
   }
 
   BindVertexArrayBuffer();
+
+  glBindBuffer(GL_ARRAY_BUFFER, bufferId);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBufferId);
+
   glBufferData(GL_ARRAY_BUFFER, numberOfElements * sizeof(float), &vertsWithTextures[0], GL_STATIC_DRAW);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices[0], GL_STATIC_DRAW);
+  UnbindVertexArrayBuffer();
   delete[] vertsWithTextures;
 }
 
 UIBuffer::UIBuffer() : Buffer()
 {
+
+  glGenVertexArrays(1, &vertexArrayBufferId);
+  BindVertexArrayBuffer(); // we bind the vertex array so it keeps track of all the things were doing
+  
   glGenBuffers(1, &bufferId);
   glGenBuffers(1, &elementsBufferId);
 
-  glGenVertexArrays(1, &vertexArrayBufferId);
 
-  BindVertexArrayBuffer(); // we bind the vertex array so it keeps track of all the things were doing
   glBindBuffer(GL_ARRAY_BUFFER, bufferId);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBufferId);
 
@@ -117,5 +124,6 @@ void UIBuffer::PutVertexData(std::vector<glm::vec3> verts, std::vector<int> indi
   BindVertexArrayBuffer();
   glBufferData(GL_ARRAY_BUFFER, numberOfElements * sizeof(float), &vertsWithTextures[0], GL_STATIC_DRAW);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices[0], GL_STATIC_DRAW);
+  UnbindVertexArrayBuffer();
   delete[] vertsWithTextures;
 }

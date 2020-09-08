@@ -19,8 +19,14 @@ void WorldRenderer::RenderChunck(Chunk *c)
     { // dont have to render all air chunks
         return;
     }
+
+	worldShader->Bind();
+	worldVertexBuffer->BindVertexArrayBuffer();
+
     std::cout << glGetError() << std::endl;
+	worldVertexBuffer->BindVertexArrayBuffer();
     worldVertexBuffer->PutVertexData(c->meshData.verts, c->meshData.indices, c->meshData.textureCoords, c->meshData.normals); // TODO: pass these by refrence or ptr instead of copy
+	worldVertexBuffer->BindVertexArrayBuffer();
 
     std::cout << glGetError() << std::endl;
     glm::mat4 model = glm::mat4(1.0f); // model = local space to world space
@@ -29,6 +35,7 @@ void WorldRenderer::RenderChunck(Chunk *c)
     std::cout << glGetError() << std::endl;
     worldShader->setMat4f("model", model);
 
+	worldVertexBuffer->BindVertexArrayBuffer();
     std::cout << glGetError() << std::endl;
     glDrawElements(GL_TRIANGLES, c->meshData.indices.size(), GL_UNSIGNED_INT, 0);
 
@@ -42,6 +49,8 @@ void WorldRenderer::Render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
     worldTexture->BindTexture();
     worldShader->Bind();
     worldVertexBuffer->BindVertexArrayBuffer();
+	glBindBuffer(GL_ARRAY_BUFFER, worldVertexBuffer->bufferId);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, worldVertexBuffer->elementsBufferId);
 
     std::cout << glGetError() << std::endl;
     worldShader->setMat4f("view", viewMatrix);
