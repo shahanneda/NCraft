@@ -29,10 +29,10 @@ public:
     void AddAllNeededFaces(int x, int y, int z, BLOCK_TYPE type, vector<vec3> *blockV, vector<int> *blockI, vector<vec2> *blockT, vector<vec3> *blockN);
 
 private:
-    std::vector<int> faceIndicesOriginal = {
-        0, 1, 2, //
-        2, 3, 0  //
-    };
+};
+const std::vector<int> faceIndicesOriginal = {
+    0, 1, 2, //
+    2, 3, 0  //
 };
 const std::vector<vec3> cubeVertFront = {
     //front face

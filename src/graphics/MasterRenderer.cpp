@@ -17,6 +17,7 @@ MasterRenderer::MasterRenderer(GLFWwindow *window, Camera *camera)
   this->window = window;
   this->camera = camera;
   this->worldRenderer = new WorldRenderer();
+  this->uiRenderer = new UIRenderer();
 }
 
 void MasterRenderer::ToggleWireframe()
@@ -28,6 +29,7 @@ void MasterRenderer::ToggleWireframe()
 MasterRenderer::~MasterRenderer()
 {
   delete worldRenderer;
+  delete uiRenderer;
 }
 
 void MasterRenderer::Render()
@@ -54,6 +56,10 @@ void MasterRenderer::Render()
   projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
   glm::mat4 view = camera->GetViewMatrix();
 
+
+  std::cout << glGetError() << std::endl;
   worldRenderer->Render(projection, view);
+
+  uiRenderer->Render();
   glfwSwapBuffers(window);
 }

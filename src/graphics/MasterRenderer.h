@@ -9,6 +9,7 @@
 #include <glm/glm.hpp>
 #include "../world/Block.h"
 #include "WorldRenderer.h"
+#include "ui/UIRenderer.h"
 
 class MasterRenderer
 {
@@ -18,6 +19,7 @@ public:
   void Render();
   void ToggleWireframe();
   WorldRenderer *worldRenderer;
+  UIRenderer *uiRenderer;
 
 private:
   GLFWwindow *window;
