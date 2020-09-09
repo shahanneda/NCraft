@@ -11,18 +11,29 @@
 
 #include <unordered_map>
 
+enum BIOME{
+    GRASSLAND,
+    GRASSLAND_SAND,
+    GRASSLAND_LAKE,
+    DESERT,
+    STONELAND,
+};
+
 class TerrainGenerator
 {
 public:
     TerrainGenerator();
     BLOCK_TYPE GetBlockTypeAtPos(glm::vec3 pos);
+    BIOME GetBiomeForPos(int x, int y);
     float maxBlockHeight = 100;
     std::unordered_map<glm::vec2, int> blockHeights;
     static int HashOfTwoNumbers(int x, int y);
 
 private:
-    FastNoise noise;
+    FastNoise heightNoises;
+    FastNoise biomeNoises;
     int GetBlockHeightForPos(float x, float z);
-    float noiseScale = 0.1f;
+    float noiseScaleHeight = 0.2f;
+    float noiseScaleBiome = 0.1f;
 };
 #endif
