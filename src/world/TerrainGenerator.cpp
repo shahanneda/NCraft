@@ -89,9 +89,9 @@ int TerrainGenerator::GetBlockHeightForPos(float x, float z)
     // auto mapIt = blockHeights.find(glm::vec2(x, z));
     // if (mapIt == blockHeights.end())
     // {
-    int blockHeight = (int)(maxBlockHeight * (float)heightNoises.GetNoise(x * noiseScaleHeight, z * noiseScaleHeight));
-    blockHeights.insert(std::pair<glm::vec2, int>(glm::vec2(x, z), blockHeight));
-    return blockHeight;
+        int blockHeight = (int)(maxBlockHeight * (float)heightNoises.GetNoise(x * noiseScaleHeight, z * noiseScaleHeight));
+        // blockHeights.insert(std::pair<glm::vec2, int>(glm::vec2(x, z), blockHeight));
+        return blockHeight;
     // }
     // return mapIt->second;
 }
@@ -104,7 +104,7 @@ int TerrainGenerator::HashOfTwoNumbers(int x, int y)
 
 BIOME TerrainGenerator::GetBiomeForPos(int x, int y)
 {
-    float noise = (biomeNoises.GetNoise(x*noiseScaleBiome, y*noiseScaleBiome) + 1.0f) * 100.0f;
+    float noise = (biomeNoises.GetNoise(x * noiseScaleBiome, y * noiseScaleBiome) + 1.0f) * 100.0f;
     for (auto it = biomeRanges.begin(); it != biomeRanges.end(); ++it)
     {
         auto range = it->second; // this is a pair with two float like 100 - 150
