@@ -112,6 +112,10 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
                 {
                     // maybe a chunk here already has NEIGHBERS!! we need to check this, and if it does we need to add them, this was the source of a very hard to find memory leak
                     chunkNearPlayer = new Chunk(newChunkPosition, terrainGen);
+                    if(ShouldUnloadChunk(chunkNearPlayer, playerPos)){
+                        delete chunkNearPlayer;
+                        continue;
+                    }
                     CheckIfNeighbersExistAndUpdate(chunkNearPlayer);
                     loadedChunks.insert(std::pair<vec3, Chunk *>(newChunkPosition, chunkNearPlayer));
                 }

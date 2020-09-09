@@ -14,10 +14,11 @@ class Chunk; // forward dec
 class ChunkMeshData
 {
 public:
-    vector<glm::vec3> verts;
-    vector<int> indices;
-    vector<glm::vec2> textureCoords;
-    vector<glm::vec3> normals;
+    // initlaize some extra to fix vector allocation bug
+    vector<glm::vec3> verts = {vec3(0,0,0)};
+    vector<int> indices = {9999};
+    vector<glm::vec2> textureCoords = {vec2{0,0}};
+    vector<glm::vec3> normals = {vec3(0,0,0)};
 
     ChunkMeshData(Chunk *chunk);
     ~ChunkMeshData();

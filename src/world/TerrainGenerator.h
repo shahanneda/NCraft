@@ -23,6 +23,6 @@ public:
 private:
     FastNoise noise;
     int GetBlockHeightForPos(float x, float z);
-    float noiseScale = 0.5f;
+    float noiseScale = 0.1f;
 };
 #endif

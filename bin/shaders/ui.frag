@@ -10,5 +10,5 @@ void main()
 
     // vec3 result = (ambient + diffuse) * vec3(texture(textureSample, texCord));
 
-    FragColor = vec4(1.0, 0.0, 0.0, 1.0) ;
+    FragColor = vec4(1.0, 0.0, 0.0, 0.1) ;
 }

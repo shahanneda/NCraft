@@ -73,11 +73,6 @@ void WorldRenderer::AddChunkToRenderQueue(Chunk *c)
 
 WorldRenderer::~WorldRenderer()
 {
-    for (Chunk *c : renderedChunks)
-    {
-        delete c;
-    }
-
     delete worldVertexBuffer;
     delete worldShader;
     delete worldTexture;

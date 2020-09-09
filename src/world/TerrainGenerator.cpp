@@ -5,7 +5,7 @@ using glm::vec3;
 
 TerrainGenerator::TerrainGenerator() : noise()
 {
-    noise.SetNoiseType(FastNoise::NoiseType::Perlin);
+    noise.SetNoiseType(FastNoise::NoiseType::Simplex);
 }
 
 BLOCK_TYPE TerrainGenerator::GetBlockTypeAtPos(vec3 pos)
