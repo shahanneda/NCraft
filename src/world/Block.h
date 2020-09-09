@@ -8,6 +8,7 @@ enum BLOCK_TYPE
     GRASS,
     DIRT,
     STONE,
+    SAND,
     AIR,
 };
 

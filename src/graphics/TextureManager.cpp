@@ -21,7 +21,21 @@ const std::map<BLOCK_TYPE, std::map<BLOCK_FACE, int>> TextureManager::numberOfFa
           {POS_Z, 2},
           {NEG_Z, 2},
           {POS_Y, 2},
-          {NEG_Y, 2}}}
+          {NEG_Y, 2}}},
+        {STONE,
+         {{POS_X, 4},
+          {NEG_X, 4},
+          {POS_Z, 4},
+          {NEG_Z, 4},
+          {POS_Y, 4},
+          {NEG_Y, 4}}},
+        {SAND,
+         {{POS_X, 3},
+          {NEG_X, 3},
+          {POS_Z, 3},
+          {NEG_Z, 3},
+          {POS_Y, 3},
+          {NEG_Y, 3}}},
 
     },
 };

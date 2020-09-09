@@ -58,7 +58,7 @@ void NCraftMain::initOpenGL()
   glViewport(0, 0, NCraftWindow::WIDTH, NCraftWindow::HEIGHT);
   // glfwSetKeyCallback(window, key_callback);
 
-  camera = new Camera(glm::vec3(0, 18, 3));
+  camera = new Camera(glm::vec3(0, 100, 3));
   renderer = new MasterRenderer(window, camera);
   world = new World(renderer, camera);
 }

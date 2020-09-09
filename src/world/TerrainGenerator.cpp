@@ -11,15 +11,19 @@ TerrainGenerator::TerrainGenerator() : noise()
 BLOCK_TYPE TerrainGenerator::GetBlockTypeAtPos(vec3 pos)
 {
 
-    int height = GetBlockHeightForPos(pos.x, pos.z);
+    int height = GetBlockHeightForPos(pos.x, pos.z) + 50;
     if (pos.y == height)
     {
-        return GRASS;
+        return SAND;
     }
-    if (pos.y < height)
+    if (pos.y < height && pos.y > 50)
     {
         return DIRT;
     }
+    if(pos.y <= 50){
+        return STONE;
+    }
+
     return AIR;
 }
 
