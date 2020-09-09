@@ -3,12 +3,12 @@ out vec4 FragColor;
 
 in vec2 texCord;
 
-// uniform sampler2D textureSample;
+uniform sampler2D textureSample;
 
 void main()
 {
 
     // vec3 result = (ambient + diffuse) * vec3(texture(textureSample, texCord));
 
-    FragColor = vec4(1.0, 0.0, 0.0, 0.1) ;
+    FragColor = texture(textureSample, texCord);
 }

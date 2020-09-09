@@ -58,6 +58,6 @@ void MasterRenderer::Render()
 
 
   worldRenderer->Render(projection, view);
-  // uiRenderer->Render();
+  uiRenderer->Render();
   glfwSwapBuffers(window);
 }
