@@ -1,9 +1,16 @@
+#ifdef _WIN32
+    #include <direct.h>
+    #define getcwd _getcwd // stupid MSFT "deprecation" warning
+#else
+    #include <unistd.h>
+#endif
 
 #include "NCraftMain.h"
 #include <iostream>
 #include <string>
 #include <glad/glad.h>
 #include "graphics/MasterRenderer.h"
+#include <filesystem>
 #include <string>
 
 const std::string VERSION = "0.02";
@@ -14,6 +21,14 @@ NCraftMain::NCraftMain()
 {
   std::cout << "NCraft v" + VERSION + "\n©Shahan Neda (https://shahan.ca)" << std::endl;
   NCraftWindow w(1000, 1000, &window, this);
+  char buffer[1000];
+  char *answer = getcwd(buffer, sizeof(buffer));
+  std::string s_cwd;
+  if (answer)
+  {
+      s_cwd = answer;
+      std::cout << s_cwd << std::endl;
+  }
 
   initOpenGL();
   mainLoop();
