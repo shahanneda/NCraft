@@ -27,6 +27,7 @@ public:
 
     std::vector<Chunk *> nonGeneratedChunks;
     std::vector<Chunk *> chunksToGenerate;
+
     TerrainGenerator *terrainGen;
 
     void NextChunkGenerationCycle(glm::vec3 playerPos);
@@ -34,7 +35,8 @@ public:
     void UpdateChunkAndNeighbers(Chunk *c);
     void UpdateChunk(Chunk *c);
 
-    std::queue<Chunk *> queueOfChunksToLoad;
+    std::unordered_map<glm::vec3, Chunk*> queueOfChunksToLoad;
+
     const float chunksRenderDistanceXZ = 4;
     const float chunksRenderDistanceY = 2;
 
