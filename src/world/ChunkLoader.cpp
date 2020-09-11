@@ -79,6 +79,10 @@ void ChunkLoader::UpdateChunk(Chunk *c)
         c->meshData.verts.clear();
         c->meshData.indices.clear();
         c->meshData.textureCoords.clear();
+        c->meshData.normals.clear();
+    }
+
+    if(c->hasAllNeighbers()){
         c->meshData.GenerateData();
     }
 }
@@ -120,6 +124,7 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
                 {
                     chunkNearPlayer->inQueueToBeGenerated = true;
                     this->queueOfChunksToLoad.insert(std::pair<vec3, Chunk*>(chunkNearPlayer->pos, chunkNearPlayer));
+                    // std::cout << chunkNearPlayer->pos.x  << " " << chunkNearPlayer->pos.y << " "<< chunkNearPlayer->pos.z << std::endl;
                 }
             }
         }
@@ -130,6 +135,7 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
     for (auto it = loadedChunks.begin(); it != loadedChunks.end(); ++it)
     {
         Chunk *c = it->second;
+        // std::cout << c->pos.x << " y: " << c->pos.y << " z: " << c->pos.z  << std::endl;
         if (ShouldUnloadChunk(c, playerPos))
         {
             chunksToUnLoad.push_back(c);
@@ -138,6 +144,7 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
 
     for (int i = 0; i < chunksToUnLoad.size(); i++)
     {
+        std::cout << "unloaidng chunk at " << glm::to_string(chunksToUnLoad[i]->pos) << std::endl;
             UnloadChunk(chunksToUnLoad[i]);
     }
     chunksToUnLoad.clear();
@@ -159,7 +166,10 @@ void ChunkLoader::UnloadChunk(Chunk *c) // remove all the neighbers from the ren
 
     auto itForLoadedChunks = loadedChunks.find(c->pos);
     if(itForLoadedChunks == loadedChunks.end()){
-        std::cout << "ERROR: Unloading chunk thats not even loaded!!!!!!!~";
+        
+        std::cout << "pos x: " << c->pos.x << " y: " << c->pos.y << " z: " << c->pos.z << std::endl;
+        std::cout << "ERROR: Unloading chunk thats not even loaded!!!!!!!~" << std::endl;
+        return;
     }
     else{
         loadedChunks.erase(itForLoadedChunks);

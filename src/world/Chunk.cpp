@@ -13,6 +13,11 @@ Chunk::Chunk(vec3 pos, TerrainGenerator *terrainGen) : meshData(this), pos(pos)
 {
     this->terrainGen = terrainGen;
     FillChunk();
+
+    meshData.verts.push_back(vec3(0,0,0));
+    meshData.normals.push_back(vec3(0,0,0));
+    meshData.textureCoords.push_back(vec2(0,0));
+    meshData.indices.push_back(0);
     // std::thread t1(&Chunk::FillChunk, this);
     // t1.detach();
 }
