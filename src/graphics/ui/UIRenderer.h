@@ -17,6 +17,8 @@ private:
     Shader uiShader;
     UIBuffer uiBuffer;
     Texture crosshair;
+    Texture hotbar;
+    Texture atlas;
 };
 const vector<vec3> verts = {
     vec3(0,0,0),

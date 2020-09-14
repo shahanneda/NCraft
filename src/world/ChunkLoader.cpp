@@ -80,6 +80,7 @@ void ChunkLoader::UpdateChunk(Chunk *c)
         c->meshData.indices.clear();
         c->meshData.textureCoords.clear();
         c->meshData.normals.clear();
+        c->meshData.generated = false;
     }
 
     if(c->hasAllNeighbers()){
@@ -155,7 +156,6 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
 
     for (int i = 0; i < chunksToUnLoad.size(); i++)
     {
-        std::cout << "unloaidng chunk at " << glm::to_string(chunksToUnLoad[i]->pos) << std::endl;
             UnloadChunk(chunksToUnLoad[i]);
     }
     chunksToUnLoad.clear();
