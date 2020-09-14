@@ -118,12 +118,23 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
                         continue;
                     }
                     CheckIfNeighbersExistAndUpdate(chunkNearPlayer);
-                    loadedChunks.insert(std::pair<vec3, Chunk *>(chunkNearPlayer->pos, chunkNearPlayer));
+                    try{
+
+                        loadedChunks.insert(std::pair<vec3, Chunk *>(chunkNearPlayer->pos, chunkNearPlayer));
+                    }
+                    catch(...){
+                        std::cout << "Something went very wrong when inserting loaded chunks." << std::endl;
+                    }
                 }
                 if (!chunkNearPlayer->meshData.generated && !chunkNearPlayer->inQueueToBeGenerated) // now we check maybe it exists but just hasnt been generated yet, and if it is already in the queue(so we dont add it again)
                 {
                     chunkNearPlayer->inQueueToBeGenerated = true;
-                    this->queueOfChunksToLoad.insert(std::pair<vec3, Chunk*>(chunkNearPlayer->pos, chunkNearPlayer));
+                    try{
+                        this->queueOfChunksToLoad.insert(std::pair<vec3, Chunk*>(chunkNearPlayer->pos, chunkNearPlayer));
+                    }
+                    catch(...){
+                        std::cout << "Something went very wrong when inserting queueload" << std::endl;
+                    }
                     // std::cout << chunkNearPlayer->pos.x  << " " << chunkNearPlayer->pos.y << " "<< chunkNearPlayer->pos.z << std::endl;
                 }
             }
@@ -179,7 +190,12 @@ void ChunkLoader::UnloadChunk(Chunk *c) // remove all the neighbers from the ren
     // remove it from the queue of tobo loaded, if its there
     auto itForQueue = queueOfChunksToLoad.find(c->pos);
     if(itForQueue != queueOfChunksToLoad.end()){
-        queueOfChunksToLoad.erase(itForQueue);
+        try{
+            queueOfChunksToLoad.erase(itForQueue);
+        }catch(...){
+            std::cout << "Something went very wrong with unloading chunk" << std::endl;
+
+        }
     }
 
     renderer->RemoveChunkFromRenderQueue(c->positiveXNeighber);

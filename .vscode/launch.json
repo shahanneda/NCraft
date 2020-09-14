@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/bin/NCraftExe",
             "args": [],
-            "preLaunchTask": "buildProgram",
+            // "preLaunchTask": "buildProgram",
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/bin/",
             "environment": [],
