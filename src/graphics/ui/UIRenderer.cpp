@@ -62,16 +62,45 @@ void UIRenderer::RenderItemsOnHotbar(){
     // Items
     glDisable(GL_BLEND);
     atlas.BindTexture();
-    std::vector<glm::vec2> texts = TextureManager::GetTextureForBlockFace(GRASS, POS_Y);
+
+    vector<vec3> groupedVert;
+    vector<int> groupedIndices;
+    vector<vec2> groupedTexts;
+
+    for(int i =0; i<items.size(); i++){
+        BLOCK_TYPE type = items[i];
+
+        // copy the originals
+        vector<vec3> newVert; 
+        vector<int> newIndices;
+
+        for(auto vert : verts){
+            newVert.push_back(vec3(vert.x + i * 1.0f, vert.y, vert.z));
+        }
+
+        int indicesShift = verts.size() * i; // because each face has vert.size and we want to add that to all our indices
+        for(auto index : indices){
+            newIndices.push_back(index + indicesShift);
+        }
+        
+
+        std::vector<glm::vec2> texts = TextureManager::GetTextureForBlockFace(type, POS_Y);
+
+
+        // insert all of our data into the grouped
+        groupedVert.insert(groupedVert.end(), newVert.begin(), newVert.end());
+        groupedIndices.insert(groupedIndices.end(), newIndices.begin(), newIndices.end());
+        groupedTexts.insert(groupedTexts.end(), texts.begin(), texts.end());
+    }
+
 
     uiBuffer.BindVertexArrayBuffer();
-    uiBuffer.PutVertexData(verts, indices, texts);
+    uiBuffer.PutVertexData(groupedVert, groupedIndices, groupedTexts);
     uiBuffer.BindVertexArrayBuffer();
-
 
     glm::mat4 model = glm::mat4(1.0f); // model = local space to world space
     model = glm::translate(model, vec3(0, -1.f, 0));
     model = glm::scale(model, vec3(0.20f,0.20f, 0));
     uiShader.setMat4f("model", model);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, groupedIndices.size(), GL_UNSIGNED_INT, 0);
 }

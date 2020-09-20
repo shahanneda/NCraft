@@ -13,7 +13,7 @@ class UIRenderer
 public:
     UIRenderer();
     void Render();
-    vector<BLOCK_TYPE> items = {GRASS, STONE, SAND};
+    vector<BLOCK_TYPE> items = {GRASS, STONE, SAND, DIRT};
 
 private:
 
