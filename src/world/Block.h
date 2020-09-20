@@ -10,6 +10,8 @@ enum BLOCK_TYPE
     STONE,
     SAND,
     AIR,
+    WOOD,
+    SELECTED
 };
 
 enum BLOCK_FACE
@@ -19,7 +21,8 @@ enum BLOCK_FACE
     POS_Y,
     NEG_Y,
     POS_Z,
-    NEG_Z
+    NEG_Z,
+    ITEM,
 };
 namespace NCraft
 {

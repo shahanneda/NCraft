@@ -51,7 +51,7 @@ void UIRenderer::RenderHotbar(){
     glEnable(GL_BLEND);
     hotbar.BindTexture();
     glm::mat4 model = glm::mat4(1.0f); // model = local space to world space
-    model = glm::translate(model, vec3(0, -1.f, 0));
+    model = glm::translate(model, vec3(0, -1.f, 1.f));
     model = glm::scale(model, vec3(1.0f,0.2,0));
     uiShader.setMat4f("model", model);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -60,22 +60,38 @@ void UIRenderer::RenderHotbar(){
 
 void UIRenderer::RenderItemsOnHotbar(){
     // Items
-    glDisable(GL_BLEND);
+    glEnable(GL_BLEND);
+    glEnable (GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+;
     atlas.BindTexture();
 
     vector<vec3> groupedVert;
     vector<int> groupedIndices;
     vector<vec2> groupedTexts;
 
-    for(int i =0; i<items.size(); i++){
+    int indexOfSelectedItem = 0;
+
+    for(int i =0; i<items.size() + 1; i++){
         BLOCK_TYPE type = items[i];
 
-        // copy the originals
+        if(i == items.size()){
+            type = SELECTED;
+        }
+        if(type == currentlySelectedBlockType){
+            indexOfSelectedItem = i;
+        }
+
         vector<vec3> newVert; 
         vector<int> newIndices;
+        vector<vec2> texts = TextureManager::GetTextureForBlockFace(type, ITEM);
 
         for(auto vert : verts){
-            newVert.push_back(vec3(vert.x + i * 1.0f, vert.y, vert.z));
+            if(type ==SELECTED){
+                newVert.push_back(vec3(vert.x + indexOfSelectedItem * 1.0f, vert.y, vert.z - 0.5f));
+            }else{
+                newVert.push_back(vec3(vert.x + i * 1.0f, vert.y, vert.z));
+            }
         }
 
         int indicesShift = verts.size() * i; // because each face has vert.size and we want to add that to all our indices
@@ -83,9 +99,6 @@ void UIRenderer::RenderItemsOnHotbar(){
             newIndices.push_back(index + indicesShift);
         }
         
-
-        std::vector<glm::vec2> texts = TextureManager::GetTextureForBlockFace(type, POS_Y);
-
 
         // insert all of our data into the grouped
         groupedVert.insert(groupedVert.end(), newVert.begin(), newVert.end());
