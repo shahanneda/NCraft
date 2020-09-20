@@ -15,14 +15,15 @@ UIRenderer::UIRenderer() : uiBuffer(), uiShader("shaders/ui.vert", "shaders/ui.f
 	uiBuffer.BindVertexArrayBuffer();
 }
 
-void UIRenderer::Render()
+void UIRenderer::Render(Player* player)
 {
     uiBuffer.BindVertexArrayBuffer();
     glBindBuffer(GL_ARRAY_BUFFER, uiBuffer.vertexArrayBufferId);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, uiBuffer.elementsBufferId);
     uiShader.Bind();
 
-    RenderItemsOnHotbar();
+
+    RenderItemsOnHotbar(player->items, player->currentBlockTypeSelected);
     RenderCrosshair();
     RenderHotbar();
 
@@ -58,12 +59,11 @@ void UIRenderer::RenderHotbar(){
 
 }
 
-void UIRenderer::RenderItemsOnHotbar(){
+void UIRenderer::RenderItemsOnHotbar(vector<BLOCK_TYPE> items, BLOCK_TYPE currentBlockTypeSelected ){
     // Items
     glEnable(GL_BLEND);
     glEnable (GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
-;
     atlas.BindTexture();
 
     vector<vec3> groupedVert;
@@ -78,7 +78,7 @@ void UIRenderer::RenderItemsOnHotbar(){
         if(i == items.size()){
             type = SELECTED;
         }
-        if(type == currentlySelectedBlockType){
+        if(type == currentBlockTypeSelected){
             indexOfSelectedItem = i;
         }
 
@@ -99,7 +99,6 @@ void UIRenderer::RenderItemsOnHotbar(){
             newIndices.push_back(index + indicesShift);
         }
         
-
         // insert all of our data into the grouped
         groupedVert.insert(groupedVert.end(), newVert.begin(), newVert.end());
         groupedIndices.insert(groupedIndices.end(), newIndices.begin(), newIndices.end());

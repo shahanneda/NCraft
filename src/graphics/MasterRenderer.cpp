@@ -12,10 +12,10 @@ using glm::vec3;
 // #include <Texture.h>
 
 // glBindBuffer(GL_ARRAY_BUFFER, VBO);
-MasterRenderer::MasterRenderer(GLFWwindow *window, Camera *camera)
+MasterRenderer::MasterRenderer(GLFWwindow *window, Player *player)
 {
   this->window = window;
-  this->camera = camera;
+  this->player = player;
   this->worldRenderer = new WorldRenderer();
   this->uiRenderer = new UIRenderer();
 }
@@ -54,10 +54,10 @@ void MasterRenderer::Render()
   glm::mat4 projection; // from camera to screen
   // fov / aspectratio/ near clip / far clip TODO: add option for these things TODO: add aspect ration height/width
   projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
-  glm::mat4 view = camera->GetViewMatrix();
+  glm::mat4 view = player->camera.GetViewMatrix();
 
 
   worldRenderer->Render(projection, view);
-  uiRenderer->Render();
+  uiRenderer->Render(player);
   glfwSwapBuffers(window);
 }

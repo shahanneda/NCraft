@@ -66,5 +66,6 @@
         "unordered_map": "cpp",
         "utility": "cpp",
         "*.tcc": "cpp"
-    }
+    },
+    "C_Cpp.intelliSenseEngineFallback": "Disabled"
 }

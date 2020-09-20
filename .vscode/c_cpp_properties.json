@@ -3,7 +3,8 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/src/inc/utils"
             ],
             "defines": [],
             "macFrameworkPath": [],

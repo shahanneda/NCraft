@@ -50,6 +50,24 @@ void NCraftMain::KeyPressed(int key, int status)
   {
     world->BreakBlock();
   }
+
+  // Item switching
+  if ((key == GLFW_KEY_1 && status == GLFW_PRESS))
+  {
+    player->SwitchToItemNumber(0);
+  }
+  if ((key == GLFW_KEY_2 && status == GLFW_PRESS))
+  {
+    player->SwitchToItemNumber(1);
+  }
+  if ((key == GLFW_KEY_3 && status == GLFW_PRESS))
+  {
+    player->SwitchToItemNumber(2);
+  }
+  if ((key == GLFW_KEY_4 && status == GLFW_PRESS))
+  {
+    player->SwitchToItemNumber(3);
+  }
 }
 void NCraftMain::MouseButtonPressed(int key, int status)
 {
@@ -73,9 +91,9 @@ void NCraftMain::initOpenGL()
   glViewport(0, 0, NCraftWindow::WIDTH, NCraftWindow::HEIGHT);
   // glfwSetKeyCallback(window, key_callback);
 
-  camera = new Camera(glm::vec3(0, 100, 3));
-  renderer = new MasterRenderer(window, camera);
-  world = new World(renderer, camera);
+  player = new Player();
+  renderer = new MasterRenderer(window, player);
+  world = new World(renderer, &player->camera);
 }
 void NCraftMain::mainLoop()
 {
@@ -95,7 +113,7 @@ void NCraftMain::mainLoop()
     deltaTime = glfwGetTime() - lastFrameTime;
     lastFrameTime = glfwGetTime();
 
-    std::string cords = "x: " + std::to_string(camera->position.x) + " y: " + std::to_string(camera->position.y) + " z: " + std::to_string(camera->position.z) + " Chunks Loaded: " + std::to_string(world->cLoader->loadedChunks.size()) + " Queue Of Chunks to load: " + std::to_string(world->cLoader->queueOfChunksToLoad.size()) + " ";
+    std::string cords = "x: " + std::to_string(player->camera.position.x) + " y: " + std::to_string(player->camera.position.y) + " z: " + std::to_string(player->camera.position.z) + " Chunks Loaded: " + std::to_string(world->cLoader->loadedChunks.size()) + " Queue Of Chunks to load: " + std::to_string(world->cLoader->queueOfChunksToLoad.size()) + " ";
 
       // glfwSetWindowTitle(window, ("NCraft || " + cords + " || FPS: " + std::to_string(std::ceil(frameRate))).c_str());
 
@@ -110,6 +128,7 @@ void NCraftMain::processInput()
   if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
     glfwSetWindowShouldClose(window, true);
 
+  Camera* camera = &player->camera;
   const float cameraSpeed = 30.0f * deltaTime;
   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     camera->TranslateCameraBy(cameraSpeed * camera->target);
@@ -145,14 +164,14 @@ void NCraftMain::MouseMoved(double xpos, double ypos)
   xoffset *= mouseSensitivity;
   yoffset *= mouseSensitivity;
 
-  camera->setYaw(camera->getYaw() + xoffset);
-  camera->setPitch(camera->getPitch() + yoffset);
+  player->camera.setYaw(player->camera.getYaw() + xoffset);
+  player->camera.setPitch(player->camera.getPitch() + yoffset);
 }
 
 void NCraftMain::cleanUp()
 {
   delete renderer;
-  delete camera;
+  delete player;
   delete world;
 
   glfwDestroyWindow(window);

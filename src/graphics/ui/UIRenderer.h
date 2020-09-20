@@ -4,6 +4,7 @@
 #include "../Texture.h"
 #include "../Shader.h"
 #include "../../world/Block.h"
+#include "../../player/Player.h"
 
 using glm::vec2;
 using glm::vec3;
@@ -12,13 +13,10 @@ class UIRenderer
 {
 public:
     UIRenderer();
-    void Render();
-    BLOCK_TYPE currentlySelectedBlockType = STONE;
-    vector<BLOCK_TYPE> items = {GRASS, STONE, SAND, DIRT};
+    void Render(Player* player);
 
 private:
-
-    void RenderItemsOnHotbar();
+    void RenderItemsOnHotbar(vector<BLOCK_TYPE> items, BLOCK_TYPE currentBlockTypeSelected );
     void RenderHotbar();
     void RenderCrosshair();
     Shader uiShader;

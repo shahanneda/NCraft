@@ -10,11 +10,12 @@
 #include "../world/Block.h"
 #include "WorldRenderer.h"
 #include "ui/UIRenderer.h"
+#include "../player/Player.h"
 
 class MasterRenderer
 {
 public:
-  MasterRenderer(GLFWwindow *window, Camera *camera);
+  MasterRenderer(GLFWwindow *window, Player *player);
   ~MasterRenderer();
   void Render();
   void ToggleWireframe();
@@ -24,5 +25,5 @@ public:
 private:
   GLFWwindow *window;
   bool shouldWireframe = false;
-  Camera *camera;
+  Player *player;
 };

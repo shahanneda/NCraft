@@ -4,6 +4,7 @@
 #include "graphics/MasterRenderer.h"
 #include <glad/glad.h>
 #include "world/World.h"
+#include "player/Player.h"
 
 class Camera;         // forward dec
 class MasterRenderer; // forward dec
@@ -23,7 +24,7 @@ private:
   GLFWwindow *window;
   World *world;
   MasterRenderer *renderer;
-  Camera *camera;
+  Player *player;
 
   float lastMouseX = -999;
   float lastMouseY = -999;
