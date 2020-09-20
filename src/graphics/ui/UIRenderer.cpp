@@ -21,43 +21,57 @@ void UIRenderer::Render()
     glBindBuffer(GL_ARRAY_BUFFER, uiBuffer.vertexArrayBufferId);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, uiBuffer.elementsBufferId);
     uiShader.Bind();
-    glEnable(GL_BLEND);
 
+    RenderItemsOnHotbar();
+    RenderCrosshair();
+    RenderHotbar();
+
+
+    uiBuffer.UnbindVertexArrayBuffer();
+}
+
+
+void UIRenderer::RenderCrosshair(){
+    // Crosshair
+    glEnable(GL_BLEND);
+    crosshair.BindTexture();
+
+    uiBuffer.BindVertexArrayBuffer();
     uiBuffer.PutVertexData(verts, indices, textures);
     uiBuffer.BindVertexArrayBuffer();
 
-    // Crosshair
-    crosshair.BindTexture();
     glm::mat4 model = glm::mat4(1.0f); // model = local space to world space
     model = glm::scale(model, vec3(0.05,0.05,0));
     model = glm::translate(model, vec3(-0.5, -0.5, 0));
     uiShader.setMat4f("model", model);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-    // glDisable(GL_BLEND);
+}
+void UIRenderer::RenderHotbar(){
+    // hotbar
+    glEnable(GL_BLEND);
     hotbar.BindTexture();
-    model = glm::mat4(1.0f); // model = local space to world space
+    glm::mat4 model = glm::mat4(1.0f); // model = local space to world space
     model = glm::translate(model, vec3(0, -1.f, 0));
     model = glm::scale(model, vec3(1.0f,0.2,0));
     uiShader.setMat4f("model", model);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    glDisable(GL_BLEND);
+}
 
+void UIRenderer::RenderItemsOnHotbar(){
+    // Items
+    glDisable(GL_BLEND);
+    atlas.BindTexture();
     std::vector<glm::vec2> texts = TextureManager::GetTextureForBlockFace(GRASS, POS_Y);
 
     uiBuffer.BindVertexArrayBuffer();
     uiBuffer.PutVertexData(verts, indices, texts);
     uiBuffer.BindVertexArrayBuffer();
 
-    atlas.BindTexture();
 
-    model = glm::mat4(1.0f); // model = local space to world space
-    model = glm::translate(model, vec3(0, -0.f, 0));
-    model = glm::rotate(model, glm::radians(120.0f), vec3(0,0,1));
-    model = glm::scale(model, vec3(1.f,1,0));
+    glm::mat4 model = glm::mat4(1.0f); // model = local space to world space
+    model = glm::translate(model, vec3(0, -1.f, 0));
+    model = glm::scale(model, vec3(0.20f,0.20f, 0));
     uiShader.setMat4f("model", model);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-    uiBuffer.UnbindVertexArrayBuffer();
 }
