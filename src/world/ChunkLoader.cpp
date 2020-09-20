@@ -83,7 +83,8 @@ void ChunkLoader::UpdateChunk(Chunk *c)
         c->meshData.generated = false;
     }
 
-    if(c->hasAllNeighbers()){
+    if (c->hasAllNeighbers())
+    {
         c->meshData.GenerateData();
     }
 }
@@ -114,26 +115,31 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
                 {
                     // maybe a chunk here already has NEIGHBERS!! we need to check this, and if it does we need to add them, this was the source of a very hard to find memory leak
                     chunkNearPlayer = new Chunk(newChunkPosition, terrainGen);
-                    if(ShouldUnloadChunk(chunkNearPlayer, playerPos)){
+                    if (ShouldUnloadChunk(chunkNearPlayer, playerPos))
+                    {
                         delete chunkNearPlayer;
                         continue;
                     }
                     CheckIfNeighbersExistAndUpdate(chunkNearPlayer);
-                    try{
+                    try
+                    {
 
                         loadedChunks.insert(std::pair<vec3, Chunk *>(chunkNearPlayer->pos, chunkNearPlayer));
                     }
-                    catch(...){
+                    catch (...)
+                    {
                         std::cout << "Something went very wrong when inserting loaded chunks." << std::endl;
                     }
                 }
                 if (!chunkNearPlayer->meshData.generated && !chunkNearPlayer->inQueueToBeGenerated) // now we check maybe it exists but just hasnt been generated yet, and if it is already in the queue(so we dont add it again)
                 {
                     chunkNearPlayer->inQueueToBeGenerated = true;
-                    try{
-                        this->queueOfChunksToLoad.insert(std::pair<vec3, Chunk*>(chunkNearPlayer->pos, chunkNearPlayer));
+                    try
+                    {
+                        this->queueOfChunksToLoad.insert(std::pair<vec3, Chunk *>(chunkNearPlayer->pos, chunkNearPlayer));
                     }
-                    catch(...){
+                    catch (...)
+                    {
                         std::cout << "Something went very wrong when inserting queueload" << std::endl;
                     }
                     // std::cout << chunkNearPlayer->pos.x  << " " << chunkNearPlayer->pos.y << " "<< chunkNearPlayer->pos.z << std::endl;
@@ -152,18 +158,39 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
         {
             chunksToUnLoad.push_back(c);
         }
+        if( (c->pos == it->second->pos)  == 0){
+            std::cout << (c->pos == it->second->pos) << std::endl;
+        }
+
+        auto itForLoadedChunks = loadedChunks.find(c->pos);
+        if (itForLoadedChunks == loadedChunks.end())
+        {
+            std::cout << "L1pos x: " << c->pos.x << " y: " << c->pos.y << " z: " << c->pos.z << std::endl;
+            std::cout << "L1ERROR: Unloading chunk thats not even loaded!!!!!!!~" << std::endl;
+        }
+
+
     }
 
     for (int i = 0; i < chunksToUnLoad.size(); i++)
     {
-            UnloadChunk(chunksToUnLoad[i]);
+
+        Chunk* c = chunksToUnLoad[i];
+        auto itForLoadedChunks = loadedChunks.find(c->pos);
+        if (itForLoadedChunks == loadedChunks.end())
+        {
+            std::cout << "L2pos x: " << c->pos.x << " y: " << c->pos.y << " z: " << c->pos.z << std::endl;
+            std::cout << "L2ERROR: Unloading chunk thats not even loaded!!!!!!!~" << std::endl;
+        }
+        UnloadChunk(c);
     }
     chunksToUnLoad.clear();
 }
 
 bool ChunkLoader::ShouldUnloadChunk(Chunk *c, glm::vec3 playerPos)
 {
-    if (c == nullptr){
+    if (c == nullptr)
+    {
         return false;
     }
     float distance = glm::distance(GetChunkPositionFromWorldPosition(playerPos), c->pos);
@@ -176,25 +203,29 @@ void ChunkLoader::UnloadChunk(Chunk *c) // remove all the neighbers from the ren
     renderer->RemoveChunkFromRenderQueue(c);
 
     auto itForLoadedChunks = loadedChunks.find(c->pos);
-    if(itForLoadedChunks == loadedChunks.end()){
-        
+    if (itForLoadedChunks == loadedChunks.end())
+    {
+
         std::cout << "pos x: " << c->pos.x << " y: " << c->pos.y << " z: " << c->pos.z << std::endl;
         std::cout << "ERROR: Unloading chunk thats not even loaded!!!!!!!~" << std::endl;
         return;
     }
-    else{
+    else
+    {
         loadedChunks.erase(itForLoadedChunks);
     }
 
-
     // remove it from the queue of tobo loaded, if its there
     auto itForQueue = queueOfChunksToLoad.find(c->pos);
-    if(itForQueue != queueOfChunksToLoad.end()){
-        try{
+    if (itForQueue != queueOfChunksToLoad.end())
+    {
+        try
+        {
             queueOfChunksToLoad.erase(itForQueue);
-        }catch(...){
+        }
+        catch (...)
+        {
             std::cout << "Something went very wrong with unloading chunk" << std::endl;
-
         }
     }
 

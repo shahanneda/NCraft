@@ -21,10 +21,15 @@ private:
     Texture atlas;
 };
 const vector<vec3> verts = {
-    vec3(0,0,0),
-    vec3(1,0,0),
-    vec3(1,1,0),
-    vec3(0,1,0),
+    vec3(0, 1, 0), // top left
+    vec3(1, 1, 0), // top right
+    vec3(1, 0, 0), // bottom right
+    vec3(0, 0, 0), // bottom left
 };
-const vector<int> indices = {0,3,2,2,1,0};
-const vector<vec2> textures ={vec2(0, 0), vec2(1, 0), vec2(1, 1), vec2(0,1)};
+const vector<int> indices = {0, 3, 2, 2, 1, 0};
+const vector<vec2> textures = {
+    vec2(0, 1),// top left
+    vec2(1, 1), // top right
+    vec2(1, 0),// bottom rigth
+    vec2(0, 0) // bottom left
+    };

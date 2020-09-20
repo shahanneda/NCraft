@@ -3,12 +3,10 @@
 
 void Buffer::BindVertexArrayBuffer()
 {
+  glBindBuffer(GL_ARRAY_BUFFER, this->bufferId);
   glBindVertexArray(vertexArrayBufferId);
 }
-void VertexBuffer::BindVertexArrayBuffer()
-{
-  glBindVertexArray(vertexArrayBufferId);
-}
+
 void Buffer::UnbindVertexArrayBuffer()
 {
   glBindVertexArray(0);
@@ -116,6 +114,8 @@ void UIBuffer::PutVertexData(std::vector<glm::vec3> verts, std::vector<int> indi
     //textures
     vertsWithTextures[i + 3] = (float)textures[textureIndex].x;
     vertsWithTextures[i + 4] = (float)textures[textureIndex].y;
+
+    std::cout << vertsWithTextures[i+3] << " " << vertsWithTextures[i+4] << std::endl;
 
     vertexIndex++;
     textureIndex++;
