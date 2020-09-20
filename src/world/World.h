@@ -4,6 +4,7 @@
 #include "ChunkLoader.h"
 #include "glm/glm.hpp"
 #include "TerrainGenerator.h"
+#include "../player/Player.h"
 
 class Camera;
 class MasterRenderer;
@@ -14,12 +15,12 @@ using glm::vec3;
 class World
 {
 public:
-    World(MasterRenderer *renderer, Camera *camera);
+    World(MasterRenderer *renderer, Player *player);
     ~World();
     MasterRenderer *renderer;
     TerrainGenerator *terrainGen;
     ChunkLoader *cLoader;
-    Camera *camera;
+    Player *player;
 
     void Update(const float, const double);
     void GenerateChunks();

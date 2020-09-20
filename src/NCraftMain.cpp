@@ -93,7 +93,7 @@ void NCraftMain::initOpenGL()
 
   player = new Player();
   renderer = new MasterRenderer(window, player);
-  world = new World(renderer, &player->camera);
+  world = new World(renderer, player);
 }
 void NCraftMain::mainLoop()
 {

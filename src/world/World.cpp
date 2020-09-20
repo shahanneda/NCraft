@@ -1,12 +1,12 @@
 #include "World.h"
 
 using glm::floor;
-World::World(MasterRenderer *renderer, Camera *camera)
+World::World(MasterRenderer *renderer, Player *player)
 {
     terrainGen = new TerrainGenerator();
-    cLoader = new ChunkLoader(renderer->worldRenderer, terrainGen, camera);
+    cLoader = new ChunkLoader(renderer->worldRenderer, terrainGen, &player->camera);
     this->renderer = renderer;
-    this->camera = camera;
+    this->player = player;
 }
 
 World::~World()
@@ -17,7 +17,7 @@ World::~World()
 
 void World::GenerateChunks()
 {
-    cLoader->PlayerMovedToNewChunk(camera->position);
+    cLoader->PlayerMovedToNewChunk(player->camera.position);
 }
 
 void World::Update(const float deltaTime, const double time)
@@ -27,12 +27,12 @@ void World::Update(const float deltaTime, const double time)
         lastChunkGenTime = time;
         GenerateChunks();
     }
-    cLoader->NextChunkGenerationCycle(camera->position);
+    cLoader->NextChunkGenerationCycle(player->camera.position);
 }
 void World::BreakBlock()
 {
 
-    Block *b = RayCastToNonAirBlock(camera->position, camera->target, 50.0f, nullptr);
+    Block *b = RayCastToNonAirBlock(player->camera.position, player->camera.target, 50.0f, nullptr);
     if (b == nullptr)
     {
         return;
@@ -46,18 +46,17 @@ void World::BreakBlock()
 void World::PlaceBlock()
 {
     vec3 faceEntered(0, 0, 0);
-    Block *b = RayCastToNonAirBlock(camera->position, camera->target, 50.0f, &faceEntered);
+    Block *b = RayCastToNonAirBlock(player->camera.position, player->camera.target, 50.0f, &faceEntered);
     if (b == nullptr)
     {
         return;
     }
-    std::cout << glm::to_string(faceEntered) << std::endl;
     Block *airBesideB = RayCastToAirBlock(b->GetWorldPos(), faceEntered, 5.0f);
     if (airBesideB == nullptr)
     {
         return;
     }
-    airBesideB->type = GRASS;
+    airBesideB->type = player->currentBlockTypeSelected;
     airBesideB->isTransparent = false;
 
     cLoader->UpdateChunkAndNeighbers(airBesideB->chunk);
