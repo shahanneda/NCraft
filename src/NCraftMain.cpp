@@ -52,22 +52,10 @@ void NCraftMain::KeyPressed(int key, int status)
   }
 
   // Item switching
-  if ((key == GLFW_KEY_1 && status == GLFW_PRESS))
-  {
-    player->SwitchToItemNumber(0);
+  if(key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && status == GLFW_PRESS){
+    player->SwitchToItemNumber(key - 49); // -49 to map 1-9 keys to 0-8
   }
-  if ((key == GLFW_KEY_2 && status == GLFW_PRESS))
-  {
-    player->SwitchToItemNumber(1);
-  }
-  if ((key == GLFW_KEY_3 && status == GLFW_PRESS))
-  {
-    player->SwitchToItemNumber(2);
-  }
-  if ((key == GLFW_KEY_4 && status == GLFW_PRESS))
-  {
-    player->SwitchToItemNumber(3);
-  }
+
 }
 void NCraftMain::MouseButtonPressed(int key, int status)
 {
