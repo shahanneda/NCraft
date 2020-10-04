@@ -27,6 +27,7 @@ public:
     BIOME GetBiomeForPos(int x, int y);
     float maxBlockHeight = 100;
     std::unordered_map<glm::vec2, int> blockHeights;
+    std::unordered_map<glm::vec3, BLOCK_TYPE> treeBlocks;
     static int HashOfTwoNumbers(int x, int y);
 
 private:

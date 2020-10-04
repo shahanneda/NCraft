@@ -177,6 +177,9 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
     {
 
         Chunk* c = chunksToUnLoad[i];
+        if(c == nullptr){
+            continue;
+        }
         auto itForLoadedChunks = loadedChunks.find(c->pos);
         if (itForLoadedChunks == loadedChunks.end())
         {

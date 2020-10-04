@@ -1,13 +1,14 @@
 #include "TerrainGenerator.h"
 #include <iostream>
 #include <map>
+#include <stdlib.h>
 
 using glm::vec3;
 
 using std::pair;
 std::map<BIOME, std::pair<float, float>> biomeRanges = {
-    {GRASSLAND, pair<float, float>(0.0f, 80.0f)},
-    {GRASSLAND_SAND, pair<float, float>(80.0f, 100.0f)},
+    {GRASSLAND, pair<float, float>(0.0f, 99.0f)},
+    {GRASSLAND_SAND, pair<float, float>(99.0f, 100.0f)},
     {DESERT, pair<float, float>(100.0f, 150.0f)},
     {STONELAND, pair<float, float>(150.0f, 200.0f)},
 };
@@ -18,15 +19,42 @@ TerrainGenerator::TerrainGenerator() : heightNoises(),
     heightNoises.SetNoiseType(FastNoise::NoiseType::Perlin);
     biomeNoises.SetNoiseType(FastNoise::NoiseType::Simplex);
     treeNoise.SetNoiseType(FastNoise::NoiseType::Simplex);
+    biomeNoises.SetSeed(4594);
+    srand((unsigned) 99);
+
 }
 
 BLOCK_TYPE TerrainGenerator::GetBlockTypeAtPos(vec3 pos)
 {
 
+    auto treeIter = treeBlocks.find(pos);
+    if(treeIter != treeBlocks.end()){
+        return treeIter->second;
+    }
+    
     int height = GetBlockHeightForPos(pos.x, pos.z) + 100;
     // std::cout << height << std::endl;
     BIOME biome = GetBiomeForPos(pos.x, pos.z);
-    if(pos.y == height + 1 && biome == GRASSLAND && treeNoise.GetNoise(pos.x*10, pos.z*10) > 0.95f){
+    if(pos.y == height + 1 && biome == GRASSLAND  && rand() % 100 > 98){
+        int treeHeight = rand() % 10 + 10; 
+        for(int i = 0; i<treeHeight; i++){
+            treeBlocks.insert(std::pair<vec3,BLOCK_TYPE> (vec3(pos.x, pos.y+i, pos.z), WOOD));
+
+
+            // generate leaves if far enough up frum trunk
+            if(i > (5 + rand() % 3)){
+                for(int xFromTrunk = -5; xFromTrunk < 5; xFromTrunk++){
+                    for(int zFromTrunk = -5; zFromTrunk < 5; zFromTrunk++){
+                        if(xFromTrunk == 0 && zFromTrunk == 0){ // dont replace trunk with leaf
+                            continue;
+                        }
+                        treeBlocks.insert(std::pair<vec3,BLOCK_TYPE> (vec3(pos.x+xFromTrunk, pos.y+i, pos.z+zFromTrunk), LEAVES));
+                    }
+                }
+            }
+
+            
+        }
         return WOOD;
     }
 
