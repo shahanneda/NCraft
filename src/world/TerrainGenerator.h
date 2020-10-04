@@ -32,6 +32,7 @@ public:
 private:
     FastNoise heightNoises;
     FastNoise biomeNoises;
+    FastNoise treeNoise;
     int GetBlockHeightForPos(float x, float z);
     float noiseScaleHeight = 0.2f;
     float noiseScaleBiome = 0.1f;

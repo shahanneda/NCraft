@@ -11,6 +11,8 @@ enum BLOCK_TYPE
     SAND,
     AIR,
     WOOD,
+    WOODEN_PLANK,
+    LEAVES,
     SELECTED
 };
 

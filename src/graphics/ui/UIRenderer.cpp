@@ -111,7 +111,7 @@ void UIRenderer::RenderItemsOnHotbar(vector<BLOCK_TYPE> items, BLOCK_TYPE curren
     uiBuffer.BindVertexArrayBuffer();
 
     glm::mat4 model = glm::mat4(1.0f); // model = local space to world space
-    model = glm::translate(model, vec3(0, -1.f, 0));
+    model = glm::translate(model, vec3(-1.0, -1.f, 0));
     model = glm::scale(model, vec3(0.20f,0.20f, 0));
     uiShader.setMat4f("model", model);
     glDrawElements(GL_TRIANGLES, groupedIndices.size(), GL_UNSIGNED_INT, 0);

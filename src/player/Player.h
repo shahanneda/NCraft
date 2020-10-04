@@ -13,7 +13,7 @@ class Player{
         void SwitchToItemNumber(int num);
         Camera camera;
         BLOCK_TYPE currentBlockTypeSelected = SAND;
-        vector<BLOCK_TYPE> items = {GRASS, STONE, SAND, DIRT, WOOD};
+        vector<BLOCK_TYPE> items = {GRASS, STONE, SAND, DIRT, WOOD, WOODEN_PLANK, LEAVES};
 };
 
 #endif

@@ -260,11 +260,6 @@ Chunk::~Chunk()
 ChunkMeshData::~ChunkMeshData()
 {
 
-    verts.push_back(vec3(0, 0, 0));
-    textureCoords.push_back(vec2(0,0));
-    normals.push_back(vec3(0,0,0));
-    normals.push_back(vec3(0,0,0));
-    indices.push_back(0);
     // this is just to avoid somesort of bug with the vector destructor
     // verts.clear();
     // indices.clear();

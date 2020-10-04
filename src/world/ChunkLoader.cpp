@@ -150,7 +150,7 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
 
     // Check and unload any chuncks far away
     vector<Chunk *> chunksToUnLoad;
-    for (auto it = loadedChunks.begin(); it != loadedChunks.end(); ++it)
+    for (auto it = loadedChunks.begin(); it != loadedChunks.end();)
     {
         Chunk *c = it->second;
         // std::cout << c->pos.x << " y: " << c->pos.y << " z: " << c->pos.z  << std::endl;
@@ -158,18 +158,19 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
         {
             chunksToUnLoad.push_back(c);
         }
-        if( (c->pos == it->second->pos)  == 0){
-            std::cout << (c->pos == it->second->pos) << std::endl;
+        if(c == nullptr){
+            it = loadedChunks.erase(it);
+        }else{
+            it++;
         }
 
         auto itForLoadedChunks = loadedChunks.find(c->pos);
         if (itForLoadedChunks == loadedChunks.end())
         {
             std::cout << "L1pos x: " << c->pos.x << " y: " << c->pos.y << " z: " << c->pos.z << std::endl;
+            std::cout << "L1ItPos" << it->first.x << "y:" << it->first.y << "z: " << it->first.z << std::endl;
             std::cout << "L1ERROR: Unloading chunk thats not even loaded!!!!!!!~" << std::endl;
         }
-
-
     }
 
     for (int i = 0; i < chunksToUnLoad.size(); i++)

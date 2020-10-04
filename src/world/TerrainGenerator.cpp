@@ -13,10 +13,11 @@ std::map<BIOME, std::pair<float, float>> biomeRanges = {
 };
 
 TerrainGenerator::TerrainGenerator() : heightNoises(),
-                                       biomeNoises()
+                                       biomeNoises(), treeNoise()
 {
     heightNoises.SetNoiseType(FastNoise::NoiseType::Perlin);
     biomeNoises.SetNoiseType(FastNoise::NoiseType::Simplex);
+    treeNoise.SetNoiseType(FastNoise::NoiseType::Simplex);
 }
 
 BLOCK_TYPE TerrainGenerator::GetBlockTypeAtPos(vec3 pos)
@@ -25,6 +26,9 @@ BLOCK_TYPE TerrainGenerator::GetBlockTypeAtPos(vec3 pos)
     int height = GetBlockHeightForPos(pos.x, pos.z) + 100;
     // std::cout << height << std::endl;
     BIOME biome = GetBiomeForPos(pos.x, pos.z);
+    if(pos.y == height + 1 && biome == GRASSLAND && treeNoise.GetNoise(pos.x*10, pos.z*10) > 0.95f){
+        return WOOD;
+    }
 
     if (pos.y == height)
     {
