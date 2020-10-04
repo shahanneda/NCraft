@@ -186,7 +186,7 @@ void ChunkLoader::PlayerMovedToNewChunk(vec3 playerPos)
             std::cout << "L2pos x: " << c->pos.x << " y: " << c->pos.y << " z: " << c->pos.z << std::endl;
             std::cout << "L2ERROR: Unloading chunk thats not even loaded!!!!!!!~" << std::endl;
         }
-        UnloadChunk(c);
+        // UnloadChunk(c);
     }
     chunksToUnLoad.clear();
 }
@@ -396,7 +396,7 @@ void ChunkLoader::LoadChunk(Chunk *c)
 
 void ChunkLoader::NextChunkGenerationCycle(vec3 playerPos)
 {
-    if (loadedChunks.size() > 1000)
+    if (loadedChunks.size() > 10000)
     {
         return;
     }

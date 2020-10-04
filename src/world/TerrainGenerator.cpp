@@ -2,8 +2,10 @@
 #include <iostream>
 #include <map>
 #include <stdlib.h>
+#include <cmath>        
 
 using glm::vec3;
+using std::abs;
 
 using std::pair;
 std::map<BIOME, std::pair<float, float>> biomeRanges = {
@@ -24,38 +26,48 @@ TerrainGenerator::TerrainGenerator() : heightNoises(),
 
 }
 
+void TerrainGenerator::GenerateTree(vec3 pos){
+        int treeHeight = rand() % 10 + 10; 
+        int treeLeaveStartHeight = rand() % 3 + 4;
+        int maxLeafDistanceLimit = 5;
+        for(int i = 0; i<treeHeight; i++){
+            treeBlocks.insert(std::pair<vec3,BLOCK_TYPE> (vec3(pos.x, pos.y+i, pos.z), WOOD));
+            // generate leaves if far enough up frum trunk
+            
+            if(i > treeLeaveStartHeight){
+                for(int xFromTrunk = -maxLeafDistanceLimit; xFromTrunk <maxLeafDistanceLimit; xFromTrunk++){
+                    for(int zFromTrunk =-maxLeafDistanceLimit; zFromTrunk < maxLeafDistanceLimit; zFromTrunk++){
+                        if(xFromTrunk == 0 && zFromTrunk == 0){ // dont replace trunk with leaf
+                            continue;
+                        }
+
+                        float distanceFromTrunkPercentage =  ((abs(xFromTrunk) + abs(zFromTrunk)) / (((float)maxLeafDistanceLimit*2) ));  // to do this properly would have to use square roots, instead just *2 is good aproximation and faster
+
+                        // if outer leaves, do a random check to spawn
+                        if(rand() % 100 > distanceFromTrunkPercentage * 100 || distanceFromTrunkPercentage < 0.5){
+                            treeBlocks.insert(std::pair<vec3,BLOCK_TYPE> (vec3(pos.x+xFromTrunk, pos.y+i+1, pos.z+zFromTrunk), LEAVES));
+                        }
+                    }
+                }
+            }
+        }
+
+        treeBlocks.insert(std::pair<vec3,BLOCK_TYPE> (vec3(pos.x, pos.y+treeHeight, pos.z), LEAVES)); // add top leaf
+}
 BLOCK_TYPE TerrainGenerator::GetBlockTypeAtPos(vec3 pos)
 {
+    int height = GetBlockHeightForPos(pos.x, pos.z) + 100;
+    // std::cout << height << std::endl;
+    BIOME biome = GetBiomeForPos(pos.x, pos.z);
 
     auto treeIter = treeBlocks.find(pos);
     if(treeIter != treeBlocks.end()){
         return treeIter->second;
-    }
-    
-    int height = GetBlockHeightForPos(pos.x, pos.z) + 100;
-    // std::cout << height << std::endl;
-    BIOME biome = GetBiomeForPos(pos.x, pos.z);
-    if(pos.y == height + 1 && biome == GRASSLAND  && rand() % 100 > 98){
-        int treeHeight = rand() % 10 + 10; 
-        for(int i = 0; i<treeHeight; i++){
-            treeBlocks.insert(std::pair<vec3,BLOCK_TYPE> (vec3(pos.x, pos.y+i, pos.z), WOOD));
-
-
-            // generate leaves if far enough up frum trunk
-            if(i > (5 + rand() % 3)){
-                for(int xFromTrunk = -5; xFromTrunk < 5; xFromTrunk++){
-                    for(int zFromTrunk = -5; zFromTrunk < 5; zFromTrunk++){
-                        if(xFromTrunk == 0 && zFromTrunk == 0){ // dont replace trunk with leaf
-                            continue;
-                        }
-                        treeBlocks.insert(std::pair<vec3,BLOCK_TYPE> (vec3(pos.x+xFromTrunk, pos.y+i, pos.z+zFromTrunk), LEAVES));
-                    }
-                }
-            }
-
-            
+    }else{
+        if(pos.y == height + 1 && biome == GRASSLAND  && rand() % 100 > 98){
+            GenerateTree(pos);
+            return WOOD;
         }
-        return WOOD;
     }
 
     if (pos.y == height)
