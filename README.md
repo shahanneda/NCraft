@@ -13,7 +13,7 @@
 * Texture Atlas
 
 ---
-No extra libraies or tools were used other that OpenGl, GLM(for math), GLFW(windows), and FastNoise. **Everything** else was written by Shahan Neda.
+No extra libraries or tools were used other that OpenGl, GLM(for math), GLFW(windows), and FastNoise. **Everything** else was written by Shahan Neda.
 
 ## Images
 
