@@ -15,6 +15,10 @@
 ---
 No extra libraies or tools were used other that OpenGl, GLM(for math), GLFW(windows), and FastNoise. **Everything** else was written by Shahan Neda.
 
+## Images
+
+![demo image](https://github.com/shahanneda/NCraft/raw/master/DemoImages/NCraftDemoImg1.png )
+
 ## Building
  * Use CMake.
  
