@@ -3,7 +3,7 @@
 
 ## Features :
 * A world made up of 16x16x16 Chunks
-* Optimised 3D rendering of voxels using my own rendering engine which does batching and tries to limit drawclass. The renderer also hides any faces that are not facing an air block.  
+* Optimised 3D rendering of voxels using my own rendering engine which does batching and tries to limit draw calls. The renderer also hides any faces that are not facing an air block.  
 * Infinite Chunk generation in all directions
 * Simple and efficient lighting using normals for each face.
 * Block Placing and Breaking
