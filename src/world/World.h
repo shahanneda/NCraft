@@ -26,6 +26,7 @@ public:
     void GenerateChunks();
     void BreakBlock();
     void PlaceBlock();
+    Block *GetBlock(vec3 Pos);
     Block *RayCastToNonAirBlock(vec3 position, vec3 direction, float distance, vec3 *outFaceNormal);
     Block *RayCastToAirBlock(vec3 position, vec3 direction, float distance);
 
@@ -33,5 +34,6 @@ private:
     double chunkGenerationUpdateInterval = 1.0;
     double lastChunkGenTime = 0;
     float raycastStep = 0.1f;
+
 };
 #endif

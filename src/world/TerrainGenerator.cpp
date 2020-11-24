@@ -26,6 +26,12 @@ TerrainGenerator::TerrainGenerator() : heightNoises(),
 
 }
 
+/*
+Why are some of the trees messed up??
+Sometimes a chunkt that should contain leaves is generated before the chunk with the root log, therfore the treeBlocks is not set with leaves, and when the other chunk is generated it does not regenerate that chunk.. 
+
+Maybe find a way to tell a chunk with leaves to regenerate? (opens up a whole can of worms)
+*/
 void TerrainGenerator::GenerateTree(vec3 pos){
         int treeHeight = rand() % 10 + 10; 
         int treeLeaveStartHeight = rand() % 3 + 4;

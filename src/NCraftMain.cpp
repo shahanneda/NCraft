@@ -1,8 +1,8 @@
 #ifdef _WIN32
-    #include <direct.h>
-    #define getcwd _getcwd // stupid MSFT "deprecation" warning
+#include <direct.h>
+#define getcwd _getcwd // stupid MSFT "deprecation" warning
 #else
-    #include <unistd.h>
+#include <unistd.h>
 #endif
 
 #include "NCraftMain.h"
@@ -26,8 +26,8 @@ NCraftMain::NCraftMain()
   std::string s_cwd;
   if (answer)
   {
-      s_cwd = answer;
-      std::cout << s_cwd << std::endl;
+    s_cwd = answer;
+    std::cout << s_cwd << std::endl;
   }
 
   initOpenGL();
@@ -52,10 +52,10 @@ void NCraftMain::KeyPressed(int key, int status)
   }
 
   // Item switching
-  if(key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && status == GLFW_PRESS){
+  if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 && status == GLFW_PRESS)
+  {
     player->SwitchToItemNumber(key - 49); // -49 to map 1-9 keys to 0-8
   }
-
 }
 void NCraftMain::MouseButtonPressed(int key, int status)
 {
@@ -103,11 +103,12 @@ void NCraftMain::mainLoop()
 
     std::string cords = "x: " + std::to_string(player->camera.position.x) + " y: " + std::to_string(player->camera.position.y) + " z: " + std::to_string(player->camera.position.z) + " Chunks Loaded: " + std::to_string(world->cLoader->loadedChunks.size()) + " Queue Of Chunks to load: " + std::to_string(world->cLoader->queueOfChunksToLoad.size()) + " ";
 
-      // glfwSetWindowTitle(window, ("NCraft || " + cords + " || FPS: " + std::to_string(std::ceil(frameRate))).c_str());
+    // glfwSetWindowTitle(window, ("NCraft || " + cords + " || FPS: " + std::to_string(std::ceil(frameRate))).c_str());
 
     renderer->Render();
     world->Update(deltaTime, glfwGetTime()); // TODO: move this somewhere at a constant time interval
     processInput();
+    processGravity();
     glfwPollEvents();
   }
 }
@@ -116,7 +117,7 @@ void NCraftMain::processInput()
   if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
     glfwSetWindowShouldClose(window, true);
 
-  Camera* camera = &player->camera;
+  Camera *camera = &player->camera;
   const float cameraSpeed = 30.0f * deltaTime;
   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     camera->TranslateCameraBy(cameraSpeed * camera->target);
@@ -135,6 +136,21 @@ void NCraftMain::processInput()
 
   if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
     camera->TranslateCameraBy(glm::vec3(0, -1.0f * cameraSpeed, 0));
+}
+
+void NCraftMain::processGravity()
+{
+  Camera *camera = &player->camera;
+  vec3 pos = player->camera.position;
+  vec3 oneUnder = vec3(pos.x, pos.y - 2, pos.z);
+  const float fallSpeed = 5.f * deltaTime;
+
+  Block *blockUnderPlayer = world->GetBlock(oneUnder);
+  if (blockUnderPlayer == nullptr || blockUnderPlayer->type == AIR)
+  {
+    std::cout << "Air Block Under" << std::endl;
+    camera->TranslateCameraBy(glm::vec3(0, -1.0f * fallSpeed, 0));
+  }
 }
 
 void NCraftMain::MouseMoved(double xpos, double ypos)

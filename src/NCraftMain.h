@@ -19,6 +19,7 @@ public:
   void MouseMoved(double xpos, double ypos);
   void MouseButtonPressed(int button, int action);
 
+
 private:
   const float mouseSensitivity = 0.1f;
   GLFWwindow *window;
@@ -34,6 +35,7 @@ private:
   void
   initOpenGL();
   void mainLoop();
+  void processGravity();
   void cleanUp();
 
   void processInput();

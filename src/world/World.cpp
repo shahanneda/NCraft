@@ -62,6 +62,10 @@ void World::PlaceBlock()
     cLoader->UpdateChunkAndNeighbers(airBesideB->chunk);
 }
 
+Block *World::GetBlock(vec3 position){
+    return cLoader->GetBlockAt(position);
+}
+
 Block *World::RayCastToAirBlock(vec3 position, vec3 direction, float distance)
 {
     Block *block = nullptr;
