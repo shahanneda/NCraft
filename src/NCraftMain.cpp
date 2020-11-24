@@ -42,6 +42,10 @@ void NCraftMain::KeyPressed(int key, int status)
   {
     renderer->ToggleWireframe();
   }
+  if (key == GLFW_KEY_F && status == GLFW_PRESS)
+  {
+    this->noClip = !this->noClip;
+  }
   if (key == GLFW_KEY_C && status == GLFW_PRESS)
   {
     world->GenerateChunks();
@@ -119,36 +123,49 @@ void NCraftMain::processInput()
 
   Camera *camera = &player->camera;
   const float cameraSpeed = 30.0f * deltaTime;
+
+  vec3 translation = vec3(0, 0, 0);
+
+  // forward
   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    camera->TranslateCameraBy(cameraSpeed * camera->target);
+    translation = cameraSpeed * camera->target;
 
+  // backwards
   if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    camera->TranslateCameraBy(-(cameraSpeed * camera->target));
+    translation = -(cameraSpeed * camera->target);
 
+  // right
   if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    camera->TranslateCameraBy(-glm::normalize(glm::cross(camera->target, camera->up)) * cameraSpeed);
+    translation = -glm::normalize(glm::cross(camera->target, camera->up)) * cameraSpeed;
 
+  // left
   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    camera->TranslateCameraBy(glm::normalize(glm::cross(camera->target, camera->up)) * cameraSpeed);
+    translation = glm::normalize(glm::cross(camera->target, camera->up)) * cameraSpeed;
 
+  // up
   if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-    camera->TranslateCameraBy(glm::vec3(0, 1.0f * cameraSpeed, 0));
+    translation = glm::vec3(0, 1.0f * cameraSpeed, 0);
 
+  // down
   if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-    camera->TranslateCameraBy(glm::vec3(0, -1.0f * cameraSpeed, 0));
+    translation = glm::vec3(0, -1.0f * cameraSpeed, 0);
+
+  // check if we can actually move there
+  if (noClip || world->GetBlockNearPlayer(translation)->type == AIR)
+    camera->TranslateCameraBy(translation);
 }
 
 void NCraftMain::processGravity()
 {
+  if (noClip)
+    return;
+
   Camera *camera = &player->camera;
-  vec3 pos = player->camera.position;
-  vec3 oneUnder = vec3(pos.x, pos.y - 2, pos.z);
   const float fallSpeed = 5.f * deltaTime;
 
-  Block *blockUnderPlayer = world->GetBlock(oneUnder);
+  Block *blockUnderPlayer = world->GetBlockNearPlayer(vec3(0, -2, 0));
   if (blockUnderPlayer == nullptr || blockUnderPlayer->type == AIR)
   {
-    std::cout << "Air Block Under" << std::endl;
     camera->TranslateCameraBy(glm::vec3(0, -1.0f * fallSpeed, 0));
   }
 }

@@ -27,6 +27,7 @@ public:
     void BreakBlock();
     void PlaceBlock();
     Block *GetBlock(vec3 Pos);
+    Block *GetBlockNearPlayer(vec3 translation);
     Block *RayCastToNonAirBlock(vec3 position, vec3 direction, float distance, vec3 *outFaceNormal);
     Block *RayCastToAirBlock(vec3 position, vec3 direction, float distance);
 

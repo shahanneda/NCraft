@@ -16,6 +16,8 @@ public:
   void KeyPressed(int key, int status);
   float deltaTime = 0;
   float lastFrameTime = 0;
+  bool noClip = false;
+
   void MouseMoved(double xpos, double ypos);
   void MouseButtonPressed(int button, int action);
 

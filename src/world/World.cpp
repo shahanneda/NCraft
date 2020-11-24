@@ -66,6 +66,13 @@ Block *World::GetBlock(vec3 position){
     return cLoader->GetBlockAt(position);
 }
 
+
+/// Returns a block in relation to the player
+Block *World::GetBlockNearPlayer(vec3 translation){
+  vec3 pos = player->camera.position + translation;
+  return this->GetBlock(pos);
+}
+
 Block *World::RayCastToAirBlock(vec3 position, vec3 direction, float distance)
 {
     Block *block = nullptr;
